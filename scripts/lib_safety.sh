@@ -242,6 +242,103 @@ ava_safety_assert_learn_file() {
 }
 
 # ---------------------------------------------------------------------------
+
+# TRUSTED CONTEXT READ boundary
+#
+# This is the read gate for persistent content that may enter
+# Avalhla model context.
+#
+# Rules:
+#   - target must resolve to an existing regular file
+#   - resolved target must remain under the trusted Avalhla root
+#   - sensitive filenames are denied
+#   - file size is bounded
+#   - the read is audited
+#
+# This does not claim the content is true.
+# It only establishes that the path is authorized for context loading.
+
+ava_safety_assert_context_readable() {
+    local target="$1"
+    local real size max_bytes
+
+    max_bytes="${AVA_SAFETY_MAX_READ_BYTES:-65536}"
+
+    real="$(ava_safety_realpath "$target")" || {
+        ava_safety_audit "context-read" "deny-not-found" "$target"
+        echo "X safety: trusted read target does not resolve" >&2
+        return 1
+    }
+
+    [[ -f "$real" ]] || {
+        ava_safety_audit "context-read" "deny-not-regular" "$real"
+        echo "X safety: trusted read target is not a regular file" >&2
+        return 1
+    }
+
+    if ava_safety_sensitive "$real"; then
+        ava_safety_audit "context-read" "deny-sensitive" "$real"
+        echo "X safety: sensitive context read denied" >&2
+        return 1
+    fi
+
+    if ! ava_safety_under "$real" "$AVA_ROOT"; then
+        ava_safety_audit "context-read" "deny-outside-root" "$real"
+        echo "X safety: context read outside Avalhla root" >&2
+        return 1
+    fi
+
+    size="$(stat -c '%s' -- "$real" 2>/dev/null || echo 0)"
+
+    if [[ ! "$size" =~ ^[0-9]+$ ]]; then
+        ava_safety_audit "context-read" "deny-size-unresolved" "$real"
+        echo "X safety: context read size could not be resolved" >&2
+        return 1
+    fi
+
+    if (( size > max_bytes )); then
+        ava_safety_audit "context-read" "deny-oversized" "$real"
+        echo "X safety: context read exceeds ${max_bytes} bytes" >&2
+        return 1
+    fi
+
+    ava_safety_audit "context-read" "allow" "$real"
+    return 0
+}
+
+ava_safety_read_file() {
+    local target="$1"
+    local real
+
+    real="$(ava_safety_realpath "$target")" || return 1
+    ava_safety_assert_context_readable "$real" || return 1
+
+    cat -- "$real"
+}
+
+ava_safety_read_head() {
+    local target="$1"
+    local bytes="${2:-8192}"
+    local real max_bytes
+
+    max_bytes="${AVA_SAFETY_MAX_READ_BYTES:-65536}"
+
+    [[ "$bytes" =~ ^[0-9]+$ ]] || {
+        echo "X safety: invalid context read size" >&2
+        return 1
+    }
+
+    (( bytes <= max_bytes )) || {
+        echo "X safety: requested context read exceeds safety limit" >&2
+        return 1
+    }
+
+    real="$(ava_safety_realpath "$target")" || return 1
+    ava_safety_assert_context_readable "$real" || return 1
+
+    head -c "$bytes" -- "$real"
+}
+
 # MEMORY WRITE boundary
 # ---------------------------------------------------------------------------
 

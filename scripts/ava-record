@@ -1,0 +1,730 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+HERE="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+
+# shellcheck source=scripts/lib_runtime.sh
+source "$HERE/lib_runtime.sh"
+# shellcheck source=scripts/lib_safety.sh
+source "$HERE/lib_safety.sh"
+
+RECORD_DIR="${AVA_MEMORY_RECORDS_DIR:-$AVA_MEMORY_DIR/records}"
+RECORD_FILE="${AVA_MEMORY_RECORDS_FILE:-$RECORD_DIR/records.jsonl}"
+SELF="$HERE/$(basename -- "$0")"
+
+usage() {
+    cat <<'USAGE'
+ava-record
+
+  add       create one canonical durable-memory record
+  verify    verify canonical records and their integrity
+  show      print canonical records
+  self-test run isolated positive/negative tests
+
+add options:
+  --type TYPE
+  --source SOURCE
+  --content TEXT
+  --content-stdin
+  --trust unverified|verified_by_human|verified_by_system
+  --derived-from REF    repeatable
+  --evidence REF        repeatable
+
+examples:
+  ava-record add \
+    --type preference \
+    --source conversations/2026-09-25.jsonl \
+    --content "Dawa prefers terminal-first coding."
+
+  ava-record add \
+    --type decision \
+    --source conversation \
+    --trust verified_by_human \
+    --derived-from conversations/2026-09-25.jsonl \
+    --evidence "Dawa explicitly chose the boundary." \
+    --content "Dawa remains the final chooser."
+USAGE
+}
+
+make_record() {
+    local record_type="$1"
+    local source="$2"
+    local trust="$3"
+    local content="$4"
+    local trusted_root="$5"
+    shift 5
+
+    python3 - "$record_type" "$source" "$trust" "$content" "$trusted_root" "$@" <<'PY'
+import hashlib
+import json
+import os
+import sys
+import uuid
+from datetime import datetime, timezone
+
+record_type, source, trust, content, trusted_root = sys.argv[1:6]
+rest = sys.argv[6:]
+
+derived_from = []
+evidence = []
+
+i = 0
+while i < len(rest):
+    if rest[i] == "--derived-from":
+        if i + 1 >= len(rest):
+            raise SystemExit("missing value for --derived-from")
+        derived_from.append(rest[i + 1])
+        i += 2
+    elif rest[i] == "--evidence":
+        if i + 1 >= len(rest):
+            raise SystemExit("missing value for --evidence")
+        evidence.append(rest[i + 1])
+        i += 2
+    else:
+        raise SystemExit(f"unexpected argument: {rest[i]}")
+
+if not record_type or len(record_type) > 64:
+    raise SystemExit("invalid record type")
+
+import re
+if not re.fullmatch(r"[a-z][a-z0-9_.-]*", record_type):
+    raise SystemExit("record type must match [a-z][a-z0-9_.-]*")
+
+if not source:
+    raise SystemExit("source is required")
+
+if trust not in {"unverified", "verified_by_human", "verified_by_system"}:
+    raise SystemExit("invalid trust value")
+
+for value in [source] + derived_from + evidence:
+    if "\x00" in value:
+        raise SystemExit("NUL byte not allowed")
+
+def validate_path_reference(value):
+    if not value.startswith("/"):
+        return
+    candidate = os.path.realpath(os.path.abspath(value))
+    trusted = os.path.realpath(os.path.abspath(trusted_root))
+    common = os.path.commonpath([candidate, trusted])
+    if common != trusted:
+        raise SystemExit(f"absolute provenance path outside Avalhla root: {value}")
+
+validate_path_reference(source)
+
+for value in derived_from:
+    validate_path_reference(value)
+
+for value in evidence:
+    validate_path_reference(value)
+
+now = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+content_bytes = content.encode("utf-8")
+
+MAX_RECORD_BYTES = 65536
+if len(content_bytes) > MAX_RECORD_BYTES:
+    raise SystemExit(f"content exceeds {MAX_RECORD_BYTES} bytes")
+
+record = {
+    "schema_version": 1,
+    "record_id": f"mem-{uuid.uuid4().hex}",
+    "record_type": record_type,
+    "created_at": now,
+    "updated_at": now,
+    "source": source,
+    "derived_from": derived_from,
+    "evidence": evidence,
+    "content": content,
+    "content_sha256": hashlib.sha256(content_bytes).hexdigest(),
+    "content_bytes": len(content_bytes),
+    "writer": "ava-record",
+    "verified_at": now,
+    "integrity_status": "verified",
+    "trust": trust,
+}
+
+forbidden = {"authority", "authorized", "can_instruct"}
+if forbidden.intersection(record):
+    raise SystemExit("forbidden authority field")
+
+canonical = json.dumps(
+    record,
+    ensure_ascii=False,
+    sort_keys=True,
+    separators=(",", ":"),
+).encode("utf-8")
+
+record["record_sha256"] = hashlib.sha256(canonical).hexdigest()
+
+print(json.dumps(
+    record,
+    ensure_ascii=False,
+    sort_keys=True,
+    separators=(",", ":"),
+))
+PY
+}
+
+cmd_add() {
+    local record_type="note"
+    local source=""
+    local trust="unverified"
+    local content=""
+    local content_stdin=0
+    local -a refs=()
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --type)
+                [[ $# -ge 2 ]] || { echo "X missing --type value" >&2; exit 2; }
+                record_type="$2"
+                shift 2
+                ;;
+            --source)
+                [[ $# -ge 2 ]] || { echo "X missing --source value" >&2; exit 2; }
+                source="$2"
+                shift 2
+                ;;
+            --content)
+                [[ $# -ge 2 ]] || { echo "X missing --content value" >&2; exit 2; }
+                content="$2"
+                shift 2
+                ;;
+            --content-stdin)
+                content_stdin=1
+                shift
+                ;;
+            --trust)
+                [[ $# -ge 2 ]] || { echo "X missing --trust value" >&2; exit 2; }
+                trust="$2"
+                shift 2
+                ;;
+            --derived-from)
+                [[ $# -ge 2 ]] || { echo "X missing --derived-from value" >&2; exit 2; }
+                refs+=(--derived-from "$2")
+                shift 2
+                ;;
+            --evidence)
+                [[ $# -ge 2 ]] || { echo "X missing --evidence value" >&2; exit 2; }
+                refs+=(--evidence "$2")
+                shift 2
+                ;;
+            -h|--help)
+                usage
+                exit 0
+                ;;
+            *)
+                echo "X unknown add option: $1" >&2
+                exit 2
+                ;;
+        esac
+    done
+
+    if (( content_stdin == 1 )); then
+        content="$(cat)"
+    fi
+
+    [[ -n "$source" ]] || {
+        echo "X source is required" >&2
+        exit 2
+    }
+
+    [[ -n "$content" ]] || {
+        echo "X content is required" >&2
+        exit 2
+    }
+
+    local trusted_root
+    trusted_root="$(realpath -m -- "$HERE/..")"
+
+    line="$(make_record \
+        "$record_type" \
+        "$source" \
+        "$trust" \
+        "$content" \
+        "$trusted_root" \
+        "${refs[@]}")"
+
+    ava_safety_append_file "$RECORD_FILE" "$line"$'\n'
+
+    printf 'RECORD_FILE=%s\n' "$RECORD_FILE"
+    printf 'RECORD_ID=%s\n' "$(printf '%s' "$line" | jq -r '.record_id')"
+    printf 'TYPE=%s\n' "$(printf '%s' "$line" | jq -r '.record_type')"
+    printf 'TRUST=%s\n' "$(printf '%s' "$line" | jq -r '.trust')"
+    printf 'INTEGRITY=verified\n'
+}
+
+cmd_verify() {
+    if [[ ! -e "$RECORD_FILE" ]]; then
+        echo "RECORD_FILE=$RECORD_FILE"
+        echo "RECORDS=0"
+        echo "VERIFY=PASS"
+        return 0
+    fi
+
+    [[ -f "$RECORD_FILE" ]] || {
+        echo "X records path is not a regular file: $RECORD_FILE" >&2
+        return 1
+    }
+
+    python3 - "$RECORD_FILE" <<'PY'
+import hashlib
+import json
+import sys
+
+path = sys.argv[1]
+
+required = {
+    "schema_version",
+    "record_id",
+    "record_type",
+    "created_at",
+    "updated_at",
+    "source",
+    "derived_from",
+    "evidence",
+    "content",
+    "content_sha256",
+    "content_bytes",
+    "writer",
+    "verified_at",
+    "integrity_status",
+    "trust",
+    "record_sha256",
+}
+
+allowed_trust = {
+    "unverified",
+    "verified_by_human",
+    "verified_by_system",
+}
+
+forbidden = {
+    "authority",
+    "authorized",
+    "can_instruct",
+}
+
+seen_ids = set()
+count = 0
+failures = []
+
+with open(path, "r", encoding="utf-8") as fh:
+    for lineno, raw in enumerate(fh, 1):
+        line = raw.rstrip("\n")
+
+        if not line.strip():
+            continue
+
+        count += 1
+
+        try:
+            obj = json.loads(line)
+        except Exception as exc:
+            failures.append(f"line={lineno}: BAD_JSON:{exc}")
+            continue
+
+        if not isinstance(obj, dict):
+            failures.append(f"line={lineno}: NOT_OBJECT")
+            continue
+
+        missing = sorted(required - set(obj))
+        if missing:
+            failures.append(
+                f"line={lineno}: MISSING_FIELDS:{','.join(missing)}"
+            )
+            continue
+
+        extra_authority = sorted(forbidden.intersection(obj))
+        if extra_authority:
+            failures.append(
+                f"line={lineno}: FORBIDDEN_AUTHORITY_FIELDS:{','.join(extra_authority)}"
+            )
+
+        if obj.get("schema_version") != 1:
+            failures.append(
+                f"line={lineno}: BAD_SCHEMA:{obj.get('schema_version')!r}"
+            )
+
+        record_id = str(obj.get("record_id", ""))
+        if not record_id:
+            failures.append(f"line={lineno}: EMPTY_RECORD_ID")
+        elif record_id in seen_ids:
+            failures.append(
+                f"line={lineno}: DUPLICATE_RECORD_ID:{record_id}"
+            )
+        else:
+            seen_ids.add(record_id)
+
+        if not isinstance(obj.get("derived_from"), list):
+            failures.append(f"line={lineno}: derived_from_not_list")
+
+        if not isinstance(obj.get("evidence"), list):
+            failures.append(f"line={lineno}: evidence_not_list")
+
+        trust = obj.get("trust")
+        if trust not in allowed_trust:
+            failures.append(f"line={lineno}: BAD_TRUST:{trust!r}")
+
+        if obj.get("integrity_status") != "verified":
+            failures.append(
+                f"line={lineno}: BAD_INTEGRITY_STATUS:{obj.get('integrity_status')!r}"
+            )
+
+        content = obj.get("content")
+        if not isinstance(content, str):
+            failures.append(f"line={lineno}: CONTENT_NOT_STRING")
+            continue
+
+        content_bytes = content.encode("utf-8")
+        actual_content_hash = hashlib.sha256(content_bytes).hexdigest()
+
+        if actual_content_hash != str(obj.get("content_sha256", "")):
+            failures.append(
+                f"line={lineno}: CONTENT_HASH_MISMATCH"
+            )
+
+        try:
+            expected_bytes = int(obj.get("content_bytes"))
+        except Exception:
+            expected_bytes = -1
+
+        if len(content_bytes) != expected_bytes:
+            failures.append(
+                f"line={lineno}: CONTENT_SIZE_MISMATCH"
+            )
+
+        unsigned = dict(obj)
+        declared_record_hash = str(unsigned.pop("record_sha256"))
+
+        canonical = json.dumps(
+            unsigned,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+
+        actual_record_hash = hashlib.sha256(canonical).hexdigest()
+
+        if actual_record_hash != declared_record_hash:
+            failures.append(
+                f"line={lineno}: RECORD_HASH_MISMATCH"
+            )
+
+if failures:
+    print(f"RECORDS={count}")
+    print(f"FAILURES={len(failures)}")
+    for item in failures[:100]:
+        print(item)
+    raise SystemExit(1)
+
+print(f"RECORDS={count}")
+print("FAILURES=0")
+print(f"UNIQUE_RECORD_IDS={len(seen_ids)}")
+print("VERIFY=PASS")
+PY
+}
+
+cmd_show() {
+    if [[ ! -f "$RECORD_FILE" ]]; then
+        echo "(no canonical records)"
+        return 0
+    fi
+
+    cat "$RECORD_FILE" |
+    jq -c '
+      {
+        record_id,
+        record_type,
+        created_at,
+        source,
+        derived_from,
+        evidence,
+        trust,
+        integrity_status,
+        content
+      }
+    '
+}
+
+cmd_self_test() {
+    local tmp
+    tmp="$(mktemp -d)"
+    trap 'rm -rf -- "$tmp"' RETURN
+
+    local test_memory="$tmp/memory"
+    local test_env=(AVA_MEMORY_DIR="$test_memory")
+
+    echo '--- canonical record self-test ---'
+
+    if ! env "${test_env[@]}" "$SELF" add \
+        --type preference \
+        --source conversations/2026-09-25.jsonl \
+        --trust verified_by_human \
+        --derived-from conversations/2026-09-25.jsonl \
+        --evidence "explicit test evidence" \
+        --content "Dawa prefers terminal-first coding." \
+        >/tmp/ava-record-add.$$ 2>&1
+    then
+        cat /tmp/ava-record-add.$$
+        rm -f /tmp/ava-record-add.$$
+        echo 'ADD=FAIL'
+        return 1
+    fi
+
+    cat /tmp/ava-record-add.$$
+    rm -f /tmp/ava-record-add.$$
+    echo 'ADD=PASS'
+
+    if env "${test_env[@]}" "$SELF" verify >/tmp/ava-record-verify.$$ 2>&1; then
+        cat /tmp/ava-record-verify.$$
+        rm -f /tmp/ava-record-verify.$$
+        echo 'VERIFY_CLEAN=PASS'
+    else
+        cat /tmp/ava-record-verify.$$
+        rm -f /tmp/ava-record-verify.$$
+        echo 'VERIFY_CLEAN=FAIL'
+        return 1
+    fi
+
+    printf '\n--- tamper test ---\n'
+
+    python3 - "$test_memory/records/records.jsonl" <<'PY'
+import json
+import sys
+
+path = sys.argv[1]
+
+with open(path, encoding="utf-8") as fh:
+    obj = json.loads(fh.readline())
+
+obj["content"] = "TAMPERED"
+
+with open(path, "w", encoding="utf-8") as fh:
+    fh.write(json.dumps(
+        obj,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ) + "\n")
+PY
+
+    if env "${test_env[@]}" "$SELF" verify >/tmp/ava-record-tamper.$$ 2>&1; then
+        cat /tmp/ava-record-tamper.$$
+        rm -f /tmp/ava-record-tamper.$$
+        echo 'TAMPER_DETECTION=FAIL'
+        return 1
+    else
+        cat /tmp/ava-record-tamper.$$
+        rm -f /tmp/ava-record-tamper.$$
+        echo 'TAMPER_DETECTION=PASS'
+    fi
+
+    printf '\n--- environment trust-root poisoning test ---\n'
+
+    rm -rf -- "$test_memory"
+    mkdir -p -- "$test_memory"
+
+    if AVA_ROOT="/tmp" env "${test_env[@]}" "$SELF" add \
+        --type note \
+        --source "/tmp/not-avalhla/source.txt" \
+        --content "environment must not redefine trust root" \
+        >/tmp/ava-record-poison.$$ 2>&1
+    then
+        cat /tmp/ava-record-poison.$$
+        rm -f /tmp/ava-record-poison.$$
+        echo 'ENV_TRUST_ROOT_POISON=FAIL'
+        return 1
+    fi
+
+    if grep -qF 'absolute provenance path outside Avalhla root:' \
+        /tmp/ava-record-poison.$$
+    then
+        cat /tmp/ava-record-poison.$$
+        rm -f /tmp/ava-record-poison.$$
+        echo 'ENV_TRUST_ROOT_POISON=PASS'
+    else
+        cat /tmp/ava-record-poison.$$
+        rm -f /tmp/ava-record-poison.$$
+        echo 'ENV_TRUST_ROOT_POISON=FAIL'
+        return 1
+    fi
+
+    printf '\n--- outside provenance path test ---\n'
+
+    rm -rf -- "$test_memory"
+    mkdir -p -- "$test_memory"
+
+    if env "${test_env[@]}" "$SELF" add \
+        --type note \
+        --source "/tmp/not-avalhla/source.txt" \
+        --content "outside provenance must fail" \
+        >/tmp/ava-record-outside-source.$$ 2>&1
+    then
+        cat /tmp/ava-record-outside-source.$$
+        rm -f /tmp/ava-record-outside-source.$$
+        echo 'OUTSIDE_PROVENANCE_BLOCK=FAIL'
+        return 1
+    fi
+
+    if grep -qF 'absolute provenance path outside Avalhla root:' \
+        /tmp/ava-record-outside-source.$$
+    then
+        cat /tmp/ava-record-outside-source.$$
+        rm -f /tmp/ava-record-outside-source.$$
+        echo 'OUTSIDE_PROVENANCE_BLOCK=PASS'
+    else
+        cat /tmp/ava-record-outside-source.$$
+        rm -f /tmp/ava-record-outside-source.$$
+        echo 'OUTSIDE_PROVENANCE_BLOCK=FAIL'
+        return 1
+    fi
+
+    printf '\n--- record size limit test ---\n'
+
+    rm -rf -- "$test_memory"
+    mkdir -p -- "$test_memory"
+
+    oversized="$(python3 - <<'PY'
+print('X' * 65537)
+PY
+)"
+
+    if env "${test_env[@]}" "$SELF" add \
+        --type note \
+        --source test \
+        --content "$oversized" \
+        >/tmp/ava-record-size.$$ 2>&1
+    then
+        cat /tmp/ava-record-size.$$
+        rm -f /tmp/ava-record-size.$$
+        echo 'RECORD_SIZE_LIMIT=FAIL'
+        return 1
+    fi
+
+    if grep -qF 'content exceeds 65536 bytes' \
+        /tmp/ava-record-size.$$
+    then
+        cat /tmp/ava-record-size.$$
+        rm -f /tmp/ava-record-size.$$
+        echo 'RECORD_SIZE_LIMIT=PASS'
+    else
+        cat /tmp/ava-record-size.$$
+        rm -f /tmp/ava-record-size.$$
+        echo 'RECORD_SIZE_LIMIT=FAIL'
+        return 1
+    fi
+
+    printf '\n--- authority-field test ---\n'
+
+    rm -rf -- "$test_memory"
+    mkdir -p -- "$test_memory"
+
+    env "${test_env[@]}" "$SELF" add \
+        --type note \
+        --source test \
+        --content "authority field test" \
+        >/dev/null
+
+    python3 - "$test_memory/records/records.jsonl" <<'PY'
+import json
+import sys
+
+path = sys.argv[1]
+
+with open(path, encoding="utf-8") as fh:
+    obj = json.loads(fh.readline())
+
+obj["authority"] = "FORBIDDEN"
+
+with open(path, "w", encoding="utf-8") as fh:
+    fh.write(json.dumps(
+        obj,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ) + "\n")
+PY
+
+    if env "${test_env[@]}" "$SELF" verify >/tmp/ava-record-authority.$$ 2>&1; then
+        cat /tmp/ava-record-authority.$$
+        rm -f /tmp/ava-record-authority.$$
+        echo 'AUTHORITY_FIELD_BLOCK=FAIL'
+        return 1
+    else
+        cat /tmp/ava-record-authority.$$
+        rm -f /tmp/ava-record-authority.$$
+        echo 'AUTHORITY_FIELD_BLOCK=PASS'
+    fi
+
+    printf '\n--- duplicate-ID test ---\n'
+
+    rm -rf -- "$test_memory"
+    mkdir -p -- "$test_memory"
+
+    env "${test_env[@]}" "$SELF" add \
+        --type note \
+        --source test \
+        --content "duplicate one" \
+        >/dev/null
+
+    cp -- \
+        "$test_memory/records/records.jsonl" \
+        "$test_memory/records/duplicate.jsonl"
+
+    cat \
+        "$test_memory/records/duplicate.jsonl" \
+        >>"$test_memory/records/records.jsonl"
+
+    if env "${test_env[@]}" "$SELF" verify >/tmp/ava-record-duplicate.$$ 2>&1; then
+        cat /tmp/ava-record-duplicate.$$
+        rm -f /tmp/ava-record-duplicate.$$
+        echo 'DUPLICATE_ID_BLOCK=FAIL'
+        return 1
+    else
+        cat /tmp/ava-record-duplicate.$$
+        rm -f /tmp/ava-record-duplicate.$$
+        echo 'DUPLICATE_ID_BLOCK=PASS'
+    fi
+
+    echo
+    echo 'CANONICAL_RECORD_SELF_TEST=PASS'
+}
+
+case "${1:-}" in
+    add)
+        shift
+        cmd_add "$@"
+        ;;
+    verify)
+        shift
+        [[ $# -eq 0 ]] || {
+            echo "X verify takes no arguments" >&2
+            exit 2
+        }
+        cmd_verify
+        ;;
+    show)
+        shift
+        [[ $# -eq 0 ]] || {
+            echo "X show takes no arguments" >&2
+            exit 2
+        }
+        cmd_show
+        ;;
+    self-test)
+        shift
+        [[ $# -eq 0 ]] || {
+            echo "X self-test takes no arguments" >&2
+            exit 2
+        }
+        cmd_self_test
+        ;;
+    -h|--help|"")
+        usage
+        ;;
+    *)
+        echo "X unknown command: $1" >&2
+        usage >&2
+        exit 2
+        ;;
+esac
