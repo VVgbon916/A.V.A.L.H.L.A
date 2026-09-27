@@ -1795,5 +1795,42 @@
     ],
     "latest_persisted_detail": "Useful findings from this review/search pass are retained here and in docs/HANDOFF.md/docs/CO_BUILDER_TOOLBELT.md.",
     "current_head_note": "Snapshot records the branch tip immediately before this state-refresh commit; future resume should read the live PR head first."
+  },
+  "review_runtime_evidence_2026_09_27": {
+    "status": "CURRENT_EVIDENCE",
+    "captured_at": "2026-09-27",
+    "pr_number": 2,
+    "current_head_before_this_update": "d5ff89f5430130955f84eec88cba2c12650b3146",
+    "findings": [
+      {
+        "subject": "GitHub required-check freshness",
+        "result": "A required status check must pass on the latest commit SHA; strict mode also requires the branch to be up to date with the base before merge.",
+        "source": "GitHub Docs — Troubleshooting required status checks / REST branch protection",
+        "urls": [
+          "https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/troubleshooting-required-status-checks",
+          "https://docs.github.com/en/rest/branches/branch-protection"
+        ]
+      },
+      {
+        "subject": "CodeRabbit review execution",
+        "result": "Observed on PR #2: incremental review reports do not re-review already-reviewed commits; a full review command was therefore requested for the complete current changeset after the CoBuilder state-sync commits.",
+        "source": "CodeRabbit bot response on PR #2",
+        "observed_at": "2026-09-27T21:10:44Z",
+        "implication": "Reviewer state must be interpreted against the exact current PR head; prior findings remain historical unless re-verified."
+      }
+    ],
+    "sync_packet": {
+      "purpose": "Prepare local Avalhla clone for evidence-first reconciliation with the protected GitHub state.",
+      "order": [
+        "fetch origin --prune",
+        "verify local branch and worktree",
+        "verify local main against origin/main",
+        "verify PR branch/head and protected-check state",
+        "capture local safety gate evidence",
+        "reconcile only after evidence review",
+        "VERIFY -> DIFF -> REVIEW before commit/push"
+      ],
+      "hard_rule": "Do not assume the local clone is current from memory; capture live Git state first."
+    }
   }
 }
