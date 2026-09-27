@@ -171,3 +171,23 @@ Recent concrete review lessons:
   - User-facing scripts/ava-* doors must retain executable mode 100755.
   - Deterministic 05 NEXT is guidance; actual gate selection belongs to bounded
     synthesis unless a deterministic selector is implemented.
+
+## Missing-information gate
+
+CoBuilder is the first source consulted before asking Dawa for implementation information.
+
+    01  READ CURRENT COBUILDER STATE
+    02  CHECK LIVE REPOSITORY
+    03  VERIFY EXISTING EVIDENCE
+    04  CROSS-CHECK WHEN NEEDED
+    05  ASK DAWA ONLY IF A REQUIRED FACT IS STILL MISSING
+
+Ask-once law:
+  - Ask only for facts that cannot be established from current source/evidence.
+  - Give the request a stable question_id.
+  - Persist Dawa's answer in the canonical CoBuilder JSON.
+  - Never re-ask that question_id unless Dawa explicitly changes or invalidates the answer.
+  - No clarification is needed when the repository or evidence already determines the answer.
+
+This prevents context loops while preserving Dawa's authority over genuinely
+underdetermined product or implementation choices.

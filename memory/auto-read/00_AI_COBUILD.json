@@ -1800,7 +1800,10 @@
       "active_scan_exclusion": "memory/auto-read/00_AI_COBUILD.json",
       "reason": "Do not force the evidence ledger to erase the exact evidence it is designed to retain.",
       "verification": "The active legacy-pattern scan excludes the evidence ledger while still scanning active repository surfaces."
-    }
+    },
+    "current_head_before_info_policy_commit": "566434b9361c360a42825883418778b65d3a74e4",
+    "latest_ci_on_head": "run 36351412945 SUCCESS for 566434b9361c360a42825883418778b65d3a74e4",
+    "latest_failure_diagnosis": "The active naming scan matched its own retained CodeRabbit finding text inside memory/auto-read/00_AI_COBUILD.json; the correct fix is to exclude the evidence ledger from the active semantic scan, preserving the evidence."
   },
   "review_runtime_evidence_2026_09_27": {
     "status": "CURRENT_EVIDENCE",
@@ -1838,5 +1841,30 @@
       ],
       "hard_rule": "Do not assume the local clone is current from memory; capture live Git state first."
     }
+  },
+  "co_builder_information_request_policy": {
+    "status": "CANONICAL",
+    "order": [
+      "COBUILDER_CURRENT_STATE",
+      "LIVE_REPOSITORY",
+      "VERIFICATION_EVIDENCE",
+      "WEB_CROSS_CHECK",
+      "ASK_DAWA_ONLY_IF_STILL_MISSING"
+    ],
+    "ask_only_when": [
+      "A required implementation fact is absent from current CoBuilder state.",
+      "The live repository cannot establish the fact.",
+      "Existing evidence conflicts and Dawa's intent is genuinely required."
+    ],
+    "do_not_ask_when": [
+      "The answer is already present in current CoBuilder state.",
+      "The answer can be verified from the live repository.",
+      "The issue is deterministic and can be resolved from source plus evidence."
+    ],
+    "ask_once": true,
+    "persistence": "Record each answered request with question_id, answer, source, recorded_at, and scope in this canonical CoBuilder JSON.",
+    "rerequest_rule": "Never ask the same question_id again unless Dawa explicitly invalidates or changes the recorded answer.",
+    "current_missing_information": [],
+    "current_status": "No human clarification is required for the current PR/CI failure; repository and CI evidence were sufficient."
   }
 }
