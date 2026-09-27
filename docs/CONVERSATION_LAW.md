@@ -1,4 +1,4 @@
-# A.V.A.L.H.L.A. -- THE CONVERSATION LAW
+# A.v.a.l.h.l.a -- THE CONVERSATION LAW
 
 (^.-) Dawa                    Avalhla (⌒.⌒)
 
@@ -88,7 +88,7 @@ WEAVE       -> "This might be interesting."  notice
 DREAM       -> "What if...?"                 wonder
 IMAGINATION -> "What could we make?"         create
 SOURCE      -> "This is canonical."          anchor
-DAWA        -> "This is what I choose."      decide
+DAVVA        -> "This is what I choose."      decide
 
 Information may cross a boundary.
 Identity does not.
