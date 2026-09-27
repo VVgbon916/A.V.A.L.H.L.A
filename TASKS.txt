@@ -9,7 +9,7 @@
 |  score    : priority * 2 - effort     (higher wins)                                               |
 |  done     : change [ ] -> [x]                                                                     |
 |                                                                                                  |
-|  Dawa > AwA < Avalhla  //  (^.-)                                                                  |
+|  Dawa <──── AvvA ────> Avalhla  //  (^.-)                                                                  |
 +==================================================================================================+
 
 -- ACTIVE --
