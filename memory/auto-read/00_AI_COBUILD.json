@@ -1794,7 +1794,13 @@
       "81116cc041de1daa4e2ec4c64210c45e0f544cb2"
     ],
     "latest_persisted_detail": "Useful findings from this review/search pass are retained here and in docs/HANDOFF.md/docs/CO_BUILDER_TOOLBELT.md.",
-    "current_head_note": "Snapshot records the branch tip immediately before this state-refresh commit; future resume should read the live PR head first."
+    "current_head_note": "Snapshot records the branch tip immediately before this state-refresh commit; future resume should read the live PR head first.",
+    "static_contract_evidence_boundary": {
+      "rule": "The tracked CoBuilder evidence ledger may preserve literal forbidden/historical strings from reviewer findings. Those literals are evidence, not active repository semantics.",
+      "active_scan_exclusion": "memory/auto-read/00_AI_COBUILD.json",
+      "reason": "Do not force the evidence ledger to erase the exact evidence it is designed to retain.",
+      "verification": "The active legacy-pattern scan excludes the evidence ledger while still scanning active repository surfaces."
+    }
   },
   "review_runtime_evidence_2026_09_27": {
     "status": "CURRENT_EVIDENCE",

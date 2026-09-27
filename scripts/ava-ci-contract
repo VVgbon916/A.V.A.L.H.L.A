@@ -24,7 +24,7 @@ printf "%s\n" "" "-- JSON --"
 if python3 -m json.tool memory/auto-read/00_AI_COBUILD.json >/dev/null; then ok "CoBuilder JSON parses"; else bad "CoBuilder JSON parses" "invalid JSON"; fi
 
 printf "%s\n" "" "-- semantic invariants --"
-if git grep -n -E "DAVVA|Dawa > AwA < Avalhla|Dawa > AvvA < Avalhla|Dawa <---- AwA ----> Avalhla" -- ":!memory/conversations/" ":!memory/reflections/" ":!scripts/ava-ci-contract" >/dev/null 2>&1; then
+if git grep -n -E "DAVVA|Dawa > AwA < Avalhla|Dawa > AvvA < Avalhla|Dawa <---- AwA ----> Avalhla" -- ":!memory/conversations/" ":!memory/reflections/" ":!memory/auto-read/00_AI_COBUILD.json" ":!scripts/ava-ci-contract" >/dev/null 2>&1; then
   bad "authority/relation naming" "active legacy or DAVVA label found"
 else
   ok "authority/relation naming"
