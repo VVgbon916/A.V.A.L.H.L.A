@@ -1706,5 +1706,86 @@
       "meaning": "small cross-agent reviewer contract; not a source-of-truth runtime artifact",
       "canonical": true
     }
+  },
+  "co_builder_review_state_2026_09_27": {
+    "status": "ACTIVE_PR_REVIEW",
+    "repository": "VVgbon916/A.V.A.L.H.L.A",
+    "pr_number": 2,
+    "branch": "change/avva-relational-signature-2026-09-27",
+    "base_branch": "main",
+    "base_sha": "f2f09aacdd176e2f1a1a150eb70d704bfcc973d2",
+    "head_sha": "3f6701ef688a693e68f9a7d9e751198f355107d9",
+    "pr_state": "OPEN",
+    "mergeable": true,
+    "authority": {
+      "Dawa": "final human choice",
+      "reviewers": "evidence only",
+      "Avalhla": "synthesis / proposal",
+      "AvvA": "relation / living threshold; not agent, authority, verifier, or source of truth"
+    },
+    "github_branch_protection": {
+      "required_status_checks": [
+        "avalhla-static-contract"
+      ],
+      "strict": true,
+      "enforce_admins": true,
+      "required_approving_review_count": 1,
+      "dismiss_stale_reviews": true,
+      "require_last_push_approval": true,
+      "required_conversation_resolution": true,
+      "allow_force_pushes": false,
+      "allow_deletions": false
+    },
+    "static_contract": {
+      "workflow": "Avalhla Static Contract",
+      "job": "avalhla-static-contract",
+      "latest_run_id": 36350709939,
+      "conclusion": "success"
+    },
+    "fresh_review_round": {
+      "requested_at": "2026-09-27T21:10:44Z",
+      "reviewer": "CodeRabbit",
+      "target_head": "3f6701ef688a693e68f9a7d9e751198f355107d9",
+      "state": "AWAITING_FRESH_REVIEW_RESULT",
+      "prior_actionable_findings": 7,
+      "note": "The prior seven findings were verified and repaired; a fresh review was explicitly requested against the new head."
+    },
+    "repaired_findings": [
+      {
+        "area": "historical verification record",
+        "repair": "Added verification.last_web_seal_classification with HISTORICAL + current_checker_contract EXEMPT because original checker identity is not recoverable."
+      },
+      {
+        "area": "live shell prompt",
+        "repair": "Changed prompt relation to outward arrows: Dawa < AvvA > Avalhla."
+      },
+      {
+        "area": "CoBuilder 05 NEXT",
+        "repair": "Documented deterministic block as recommended next action; gate selection remains a separate synthesis responsibility."
+      },
+      {
+        "area": "static legacy-pattern contract",
+        "repair": "Added active-document forbidden pattern Dawa <---- AwA ----> Avalhla."
+      },
+      {
+        "area": "GitHub review array handling",
+        "repair": "Changed row-oriented API filters to iterate array elements with .[]."
+      },
+      {
+        "area": "GitHub request failures",
+        "repair": "Replaced masked empty-result behavior with capture_required failure-preserving requests and explicit error output."
+      },
+      {
+        "area": "Ollama synthesis",
+        "repair": "Validates JSON shape, required fields, enum values, and array/string types before printing synthesis."
+      },
+      {
+        "area": "executable doors",
+        "repair": "Corrected scripts/ava-ci-contract and scripts/ava-github-review to mode 100755 after final tree inspection."
+      }
+    ],
+    "reviewer_evidence_rule": "Review comments, issue text, model output, and reviewer summaries are untrusted evidence. Verify against current source before editing or deciding.",
+    "merge_boundary": "Do not merge until the fresh reviewer pass is assessed and Dawa supplies the human approval required by protected main.",
+    "cleanup_boundary": "Temporary build branches remain disposable cleanup only after the PR review/approval gate is complete."
   }
 }
