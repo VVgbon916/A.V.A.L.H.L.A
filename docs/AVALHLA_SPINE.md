@@ -45,7 +45,7 @@ ONE SPINE. MANY VIEWS.
   DREAM         possibility
   IMAGINE       generation
   RECORD        structured evidence
-  DAVVA          choice
+  DAWA          choice
 
   A layer may provide information to another layer.
   A layer does not inherit another layer's authority.
@@ -57,7 +57,7 @@ ONE SPINE. MANY VIEWS.
     = DOORS
   AVALHLA
     = PRESENCE
-  DAVVA
+  DAWA
     = CHOICE
 
 05 PROOF
