@@ -1,0 +1,234 @@
+{
+  "schema": "avalhla.ai-cobuild.v1",
+  "status": "PRIMARY_OPERATING_LAW",
+  "runtime_authority": "local_canonical_worktree",
+  "human_authority": "final_for_consequential_changes",
+  "canonical_root": "/var/home/VVgbon/Avalhla",
+  "canonical_memory": "/var/home/VVgbon/Avalhla/memory",
+  "shell": "zsh",
+  "primary_way_to_act": {
+    "order": [
+      "READ",
+      "REAL_STATE",
+      "UNDERSTAND",
+      "COMPARE",
+      "CROSS_CHECK",
+      "MINIMAL_EDIT",
+      "TEST",
+      "VERIFY",
+      "DIFF",
+      "REVIEW"
+    ],
+    "rule": "Evidence precedes mutation. The model does not authorize itself.",
+    "no_story_over_result": true
+  },
+  "verification": {
+    "web_4x": {
+      "scope": "WEB_4X",
+      "checks": {
+        "primary": "closest_authoritative_source",
+        "independent": "separate_origin_or_genuine_corroboration",
+        "counter": "disagreement_limits_or_alternate_source",
+        "current": "date_scope_and_present_state"
+      },
+      "rules": [
+        "Repeated copies, mirrors, syndications, or summaries from one origin count as one source.",
+        "Search discovery is not verification.",
+        "Search-result absence is not proof of absence.",
+        "Agreement strengthens a bounded finding.",
+        "Disagreement becomes a finding and blocks a seal when unresolved."
+      ]
+    },
+    "seal": {
+      "display": "⟦✓‿✓⟧ CHECKING > AvvA < SEALED ⟪◉‿◉⟫",
+      "checking_semantics": "Verification process active; not proof of success.",
+      "sealed_semantics": "Defined verification gate passed for the declared scope only.",
+      "face_semantics": {
+        "⟦✓‿✓⟧": "CHECKING",
+        "AvvA": "verifier_or_witness",
+        "⟪◉‿◉⟫": "SEALED_OR_WITNESSED"
+      },
+      "ai_cannot_self_seal": true,
+      "revocation": [
+        "stale_evidence",
+        "scope_change",
+        "new_meaningful_fact",
+        "unresolved_conflict",
+        "record_corruption"
+      ]
+    },
+    "seal_evidence_record": {
+      "required_fields": [
+        "schema_version",
+        "seal_id",
+        "scope",
+        "subject",
+        "checked_at",
+        "checker",
+        "status",
+        "checks",
+        "convergence",
+        "conflicts",
+        "limitations",
+        "conclusion_basis",
+        "source_refs",
+        "evidence_hash",
+        "record_hash"
+      ],
+      "check_order": [
+        "primary",
+        "independent",
+        "counter",
+        "current"
+      ],
+      "check_result_values": [
+        "PASS",
+        "FAIL",
+        "LIMIT"
+      ],
+      "convergence_values": [
+        "AGREES",
+        "DIVERGENT",
+        "INSUFFICIENT"
+      ],
+      "sealed_gate": {
+        "primary": "PASS",
+        "independent": "PASS",
+        "counter": [
+          "PASS",
+          "LIMIT"
+        ],
+        "current": "PASS",
+        "convergence": "AGREES",
+        "conflicts": [],
+        "limitations": "explicitly_recorded",
+        "source_refs": "non_empty",
+        "evidence_hash": "present",
+        "record_hash": "present"
+      },
+      "blocked_conditions": [
+        "counter_result_is_FAIL",
+        "current_result_is_not_PASS",
+        "primary_result_is_not_PASS",
+        "independent_result_is_not_PASS",
+        "convergence_is_not_AGREES",
+        "unresolved_conflicts_present",
+        "missing_required_evidence",
+        "hash_missing_or_invalid"
+      ],
+      "scope_law": "A seal proves the verification procedure passed for its declared scope; it does not prove more than the evidence supports.",
+      "source_reference_fields": [
+        "source_id",
+        "title",
+        "origin",
+        "url",
+        "publisher",
+        "published_at",
+        "retrieved_at"
+      ]
+    }
+  },
+  "editor": {
+    "geometry": {
+      "canvas": 100,
+      "core": 80,
+      "notes_left": 10,
+      "notes_right": 10
+    },
+    "sublime_settings": {
+      "draw_centered": false,
+      "word_wrap": false,
+      "wrap_width": 80,
+      "wrap_width_style": "constant",
+      "rulers": [
+        [10, "dotted", 1],
+        [20, "dotted", 1],
+        [40, "stippled", 1],
+        [60, "dotted", 1],
+        [80, "stippled", 1],
+        [90, "dotted", 1],
+        [100, "solid", 2]
+      ]
+    },
+    "change_law": "No silent Sublime changes. AI may detect, explain, or propose. Dawa must be told before settings change."
+  },
+  "heart": {
+    "board": "MAP",
+    "doors": "COMMANDS",
+    "ava": "PRESENCE",
+    "dawa": "CHOICE",
+    "model_sees_not_model_decides": true,
+    "cross_available_not_cross_contaminated": true,
+    "dawa_decides": true
+  },
+  "safety": {
+    "must_fail_closed": [
+      "outside_root",
+      "traversal",
+      "sensitive_path",
+      "unsafe_symlink"
+    ],
+    "protected_semantic_state": [
+      "persona/avalhla.Modelfile",
+      "AwA_ATLAS.md",
+      "AwA_WEAVE.md",
+      "AwA_DREAM.md",
+      "AwA_TERMINAL.md",
+      "memory/conversations/",
+      "memory/reflections/",
+      "memory/profiles/",
+      "memory/reality/",
+      "memory/inventory/07_LORE/"
+    ],
+    "distinctions": {
+      "ROOT": "where Avalhla operates",
+      "SENSITIVE": "secret material denied",
+      "PROTECTED": "semantic Avalhla state requiring deliberate handling"
+    }
+  },
+  "memory": {
+    "read_flow": [
+      "ai-chat",
+      "run_read_request",
+      "ai-read",
+      "lib_context.sh",
+      "lib_safety.sh"
+    ],
+    "writers": [
+      "ai-chat",
+      "ai-learn",
+      "ai-remember",
+      "ava-autoread",
+      "ava-mood",
+      "ava-record",
+      "ava-reality",
+      "ava-doc",
+      "ava-dream",
+      "ava-weave",
+      "ava-imagine",
+      "ava-learn-repo",
+      "ava-diff"
+    ]
+  },
+  "final_rules": [
+    "DO_NOT_MAKE_TEST_FIT_COMMAND",
+    "MAKE_TEST_FIT_VERIFIED_CONTRACT",
+    "DO_NOT_MAKE_STORY_FIT_RESULT",
+    "MAKE_RESULT_DECIDE_STORY",
+    "MODEL_DOES_NOT_AUTHORIZE_ITSELF"
+  ],
+  "change_contract": [
+    "READ",
+    "REAL_STATE",
+    "UNDERSTAND",
+    "COMPARE",
+    "MINIMAL_EDIT",
+    "POSITIVE_TEST",
+    "NEGATIVE_TEST",
+    "VERIFY",
+    "DIFF",
+    "COMMIT",
+    "PUSH",
+    "REMOTE_CONFIRM"
+  ]
+}
