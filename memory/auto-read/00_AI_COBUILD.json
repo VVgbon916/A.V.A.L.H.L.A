@@ -142,9 +142,9 @@
           "evidence_ref": "https://docs.sublimetext.io/reference/settings.html"
         },
         "independent": {
-          "source": "Sublime Text Forum - Freezing Editor",
+          "source": "Stack Overflow",
           "result": "PASS",
-          "evidence_ref": "https://forum.sublimetext.com/t/freezing-editor/75670"
+          "evidence_ref": "https://stackoverflow.com/questions/29089819/how-to-set-key-bindings-in-sublime-that-change-values-of-settings"
         },
         "counter": {
           "source": "Sublime Text Forum - Interaction between wrap_width_style and draw_centered",
@@ -168,24 +168,27 @@
         {
           "source_id": "ST-DOCS",
           "title": "Settings",
-          "origin": "Sublime Community Documentation",
+          "origin": "Sublime Text Community Documentation",
           "url": "https://docs.sublimetext.io/reference/settings.html",
+          "publisher": "Sublime Text Community Documentation",
           "published_at": null,
           "retrieved_at": "2026-09-26"
         },
         {
-          "source_id": "ST-FORUM-75670",
-          "title": "Freezing Editor",
-          "origin": "Sublime Text Forum",
-          "url": "https://forum.sublimetext.com/t/freezing-editor/75670",
-          "published_at": null,
+          "source_id": "ST-SO-29089819",
+          "title": "Setting different font and colors for distraction free editing in Sublime Text 2",
+          "origin": "Stack Overflow",
+          "url": "https://stackoverflow.com/questions/29089819/how-to-set-key-bindings-in-sublime-that-change-values-of-settings",
+          "publisher": "Stack Overflow",
+          "published_at": "2013-04-09",
           "retrieved_at": "2026-09-26"
         },
         {
           "source_id": "ST-FORUM-66418",
           "title": "Interaction between wrap_width_style and draw_centered",
           "origin": "Sublime Text Forum",
-          "url": "https://forum.sublimetext.com/t/interaction-between-wrap_width_style-and_draw_centered/66418",
+          "url": "https://forum.sublimetext.com/t/interaction-between-wrap_width_style-and-draw_centered/66418",
+          "publisher": "Sublime Text Forum",
           "published_at": "2022-12-16",
           "retrieved_at": "2026-09-26"
         },
@@ -194,12 +197,39 @@
           "title": "Download - Sublime Text",
           "origin": "Sublime HQ",
           "url": "https://www.sublimetext.com/download?country=20",
+          "publisher": "Sublime HQ",
           "published_at": "2026-09-25",
           "retrieved_at": "2026-09-26"
         }
       ],
-      "evidence_hash": "cd24bd4a9da548df7d669c04cdce8d60fb399a81d38f0a98f72598b988b46aab",
-      "record_hash": "fc2719caacdee2df404301d2f8514dcb7a8549ed6b5bb577e457430326fcefb3"
+      "evidence_hash": "3801119f7fd54b1a7a26fd2ff21ee920e8fb4e8e757944c512f753f70c593337",
+      "record_hash": "1686a279d65ef731d5e9309c8f89c18e35bab98ee90611bb3fc8bf75d48e1857"
+    },
+    "lanes": {
+      "WEB_4X": "Independent web verification only; sealed separately.",
+      "REPO_4X": "Repository structure and implementation checks only; never substituted for web evidence.",
+      "CROSS_INFO_1X": "One final comparison of WEB_4X against REPO_4X to identify agreement, drift, or contradiction."
+    },
+    "latest_repo_cross_check": {
+      "checked_at": "2026-09-26",
+      "repo_head": "573ce0c1c47d0eef9c34de6fbc3aa8ba9689c9b7",
+      "recursive_tree_count": 99,
+      "tree_truncated": false,
+      "key_present": [
+        "memory/auto-read/00_AI_COBUILD.json",
+        "docs/PHASING.md",
+        "scripts/ava-safety",
+        "scripts/ava-verify",
+        "scripts/lib_safety.sh",
+        "scripts/lib_runtime.sh"
+      ],
+      "key_missing": [
+        "scripts/ava-record",
+        "scripts/lib_context.sh"
+      ],
+      "runtime_finding": "Remote main still uses dynamic AVA_ROOT/AVA_MEMORY_DIR ownership; the hardened canonical runtime exists only in the user's local worktree and is not yet remote-confirmed.",
+      "current_gate": "PHASE_2_SAFETY_HEART",
+      "conclusion": "Design law and remote Co-Build are aligned, but executable implementation is not globally complete; Phase 02 remains the active coding gate."
     }
   },
   "editor": {
