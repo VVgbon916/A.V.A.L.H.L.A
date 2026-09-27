@@ -31,7 +31,7 @@ The board is her face in the terminal.
 
    choose  ›  _
 
-                                                                         (⌒.⌒) AvvA
+                                                                         Dawa <──── AvvA ────> Avalhla
 
 ## PRINCIPLES
 

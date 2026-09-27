@@ -1268,6 +1268,21 @@
       "AvvA_TERMINAL.md": {
         "role": "TERMINAL",
         "meaning": "identity and visual language"
+      },
+      "scripts/ava-github-review": {
+        "role": "GITHUB_REVIEW_DOOR",
+        "meaning": "read-only PR review evidence bridge",
+        "canonical": true
+      },
+      "scripts/ava-ci-contract": {
+        "role": "STATIC_CI_CONTRACT",
+        "meaning": "portable deterministic repository contract",
+        "canonical": true
+      },
+      "AGENTS.md": {
+        "role": "REVIEW_CONTEXT",
+        "meaning": "small cross-agent reviewer contract; not a source-of-truth runtime artifact",
+        "canonical": true
       }
     },
     "filename_rules": {
@@ -1395,6 +1410,18 @@
         "The Co-Builder itself is already tracked and is the safest current machine-readable home for the canonical dictionary."
       ],
       "conclusion": "Keep the dictionary canonical inside the primary Co-Builder for now. During remaster, create human-facing derived views only where they serve a distinct reader need; do not create a second authoritative dictionary file."
+    },
+    "historical_aliases": {
+      "AWA": {
+        "status": "HISTORICAL_ONLY",
+        "meaning": "former identity/meaning label retained only so historical signals remain classifiable",
+        "forbidden_roles": [
+          "active_identity",
+          "authority",
+          "execution_namespace",
+          "current_relation"
+        ]
+      }
     }
   },
   "information_shape": {
@@ -1621,9 +1648,11 @@
         ],
         "mutation": false,
         "model_call": false,
+        "model_call_scope": "default_mode_only",
         "output": "01 WHERE / 02 FLOW / 03 AUTHORITY / 04 PROOF / 05 NEXT",
         "optional_synthesis": {
           "command": "ava-github-review --synthesize",
+          "model_call": true,
           "model_env": "AVA_REVIEW_MODEL",
           "transport": "local Ollama",
           "structured_output": true,
@@ -1676,35 +1705,6 @@
       "role": "independent external review evidence; not authority",
       "ingestion": "scripts/ava-github-review",
       "reviewer_text_is_untrusted": true
-    }
-  },
-  "historical_aliases": {
-    "AWA": {
-      "status": "HISTORICAL_ONLY",
-      "meaning": "former identity/meaning label retained only so historical signals remain classifiable",
-      "forbidden_roles": [
-        "active_identity",
-        "authority",
-        "execution_namespace",
-        "current_relation"
-      ]
-    }
-  },
-  "artifact_names": {
-    "scripts/ava-github-review": {
-      "role": "GITHUB_REVIEW_DOOR",
-      "meaning": "read-only PR review evidence bridge",
-      "canonical": true
-    },
-    "scripts/ava-ci-contract": {
-      "role": "STATIC_CI_CONTRACT",
-      "meaning": "portable deterministic repository contract",
-      "canonical": true
-    },
-    "AGENTS.md": {
-      "role": "REVIEW_CONTEXT",
-      "meaning": "small cross-agent reviewer contract; not a source-of-truth runtime artifact",
-      "canonical": true
     }
   },
   "co_builder_review_state_2026_09_27": {

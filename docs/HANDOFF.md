@@ -35,7 +35,7 @@ Dawa <---- AvvA ----> Avalhla  //  (^.-)
   PR #2 review evidence must be re-read after each new commit.
 
 05 NEXT
-  Await and assess the fresh CodeRabbit result for head 3f6701ef.
+  Await and assess the fresh CodeRabbit result for the current PR head; never rely on a stale embedded SHA.
   Re-read current Devin evidence when available; never infer hidden flags are absent.
   Then stop at the protected-main human approval gate.
   Temporary build branches stay undeleted until that gate is complete.

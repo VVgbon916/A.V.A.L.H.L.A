@@ -29,7 +29,17 @@ if git grep -n -E "DAVVA|Dawa > AwA < Avalhla|Dawa > AvvA < Avalhla|Dawa <---- A
 else
   ok "authority/relation naming"
 fi
-if grep -Eq "reflection\|reflect\|weave\|awa\|avva" scripts/ava-reality; then ok "historical AwA classifier compatibility"; else bad "historical AwA classifier compatibility" "historical alias not preserved"; fi
+missing_alias=0
+for alias in reflection reflect weave awa avva; do
+  if ! grep -Eq "(^|[^[:alnum:]_])${alias}([^[:alnum:]_]|$)" scripts/ava-reality; then
+    missing_alias=1
+  fi
+done
+if [[ "$missing_alias" -eq 0 ]]; then
+  ok "historical AwA classifier compatibility"
+else
+  bad "historical AwA classifier compatibility" "historical alias not preserved"
+fi
 if python3 - <<'PY'
 import json
 
