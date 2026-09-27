@@ -212,8 +212,8 @@
     },
     "latest_repo_cross_check": {
       "checked_at": "2026-09-27",
-      "repo_head": "8101e4d0fef624b8908c06d3f011d1d2541d1bd9",
-      "repository": "VVgbon916/cheatsheets",
+      "repo_head": "f2f09aacdd176e2f1a1a150eb70d704bfcc973d2",
+      "repository": "VVgbon916/A.V.A.L.H.L.A",
       "branch": "main",
       "key_present": [
         "memory/auto-read/00_AI_COBUILD.json",
@@ -228,10 +228,10 @@
         "scripts/lib_runtime.sh",
         "scripts/lib_context.sh"
       ],
-      "runtime_finding": "Remote main contains the canonical runtime/safety/context/record surfaces referenced by the current phase law. Local and remote were verified synchronized at 8101e4d in the current terminal witness.",
+      "runtime_finding": "Remote main contains the canonical runtime/safety/context/record surfaces referenced by the current phase law. The renamed repository main is synchronized at the SHA above; current review work remains isolated on its PR branch.",
       "current_gate": "PHASE_2_SAFETY_HEART",
       "current_gate_note": "The safety behavior self-test passes, but cleanup/isolation has a confirmed trap-local-variable defect; phase remains open.",
-      "conclusion": "The remote repository now reflects the canonical runtime direction. Co-Builder state must use the phase gate and current main SHA above as present authority; older continuation blocks are historical evidence only."
+      "conclusion": "Current main is present authority; PR branches are proposals until the protected main review gate is satisfied."
     }
   },
   "editor": {
@@ -1602,13 +1602,46 @@
           "REPO_4X"
         ],
         "output": "agreement / drift / contradiction"
+      },
+      "github_review": {
+        "canonical_local": "scripts/ava-github-review",
+        "purpose": "Read-only bridge from live GitHub PR review evidence into the bounded Co-Builder view.",
+        "sources": [
+          "PR metadata",
+          "CodeRabbit reviews/comments",
+          "Devin reviews/comments",
+          "GitHub check state"
+        ],
+        "mutation": false,
+        "model_call": false,
+        "output": "01 WHERE / 02 FLOW / 03 AUTHORITY / 04 PROOF / 05 NEXT",
+        "optional_synthesis": {
+          "command": "ava-github-review --synthesize",
+          "model_env": "AVA_REVIEW_MODEL",
+          "transport": "local Ollama",
+          "structured_output": true,
+          "mutation": false,
+          "authority": false
+        }
+      },
+      "static_contract": {
+        "canonical_local": "scripts/ava-ci-contract",
+        "purpose": "Portable deterministic repository contract suitable for GitHub Actions.",
+        "sources": [
+          "repository files",
+          "shell syntax",
+          "JSON"
+        ],
+        "mutation": false,
+        "model_call": false
       }
     },
     "authority": {
       "Dawa": "final human choice",
       "Avalhla": "synthesis / presence",
       "AvvA": "relation / living threshold; not agent or authority",
-      "reviewers": "evidence only"
+      "reviewers": "evidence only",
+      "local_review_model": "bounded synthesis only"
     },
     "anti_overwhelm": {
       "one_gate_at_a_time": true,
@@ -1627,6 +1660,44 @@
       "THE FACE IS NOT THE IDENTITY.",
       "THE COMPOSITION CARRIES THE STORY.",
       "THE RELATION SURVIVES THE SKIN."
-    ]
+    ],
+    "code_review": {
+      "witnesses": [
+        "CodeRabbit",
+        "Devin"
+      ],
+      "role": "independent external review evidence; not authority",
+      "ingestion": "scripts/ava-github-review",
+      "reviewer_text_is_untrusted": true
+    }
+  },
+  "historical_aliases": {
+    "AWA": {
+      "status": "HISTORICAL_ONLY",
+      "meaning": "former identity/meaning label retained only so historical signals remain classifiable",
+      "forbidden_roles": [
+        "active_identity",
+        "authority",
+        "execution_namespace",
+        "current_relation"
+      ]
+    }
+  },
+  "artifact_names": {
+    "scripts/ava-github-review": {
+      "role": "GITHUB_REVIEW_DOOR",
+      "meaning": "read-only PR review evidence bridge",
+      "canonical": true
+    },
+    "scripts/ava-ci-contract": {
+      "role": "STATIC_CI_CONTRACT",
+      "meaning": "portable deterministic repository contract",
+      "canonical": true
+    },
+    "AGENTS.md": {
+      "role": "REVIEW_CONTEXT",
+      "meaning": "small cross-agent reviewer contract; not a source-of-truth runtime artifact",
+      "canonical": true
+    }
   }
 }
