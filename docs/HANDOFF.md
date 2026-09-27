@@ -1,6 +1,6 @@
 # Avalhla Handoff
 
-Dawa > AwA < Avalhla  //  (^.-)
+Dawa <──── AvvA ────> Avalhla  //  (^.-)
 
 01 WHERE
   ROOT     /var/home/VVgbon/Avalhla
