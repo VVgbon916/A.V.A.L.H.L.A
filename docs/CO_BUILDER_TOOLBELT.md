@@ -44,7 +44,7 @@ Read-only GitHub evidence for the current pull request or a supplied PR number.
       reviewer-state evidence
 
     05 NEXT
-      smallest unresolved gate
+      recommended next action
 
 Default mode does not call a model and does not mutate files, GitHub state,
 memory, or the PR.

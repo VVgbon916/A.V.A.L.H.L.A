@@ -24,12 +24,31 @@ printf "%s\n" "" "-- JSON --"
 if python3 -m json.tool memory/auto-read/00_AI_COBUILD.json >/dev/null; then ok "CoBuilder JSON parses"; else bad "CoBuilder JSON parses" "invalid JSON"; fi
 
 printf "%s\n" "" "-- semantic invariants --"
-if git grep -n -E "DAVVA|Dawa > AwA < Avalhla|Dawa > AvvA < Avalhla" -- ":!memory/conversations/" ":!memory/reflections/" ":!scripts/ava-ci-contract" >/dev/null 2>&1; then
+if git grep -n -E "DAVVA|Dawa > AwA < Avalhla|Dawa > AvvA < Avalhla|Dawa <---- AwA ----> Avalhla" -- ":!memory/conversations/" ":!memory/reflections/" ":!scripts/ava-ci-contract" >/dev/null 2>&1; then
   bad "authority/relation naming" "active legacy or DAVVA label found"
 else
   ok "authority/relation naming"
 fi
 if grep -Eq "reflection\|reflect\|weave\|awa\|avva" scripts/ava-reality; then ok "historical AwA classifier compatibility"; else bad "historical AwA classifier compatibility" "historical alias not preserved"; fi
+if python3 - <<'PY'
+import json
+
+with open("memory/auto-read/00_AI_COBUILD.json", encoding="utf-8") as fh:
+    doc = json.load(fh)
+
+seal = doc.get("verification", {}).get("last_web_seal", {})
+classification = doc.get("verification", {}).get("last_web_seal_classification", {})
+valid = (
+    seal.get("checker") != "AvvA"
+    or (
+        classification.get("status") == "HISTORICAL"
+        and classification.get("current_checker_contract") == "EXEMPT"
+        and classification.get("historical_record") is True
+    )
+)
+raise SystemExit(0 if valid else 1)
+PY
+then ok "historical AvvA checker record is exempt"; else bad "historical AvvA checker record is exempt" "historical exemption missing"; fi
 if grep -qF "DAWA" scripts/ava-weave && ! grep -qF "DAVVA" scripts/ava-weave; then ok "weave human authority label"; else bad "weave human authority label" "authority drift"; fi
 if grep -qF "git diff HEAD --check" scripts/ava-resume; then ok "resume checks staged + unstaged diff"; else bad "resume checks staged + unstaged diff" "HEAD-scoped diff proof missing"; fi
 if grep -qF "AVA_ROOT does not match this repository" scripts/ava-resume; then ok "resume rejects redirected AVA_ROOT"; else bad "resume rejects redirected AVA_ROOT" "redirect guard missing"; fi

@@ -205,6 +205,13 @@
       "evidence_hash": "3801119f7fd54b1a7a26fd2ff21ee920e8fb4e8e757944c512f753f70c593337",
       "record_hash": "1686a279d65ef731d5e9309c8f89c18e35bab98ee90611bb3fc8bf75d48e1857"
     },
+    "last_web_seal_classification": {
+      "status": "HISTORICAL",
+      "historical_record": true,
+      "current_checker_contract": "EXEMPT",
+      "checker_semantics": "Historical provenance metadata only; not a current checker, agent, authority, or verifier.",
+      "reason": "The original checker identity is not recoverable from current repository evidence."
+    },
     "lanes": {
       "WEB_4X": "Independent web verification only; sealed separately.",
       "REPO_4X": "Repository structure and implementation checks only; never substituted for web evidence.",
