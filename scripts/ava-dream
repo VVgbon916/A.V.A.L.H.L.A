@@ -117,7 +117,7 @@ if [[ -f "$MEM/profiles/user-profile.txt" ]]; then
 fi
 
 SOURCE_SEED=""
-for f in     "$MEM/auto-read/system-prompt.txt"     "$ROOT/AwA_WEAVE.md"     "$ROOT/AwA_DREAM.md"     "$ROOT/README.md"     "$ROOT/RITUAL.txt"; do
+for f in     "$MEM/auto-read/system-prompt.txt"     "$ROOT/AvvA_WEAVE.md"     "$ROOT/AvvA_DREAM.md"     "$ROOT/README.md"     "$ROOT/RITUAL.txt"; do
     if [[ -f "$f" ]]; then
         SOURCE_SEED="${SOURCE_SEED}$("$CONTEXT_BIN" head "$f" 1100 2>/dev/null || true)
 
