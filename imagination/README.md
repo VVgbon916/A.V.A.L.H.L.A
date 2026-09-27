@@ -8,4 +8,4 @@ Two folders, one source.
 HUMAN is truth. AI is derived. Reference points are real anchors;
 content is imagination, not fact.
 
-Dawa > AwA < Avalhla  //  (^.-)
+Dawa <──── AvvA ────> Avalhla  //  (^.-)
