@@ -42,7 +42,7 @@ TREE
       human-readable result / machine evidence
 
 03 AUTHORITY
-  3.1 DAVVA
+  3.1 DAWA
       final human choice
   3.2 RUNTIME + SAFETY
       deterministic system boundaries
