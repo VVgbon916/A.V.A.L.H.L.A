@@ -1554,5 +1554,79 @@
       "dream_self": "NightOwl",
       "avalhla_wordmark": "A.v.a.l.h.l.a"
     }
+  },
+  "toolbelt": {
+    "status": "BOUNDED_CO_BUILDER_TOOLBELT",
+    "purpose": "Prevent resume, review, and research work from reopening the whole project context.",
+    "doors": {
+      "resume": {
+        "canonical_local": "scripts/ava-resume",
+        "sources": [
+          "docs/FAST_VIEW.md",
+          "docs/HANDOFF.md",
+          "git state"
+        ],
+        "output": "01 WHERE / 02 FLOW / 03 AUTHORITY / 04 PROOF / 05 NEXT",
+        "mutation": false,
+        "model_call": false
+      },
+      "repo_review": {
+        "sources": [
+          "repository source",
+          "git diff",
+          "shell syntax"
+        ],
+        "mutation": false
+      },
+      "code_review": {
+        "witnesses": [
+          "CodeRabbit",
+          "Devin"
+        ],
+        "role": "independent external review evidence; not authority"
+      },
+      "web_research": {
+        "lane": "WEB_4X",
+        "order": [
+          "primary",
+          "independent",
+          "counter",
+          "current"
+        ],
+        "rule": "search discovery is not verification"
+      },
+      "cross_check": {
+        "lane": "CROSS_INFO_1X",
+        "input": [
+          "WEB_4X",
+          "REPO_4X"
+        ],
+        "output": "agreement / drift / contradiction"
+      }
+    },
+    "authority": {
+      "Dawa": "final human choice",
+      "Avalhla": "synthesis / presence",
+      "AvvA": "relation / living threshold; not agent or authority",
+      "reviewers": "evidence only"
+    },
+    "anti_overwhelm": {
+      "one_gate_at_a_time": true,
+      "questions": [
+        "WHERE?",
+        "CURRENT GATE?",
+        "EVIDENCE?",
+        "CONFLICT?",
+        "SMALLEST NEXT CHANGE?"
+      ],
+      "reopen_solved_gate_only_on_new_meaningful_evidence": true
+    },
+    "philosophy": [
+      "THE CHARACTER IS NOT THE ART.",
+      "THE GRID IS NOT THE MEANING.",
+      "THE FACE IS NOT THE IDENTITY.",
+      "THE COMPOSITION CARRIES THE STORY.",
+      "THE RELATION SURVIVES THE SKIN."
+    ]
   }
 }
