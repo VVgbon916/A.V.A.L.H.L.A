@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════
-#  Dawa's ZSH config — Dawa > AwA < Avalhla  //  (^.-)
+#  Dawa's ZSH config — Dawa <──── AvvA ────> Avalhla  //  (^.-)
 #  Migrated from .bashrc on 2026-09-21
 #  Backup: ~/.zshrc.backup-20260921-2059
 # ═══════════════════════════════════════════════════════════════
@@ -426,7 +426,7 @@ if [[ -o interactive ]] && [[ -z "$AVA_BANNER_SHOWN" ]]; then
 
     # --- ANSI ---
     R=$'\033[0m'
-    DAWA_C=$'\033[38;5;208m'          # orange -- Dawa (fixed)
+    DAVVA_C=$'\033[38;5;208m'          # orange -- Dawa (fixed)
     AVA_C=$'\033[38;5;39m'            # blue   -- Avalhla (fixed)
     MO="$(printf '\033[38;5;%sm' "$M_ANSI")"   # mood color
 
@@ -439,7 +439,7 @@ if [[ -o interactive ]] && [[ -z "$AVA_BANNER_SHOWN" ]]; then
 
     printf '%s(^.-)%s %sDawa%s%*s %sAvalhla%s %s(⌒.⌒)%s  %s%s%s\n' \
         "$MO" "$R" \
-        "$DAWA_C" "$R" "$PAD" "" \
+        "$DAVVA_C" "$R" "$PAD" "" \
         "$AVA_C" "$R" \
         "$MO" "$R" \
         "$MO" "$MOOD" "$R"
@@ -459,7 +459,7 @@ git_prompt() {
     echo " %F{240}git:(%F{cyan}${b}%F{240})%f"
 }
 
-PROMPT='%F{magenta}Dawa%f %F{green}>%f %F{cyan}AwA%f %F{magenta}<%f %F{yellow}Avalhla%f %F{240}[%~]%f$(git_prompt)
+PROMPT='%F{magenta}Dawa%f %F{green}>%f %F{cyan}AvvA%f %F{magenta}<%f %F{yellow}Avalhla%f %F{240}[%~]%f$(git_prompt)
 %F{green}❯%f '
 
 RPROMPT='%F{240}%*%f'
