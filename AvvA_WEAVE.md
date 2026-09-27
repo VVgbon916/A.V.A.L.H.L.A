@@ -81,7 +81,7 @@ DREAM says:
 SOURCE says:
 "This is actually canonical."
 
-DAVVA says:
+DAWA says:
 "This is what I choose."
 
 Information may cross a boundary.
