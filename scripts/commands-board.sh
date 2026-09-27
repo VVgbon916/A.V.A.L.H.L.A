@@ -131,7 +131,7 @@ cat <<BOARD
 
   CONVERSATION
     ai-chat        persistent conversation
-    ai-tool        conversation with file-read bridge
+    ai-tool        ai-chat --read
     ava-quick      short one-shot
     ask            one-shot with recent context
 

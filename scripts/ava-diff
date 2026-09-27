@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 source "$(dirname "${BASH_SOURCE[0]}")/lib_runtime.sh"
+CONTEXT_BIN="$AVA_SCRIPTS_DIR/lib_context.sh"
 source "$(dirname "${BASH_SOURCE[0]}")/lib_output_gate.sh"
 # ava-diff -- show what changed since last review, ask avalhla-review.
 # Usage: ava-diff <file> [--since <ref>]
@@ -8,7 +9,7 @@ source "$(dirname "${BASH_SOURCE[0]}")/lib_output_gate.sh"
 set -Eeuo pipefail
 
 REPO="${AVA_DIFF_REPO:-$(git rev-parse --show-toplevel 2>/dev/null || echo "$PWD")}"
-CACHE_DIR="$HOME/.ai-memory/reviewed"
+CACHE_DIR="$AVA_REVIEWED_DIR"
 MODEL="${AVA_REVIEW_MODEL}"
 SINCE="HEAD~1"
 USE_CACHE=1
@@ -42,6 +43,13 @@ if [[ ! -f "$FILE" ]]; then
         exit 1
     fi
 fi
+
+# Trusted model-context boundary: validate the resolved source
+# before git diff content is allowed into the model prompt.
+"$CONTEXT_BIN" head "$FILE" 1 >/dev/null 2>&1 || {
+    echo "X safety: diff source denied" >&2
+    exit 1
+}
 
 if ! curl -fsS "$OLLAMA_HOST/api/tags" >/dev/null 2>&1; then
     echo "X Ollama server not reachable" >&2

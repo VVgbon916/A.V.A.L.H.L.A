@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
-source "$(dirname "${BASH_SOURCE[0]}")/lib_runtime.sh"
-source "$(dirname "${BASH_SOURCE[0]}")/lib_output_gate.sh"
+HERE="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+# shellcheck source=scripts/lib_runtime.sh
+source "$HERE/lib_runtime.sh"
+# shellcheck source=scripts/lib_output_gate.sh
+source "$HERE/lib_output_gate.sh"
+# shellcheck source=scripts/lib_safety.sh
+source "$HERE/lib_safety.sh"
 set -Eeuo pipefail
 
 ROOT="$AVA_ROOT"
 MODEL="${AVA_WEAVE_MODEL:-$AVA_CHAT_MODEL}"
+CONTEXT_BIN="$AVA_SCRIPTS_DIR/lib_context.sh"
 
 WEAVE_DIR="$AVA_REFLECTIONS_DIR/weave"
-mkdir -p "$WEAVE_DIR"
 
 case "${1:-}" in
     --show)
@@ -54,35 +59,25 @@ esac
 
 REALITY="$("$ROOT/scripts/ava-context-gate" 2>/dev/null | head -c 5000 || true)"
 
-RECENT_CONTEXT="$(
-    find "$AVA_CONVERSATIONS_DIR" -type f -name '*.jsonl' -printf '%T@ %p\n' 2>/dev/null |
-        sort -nr |
-        head -n1 |
-        cut -d' ' -f2- |
-        xargs -r tail -n 18 2>/dev/null |
-        jq -r 'select(.role? and .content?) | "\(.role): \(.content)"' 2>/dev/null |
-        tail -n18 |
-        head -c 1800 || true
-)"
-
+RECENT_CONTEXT="$("$CONTEXT_BIN" recent-jsonl "$AVA_CONVERSATIONS_DIR" 18 1800 2>/dev/null || true)"
 LATEST_DREAM="$(
-    find "$AVA_REFLECTIONS_DIR/dreams" -maxdepth 1 -type f -name '*.md' \
-        -printf '%T@ %p\n' 2>/dev/null |
-        sort -nr |
-        head -n1 |
-        cut -d' ' -f2- |
-        xargs -r head -c 1800 2>/dev/null || true
+    latest="$(
+        find "$AVA_REFLECTIONS_DIR/dreams" -maxdepth 1 -type f -name '*.md'             -printf '%T@ %p\n' 2>/dev/null |
+            sort -nr |
+            head -n1 |
+            cut -d' ' -f2-
+    )"
+    [[ -n "$latest" ]] && "$CONTEXT_BIN" head "$latest" 1800 2>/dev/null || true
 )"
-
 LATEST_REFLECTION="$(
-    find "$AVA_REFLECTIONS_DIR" -maxdepth 1 -type f -name '*.md' \
-        -printf '%T@ %p\n' 2>/dev/null |
-        sort -nr |
-        head -n1 |
-        cut -d' ' -f2- |
-        xargs -r head -c 1800 2>/dev/null || true
+    latest="$(
+        find "$AVA_REFLECTIONS_DIR" -maxdepth 1 -type f -name '*.md'             -printf '%T@ %p\n' 2>/dev/null |
+            sort -nr |
+            head -n1 |
+            cut -d' ' -f2-
+    )"
+    [[ -n "$latest" ]] && "$CONTEXT_BIN" head "$latest" 1800 2>/dev/null || true
 )"
-
 SOURCE_CONTEXT=""
 for source in \
     "$ROOT/AwA_WEAVE.md" \
@@ -94,7 +89,7 @@ do
     [[ -f "$source" ]] || continue
     SOURCE_CONTEXT+="
 --- $(basename "$source") ---
-$(head -c 900 "$source" 2>/dev/null || true)"
+$("$CONTEXT_BIN" head "$source" 900 2>/dev/null || true)"
 done
 
 IMAGINATION_CONTEXT=""
@@ -102,7 +97,7 @@ if [[ -d "$ROOT/imagination" ]]; then
     while IFS= read -r file; do
         IMAGINATION_CONTEXT+="
 --- $(basename "$file") ---
-$(head -c 600 "$file" 2>/dev/null || true)"
+$("$CONTEXT_BIN" head "$file" 600 2>/dev/null || true)"
     done < <(
         find "$ROOT/imagination" -type f \
             \( -name '*.md' -o -name '*.txt' \) \
@@ -292,7 +287,7 @@ RESPONSE="$(printf '%s\n' "$RESPONSE" | head -c 5000)"
 timestamp="$(date '+%Y-%m-%d %H:%M:%S %Z')"
 output="$WEAVE_DIR/$(date '+%Y-%m-%d-%H%M%S').md"
 
-cat > "$output" <<EOF_OUTPUT
+OUTPUT_CONTENT="$(cat <<EOF_OUTPUT
 # AVV A WEAVE
 
 type: possibility
@@ -320,6 +315,8 @@ CROSS-AVAILABLE != CROSS-CONTAMINATED
 Dawa > AvvA < Avalhla
 (⌒.⌒)
 EOF_OUTPUT
+)"
+ava_safety_write_file "$output" "$OUTPUT_CONTENT"$'\n'
 
 echo "saved: $output"
 echo

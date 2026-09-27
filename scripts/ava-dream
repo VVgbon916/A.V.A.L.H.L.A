@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
-source "$(dirname "${BASH_SOURCE[0]}")/lib_runtime.sh"
-source "$(dirname "${BASH_SOURCE[0]}")/lib_output_gate.sh"
 set -Eeuo pipefail
+
+SCRIPT_REAL="$(realpath -- "${BASH_SOURCE[0]}")"
+HERE="$(cd -- "$(dirname -- "$SCRIPT_REAL")" && pwd -P)"
+# shellcheck disable=SC1091
+source "$HERE/lib_runtime.sh"
+# shellcheck disable=SC1091
+source "$HERE/lib_output_gate.sh"
+# shellcheck disable=SC1091
+source "$HERE/lib_safety.sh"
 
 ROOT="$AVA_ROOT"
 MODEL="${AVA_DREAM_MODEL:-$AVA_CHAT_MODEL}"
+CONTEXT_BIN="$AVA_SCRIPTS_DIR/lib_context.sh"
 MEM="$AVA_MEMORY_DIR"
 CONV_DIR="$MEM/conversations"
 KB_DIR="$MEM/knowledge-base"
@@ -27,8 +35,6 @@ while [[ $# -gt 0 ]]; do
         *) echo "unknown arg: $1" >&2; exit 2 ;;
     esac
 done
-
-mkdir -p "$DREAM_DIR"
 
 strip_nonascii() {
     sed -e 's/—/--/g; s/–/-/g' \
@@ -83,13 +89,7 @@ if ! curl -fsS "$OLLAMA_HOST/api/tags" >/dev/null 2>&1; then
     exit 1
 fi
 
-RECENT_TXT=""
-RECENT_CONV="$(ls -1t "$CONV_DIR"/*.jsonl 2>/dev/null | head -1 || true)"
-if [[ -n "$RECENT_CONV" ]]; then
-    RECENT_TXT="$(tail -n 18 "$RECENT_CONV" 2>/dev/null \
-        | jq -r '"\(.role): \(.content | .[0:300])"' 2>/dev/null \
-        | head -c 2200 || true)"
-fi
+RECENT_TXT="$("$CONTEXT_BIN" recent-jsonl "$CONV_DIR" 18 2200 2>/dev/null || true)"
 
 REALITY_SIGNAL=""
 if [[ -x "$HOME/Avalhla/scripts/ava-context-gate" ]]; then
@@ -98,24 +98,28 @@ fi
 
 REFLECT_BODY=""
 LAST_REFLECT="$(ls -1t "$REFLECT_DIR"/[0-9]*.md 2>/dev/null | head -1 || true)"
-[[ -n "$LAST_REFLECT" ]] && REFLECT_BODY="$(head -c 1800 "$LAST_REFLECT" 2>/dev/null || true)"
-
+[[ -n "$LAST_REFLECT" ]] && REFLECT_BODY="$("$CONTEXT_BIN" head "$LAST_REFLECT" 1800 2>/dev/null || true)"
 PREVIOUS_DREAMS=""
-for f in $(ls -1t "$DREAM_DIR"/*.md 2>/dev/null | head -3); do
-    PREVIOUS_DREAMS="${PREVIOUS_DREAMS}$(head -c 1400 "$f" 2>/dev/null || true)
+while IFS= read -r -d '' entry; do
+    f="${entry#* }"
+    PREVIOUS_DREAMS="${PREVIOUS_DREAMS}$("$CONTEXT_BIN" head "$f" 1400 2>/dev/null || true)
 
 "
-done
+done < <(
+    find "$DREAM_DIR" -maxdepth 1 -type f -name '*.md' -printf '%T@ %p\\0' 2>/dev/null |
+        sort -z -nr |
+        head -z -n 3
+)
 
 PROFILE=""
 if [[ -f "$MEM/profiles/user-profile.txt" ]]; then
-    PROFILE="$(head -c 2200 "$MEM/profiles/user-profile.txt" 2>/dev/null || true)"
+    PROFILE="$("$CONTEXT_BIN" head "$MEM/profiles/user-profile.txt" 2200 2>/dev/null || true)"
 fi
 
 SOURCE_SEED=""
 for f in     "$MEM/auto-read/system-prompt.txt"     "$ROOT/AwA_WEAVE.md"     "$ROOT/AwA_DREAM.md"     "$ROOT/README.md"     "$ROOT/RITUAL.txt"; do
     if [[ -f "$f" ]]; then
-        SOURCE_SEED="${SOURCE_SEED}$(head -c 1100 "$f" 2>/dev/null || true)
+        SOURCE_SEED="${SOURCE_SEED}$("$CONTEXT_BIN" head "$f" 1100 2>/dev/null || true)
 
 "
     fi
@@ -123,11 +127,18 @@ done
 
 IMAGINATION_SEED=""
 if [[ -d "$ROOT/imagination" ]]; then
-    IMAGINATION_SEED="$(find "$ROOT/imagination" -type f \( -name '*.md' -o -name '*.txt' \) -print 2>/dev/null | head -5 | while read -r f; do
-        printf '%s\n' "$f"
-        head -c 700 "$f" 2>/dev/null || true
-        printf '\n'
-    done | head -c 2600 || true)"
+    IMAGINATION_SEED="$(
+        find "$ROOT/imagination" -type f \( -name '*.md' -o -name '*.txt' \) -print 2>/dev/null |
+        head -5 |
+        while read -r f; do
+            printf '%s
+' "$f"
+            "$CONTEXT_BIN" head "$f" 700 2>/dev/null || true
+            printf '
+'
+        done |
+        head -c 2600 || true
+    )"
 fi
 
 KB_MANIFEST="$KB_DIR/repo.manifest.json"
@@ -204,14 +215,20 @@ SAFE_PROMPT="$(printf '%s' "$PROMPT" |
 
 RESPONSE="$(curl -s "$OLLAMA_HOST/api/generate"     -d "$(jq -n --arg m "$MODEL" --arg p "$SAFE_PROMPT"     '{model: $m, prompt: $p, stream: false}')"     | jq -r '.response' | strip_nonascii | ava_output_gate)"
 
-{
-    echo "# ava-dream :: $NOW"
-    echo ""
-    [[ -n "$SEED" ]] && { echo "> seed: $SEED"; echo ""; }
-    echo "$RESPONSE"
-    echo ""
-    echo "(⌒.⌒)"
-} > "$OUT"
+DREAM_CONTENT="$(cat <<EOF_OUTPUT
+# ava-dream :: $NOW
+
+$(
+    if [[ -n "$SEED" ]]; then
+        printf '> seed: %s\n\n' "$SEED"
+    fi
+)
+$RESPONSE
+
+(⌒.⌒)
+EOF_OUTPUT
+)"
+ava_safety_write_file "$OUT" "$DREAM_CONTENT"$'\n'
 
 echo "$RESPONSE"
 echo ""

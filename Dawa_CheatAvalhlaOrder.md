@@ -188,7 +188,7 @@ Everything else is expansion.
   persona/system-prompt.txt                        same, plain text
   persona/user-profile.txt                         local, gitignored
   scripts/start-avalhla.sh                         launcher
-  scripts/ai-with-memory                           memory chat
+  scripts/ai-chat                           memory chat
   scripts/ai-learn                                 file indexer
   scripts/ai-remember                              reflection
   scripts/ollama-ctx                               context changer

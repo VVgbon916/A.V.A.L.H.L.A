@@ -12,11 +12,11 @@
 
 | Script | Purpose |
 |---|---|
-| `scripts/ai-with-memory` | Persistent chat with ~/.ai-memory history |
+| `scripts/ai-chat` | Persistent chat with canonical Avalhla memory |
 | `scripts/ai-learn` | Index files into knowledge base |
 | `scripts/ai-remember` | Reflect on recent sessions |
 | `scripts/ai-ask` | One-shot question with context |
-| `scripts/ai-chat-tool` | Read-only file bridge tool |
+| `scripts/ai-chat --read` | Chat with controlled file-read bridge |
 | `scripts/start-avalhla.sh` | Launch ollama + container |
 | `scripts/commands-board.sh` | Harvest all commands into board |
 | `scripts/ava-reality` | Sanitized terminal/repository Reality Signal |

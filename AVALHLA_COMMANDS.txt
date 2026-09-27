@@ -160,7 +160,7 @@
     ~/Avalhla/persona/system-prompt.txt     plain version
     ~/Avalhla/persona/user-profile.txt      local, gitignored
     ~/Avalhla/scripts/start-avalhla.sh      launcher
-    ~/Avalhla/scripts/ai-with-memory        memory chat
+    ~/Avalhla/scripts/ai-chat        memory chat
     ~/Avalhla/scripts/ai-learn              indexer
     ~/Avalhla/scripts/ai-remember           reflection
     ~/.config/containers/systemd/ollama.container        container def

@@ -68,7 +68,7 @@ if command -v gh >/dev/null 2>&1; then
 fi
 
 # Avalhla environment
-export OLLAMA_HOST="http://localhost:11434"
+export OLLAMA_HOST="http://127.0.0.1:11434"
 export AVALHLA_MODEL="avalhla"
 
 # ═══════════════════════════════════════════════════════════════
@@ -109,10 +109,10 @@ alias avastart='~/Avalhla/scripts/start-avalhla.sh'
 alias avastop='systemctl --user stop ollama.service'
 
 # Ava chat + tools
-alias ai-chat='~/Avalhla/scripts/ai-with-memory'
+alias ai-chat='~/Avalhla/scripts/ai-chat'
 alias ai-learn='~/Avalhla/scripts/ai-learn'
 alias ai-remember='~/Avalhla/scripts/ai-remember'
-alias ai-tool='~/Avalhla/scripts/ai-chat-tool'
+alias ai-tool='~/Avalhla/scripts/ai-chat --read'
 alias ask='~/Avalhla/scripts/ai-ask'
 
 # System
@@ -183,7 +183,7 @@ vv() {
 ava-status() {
     local svc model_ok mem_size ctx
     svc=$(systemctl --user is-active ollama.service 2>/dev/null)
-    if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null 2>&1; then
+    if curl -fsS "$OLLAMA_HOST/api/tags" >/dev/null 2>&1; then
         model_ok="✓ up"
     else
         model_ok="✗ down"

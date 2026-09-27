@@ -20,6 +20,7 @@ SESSION_FILE="$CONV_DIR/$(date +%Y-%m-%d).jsonl"
 PROFILE_FILE="$PROFILE_DIR/user-profile.txt"
 RANK_BIN="$AVA_SCRIPTS_DIR/ava-context"
 READ_BIN="$AVA_SCRIPTS_DIR/ai-read"
+CONTEXT_BIN="$AVA_SCRIPTS_DIR/lib_context.sh"
 
 MEM_TURNS="${AVALHLA_MEMORY_TURNS:-8}"
 ENABLE_READ=0
@@ -53,7 +54,7 @@ load_auto_read() {
         (( total + size > 65536 )) && break
         out+="
 --- $(basename "$f") ---
-$(cat "$f")
+$("$CONTEXT_BIN" file "$f" 2>/dev/null || true)
 "
         total=$(( total + size ))
     done
@@ -61,12 +62,46 @@ $(cat "$f")
     return 0
 }
 
+run_read_request() {
+    local request="$1"
+    local rest
+    local pattern
+    local target
+
+    case "$request" in
+        --ls\ *)
+            target="${request#--ls }"
+            [[ -n "$target" ]] || return 2
+            "$READ_BIN" --ls "$target"
+            ;;
+        --tree\ *)
+            target="${request#--tree }"
+            [[ -n "$target" ]] || return 2
+            "$READ_BIN" --tree "$target"
+            ;;
+        --grep\ *)
+            rest="${request#--grep }"
+            pattern="${rest%% *}"
+            target="${rest#"$pattern"}"
+            target="${target# }"
+            [[ -n "$pattern" && -n "$target" ]] || return 2
+            "$READ_BIN" --grep "$pattern" "$target"
+            ;;
+        --*)
+            return 2
+            ;;
+        *)
+            "$READ_BIN" "$request"
+            ;;
+    esac
+}
+
 strip_read_tags() {
     sed -E 's/\[READ: [^]]*\]//g; s/\[END READ\]//g' | sed -e 's/^[[:space:]]*$//' | awk 'NF' ORS='\n'
 }
 
 PROFILE=""
-[[ -f "$PROFILE_FILE" ]] && PROFILE="$(cat "$PROFILE_FILE")"
+[[ -f "$PROFILE_FILE" ]] && PROFILE="$("$CONTEXT_BIN" file "$PROFILE_FILE" 2>/dev/null || true)"
 
 echo ""
 echo "Avalhla :: chat   model=$MODEL   read=$ENABLE_READ"
@@ -100,7 +135,7 @@ read_enabled: $ENABLE_READ
       Never guess current system state from old context or stale logs.
 "
         p+="goal: answer the user. If you need file content you do not have, output exactly ONE line: [READ: <arg>]
-      Allowed: [READ: path]  [READ: --ls dir]  [READ: --grep pattern]
+      Allowed: [READ: path]  [READ: --ls dir]  [READ: --grep pattern dir]
       If CONTEXT already has the content, answer in plain text. Never invent file contents.
       Do not emit [END READ]. Emit at most one read/system request per reply.
 "
@@ -208,7 +243,7 @@ while true; do
         READS=$(( READS + 1 ))
         echo "  [read $READS/$MAX_READS_PER_TURN: $READ_ARG]"
 
-        RESULT="$("$READ_BIN" "$READ_ARG" 2>&1 || echo "X read failed: $READ_ARG")"
+        RESULT="$(run_read_request "$READ_ARG" 2>&1 || echo "X read failed: $READ_ARG")"
         RESULT="$(echo "$RESULT" | head -c 4000)"
         READ_CTX="$RESULT"
     done

@@ -1013,5 +1013,162 @@
         "architectural_rule": "FACT FIRST. ART SECOND. MODEL SEES != MODEL DECIDES. CROSS-AVAILABLE != CROSS-CONTAMINATED. Dawa decides."
       }
     }
+  },
+  "continuation": {
+    "purpose": "FAST_NEW_CHAT_RESUME",
+    "instruction": "Read this block first. Resume from evidence, not story. Do not re-run completed forensic work unless state changed.",
+    "current": {
+      "phase": "PHASE_04_MEMORY_READ_HEART",
+      "next_target": "Review remaining model-bound input surfaces and then freeze Phase-04 read-boundary evidence.",
+      "safety_self_test": "PASS",
+      "diff_check": "PASS",
+      "canonical_root": "/var/home/VVgbon/Avalhla",
+      "canonical_memory": "/var/home/VVgbon/Avalhla/memory",
+      "local_branch": "main",
+      "local_ahead": 2,
+      "remote_behind": 6,
+      "local_commits": [
+        "7b22c9d feat: add canonical memory record layer",
+        "8ffe013 docs: record DevilASH model-input forensic findings"
+      ],
+      "remote_head_observed": "3a90524b63c73eb884c67c87adc2a3ffa863d3d8",
+      "remote_phase_note": "Remote main does not yet contain local Phase-02/04 executable work."
+    },
+    "context_heart": {
+      "library": "scripts/lib_context.sh",
+      "root_authority": "lib_runtime.sh -> AVA_ROOT",
+      "safety_authority": "lib_safety.sh",
+      "trusted_path": "model-bound context read -> lib_context.sh -> lib_safety.sh",
+      "migrated": [
+        "ai-chat",
+        "ai-ask",
+        "ai-read",
+        "ai-remember",
+        "ava-doc",
+        "ava-diff",
+        "ava-dream",
+        "ava-weave"
+      ],
+      "migration_targets": [],
+      "grep_boundary": "ava_context_grep validates each candidate file through the context safety gate before reading it."
+    },
+    "forensic_web": {
+      "finding": "Current shell boundary is check-then-use; TOCTOU remains an adversarial verification question.",
+      "classification": "PHASE_09_ADVERSARIAL_VERIFY",
+      "do_not_pull_forward": "Do not redesign Phase 04 around TOCTOU yet.",
+      "reference_concept": "Linux openat2 can enforce pathname-resolution constraints during access; treat this as later adversarial hardening evidence, not current migration scope."
+    },
+    "negative_findings": {
+      "do_not_confuse": [
+        "SELF_TEST_STATUS=PASS != all model input globally routed",
+        "search-result absence != proof of absence",
+        "remote repository state != local worktree state"
+      ]
+    },
+    "resume_order": [
+      "READ",
+      "REAL_STATE",
+      "UNDERSTAND",
+      "COMPARE",
+      "CROSS_CHECK",
+      "MINIMAL_EDIT",
+      "TEST",
+      "VERIFY",
+      "DIFF",
+      "REVIEW"
+    ],
+    "git_law": [
+      "NO_COMMIT_UNTIL_REVIEW",
+      "NO_PUSH_BEFORE_LOCAL_VERIFY",
+      "REMOTE_CONFIRM_AFTER_PUSH"
+    ],
+    "new_chat_mode": {
+      "style": "FAST_DEVILASH",
+      "priority": "commands > source > evidence > smallest safe edit",
+      "avoid": [
+        "repeating already-proven tests",
+        "giant speculative rewrites",
+        "story-first reasoning",
+        "changing semantics while moving the read boundary"
+      ],
+      "closing_law": "Dawa decides. Model sees != model decides."
+    },
+    "terminal_protocol": {
+      "interactive_shell": "zsh",
+      "verification_runner": "persistent child Bash script",
+      "rule": "Never run errexit-sensitive multi-step verification directly in the interactive parent shell.",
+      "wrapper": "rc=0; bash -s <<'AVALHLA_DEVILASH' || rc=$?; set -Eeuo pipefail; run verification; AVALHLA_DEVILASH; inspect child_exit in the parent.",
+      "failure_behavior": "child returns nonzero; parent captures rc, prints VERIFICATION_STATUS=FAIL, and remains alive",
+      "handoff": "Paste raw verifier output including child_exit before interpretation",
+      "runtime_initialization": "source scripts/lib_runtime.sh inside the child before using AVA_* variables",
+      "parent_failure_policy": "NEVER execute set -e, set -u, exit, or exec in the interactive parent verification stream",
+      "invocation_rule": "invoke child verification only inside if/then/else or an &&/|| guarded command so zsh ERR_EXIT cannot terminate the parent",
+      "heredoc_policy": "Do not use nested or giant heredoc verification blocks; prefer a persistent executable verifier file",
+      "success_behavior": "parent prints VERIFICATION_STATUS=PASS and remains alive",
+      "paste_safety": "zsh bracketed paste preferred; multiline paste must not rely on parent-shell errexit behavior"
+    },
+    "phase": "PHASE_04_MEMORY_READ_HEART_FREEZE",
+    "next_target": "PHASE_05_MODEL_EGRESS_AUTHORITY_REVIEW",
+    "migration_targets": [],
+    "freeze_evidence": {
+      "context_gate": "PASS",
+      "lib_context_shellcheck_x": "PASS",
+      "nul_source_count": 0,
+      "newline_filename_selector": "PASS",
+      "outside_root_denied": "PASS",
+      "sensitive_denied": "PASS",
+      "ava_context_gate_reader": "lib_context.sh",
+      "ava_weave_model_bound_content_reads": "context bridge",
+      "status": "READY_FOR_REVIEW"
+    }
+  },
+  "phase": "PHASE_05_MODEL_EGRESS_AUTHORITY_REVIEW",
+  "next_target": "PHASE_06_COMMIT_PUSH_AND_REMOTE_RECONCILIATION",
+  "migration_targets": [],
+  "freeze_evidence": {
+    "context_gate": "PASS",
+    "lib_context_shellcheck_x": "PASS",
+    "nul_source_count": 0,
+    "newline_filename_selector": "PASS",
+    "outside_root_denied": "PASS",
+    "sensitive_denied": "PASS",
+    "ava_context_gate_reader": "lib_context.sh",
+    "ava_weave_model_bound_content_reads": "context bridge",
+    "phase05_egress_status": "VERIFIED",
+    "phase05_runtime_authority": "scripts/lib_runtime.sh",
+    "phase05_canonical_ollama_host": "runtime-owned loopback endpoint",
+    "phase05_host_override": "BLOCKED",
+    "phase05_static_drift": "PASS",
+    "phase05_live_api": "PASS",
+    "phase05_ollama_cli": "PASS",
+    "phase05_launcher_hostile_env": "PASS",
+    "phase05_shellcheck_error_level": "PASS",
+    "phase05_diff_check": "PASS",
+    "phase05_model_callers_runtime_sourced": [
+      "scripts/ai-ask",
+      "scripts/ai-chat",
+      "scripts/ai-remember",
+      "scripts/ava-diff",
+      "scripts/ava-doc",
+      "scripts/ava-dream",
+      "scripts/ava-explain",
+      "scripts/ava-imagine",
+      "scripts/ava-review",
+      "scripts/ava-status",
+      "scripts/ava-verify",
+      "scripts/start-avalhla.sh"
+    ],
+    "phase05_container_source": "$HOME/.config/containers/systemd/ollama.container",
+    "phase05_container_publish": "127.0.0.1:11434:11434",
+    "phase05_container_listener": "0.0.0.0:11434 is container-internal",
+    "phase05_verifier": "scripts/devilash-phase05-egress-check",
+    "phase05_important_pattern": "runtime authority is imported before Ollama client calls; ambient OLLAMA_HOST is replaced by runtime ownership",
+    "phase05_known_pitfall": "verifier static scans must exclude the verifier itself",
+    "phase05_parked": "Phase09 TOCTOU/openat2 hardening remains separate"
+  },
+  "release_notes": {
+    "2026-09-27": "Phase 05 egress authority verified through live API, Ollama CLI, hostile OLLAMA_HOST environment, launcher --help path, static drift scan, bash syntax, ShellCheck error severity, and git diff check.",
+    "git_state_before_release": "local main at 8ffe013; origin/main at 3a90524; local branch contains existing ahead/behind divergence requiring explicit reconciliation before push.",
+    "do_not_mix": "Review worktree carefully because unrelated existing changes are present alongside Phase 05 changes; no blind staging/commit."
   }
 }

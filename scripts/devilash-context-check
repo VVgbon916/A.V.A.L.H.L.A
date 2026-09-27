@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+cd /var/home/VVgbon/Avalhla
+source scripts/lib_runtime.sh
+source scripts/lib_safety.sh
+source scripts/lib_redact.sh
+source scripts/lib_context.sh
+
+printf "[SOURCE]\n"
+python3 - <<PY
+from pathlib import Path
+b=Path("scripts/lib_context.sh").read_bytes()
+print("NUL_COUNT="+str(b.count(b"\x00")))
+assert b"\x00" not in b
+PY
+
+printf "[SYNTAX]\n"
+bash -n scripts/lib_context.sh
+printf "PASS\n"
+
+printf "[SELECTOR]\n"
+tmp="$(mktemp -d "$AVA_ROOT/.devilash-context.XXXXXX")"
+trap 'rm -rf -- "$tmp"' EXIT
+mkdir -p "$tmp/records"
+printf '{"role":"OLD","content":"OLD_MARKER"}\n' > "$tmp/records/old.jsonl"
+printf '{"role":"NEW","content":"NEW_MARKER"}\n' > "$tmp/records/new space.jsonl"
+printf '{"role":"NEWLINE","content":"NEWLINE_MARKER"}\n' > "$tmp/records/new
+line.jsonl"
+touch -d "2026-09-27 03:01:00" "$tmp/records/new
+line.jsonl"
+touch -d "2026-09-27 03:00:00" "$tmp/records/new space.jsonl"
+touch -d "2026-09-26 23:00:00" "$tmp/records/old.jsonl"
+out="$(ava_context_latest "$tmp/records" ".jsonl" 500)"
+printf "%s\n" "$out"
+grep -Fq NEWLINE_MARKER <<<"$out"
+printf "PASS\n"
+
+printf "[BOUNDARY]\n"
+! ava_context_file /etc/hosts >/dev/null 2>&1
+printf "outside-root=PASS\n"
+printf "[SHELLCHECK]\n"
+shellcheck -x scripts/lib_context.sh
+printf "[DIFF]\n"
+git --no-pager diff --check
+printf "VERIFICATION_STATUS=PASS\n"

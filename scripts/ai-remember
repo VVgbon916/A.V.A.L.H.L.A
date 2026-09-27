@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
-source "$(dirname "${BASH_SOURCE[0]}")/lib_runtime.sh"
-source "$(dirname "${BASH_SOURCE[0]}")/lib_output_gate.sh"
+HERE="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+# shellcheck source=scripts/lib_runtime.sh
+source "$HERE/lib_runtime.sh"
+# shellcheck source=scripts/lib_output_gate.sh
+source "$HERE/lib_output_gate.sh"
+# shellcheck source=scripts/lib_safety.sh
+source "$HERE/lib_safety.sh"
+CONTEXT_BIN="$AVA_SCRIPTS_DIR/lib_context.sh"
 # ai-remember — she reflects on recent sessions, saves to reflections/
 set -Eeuo pipefail
 
@@ -9,16 +15,14 @@ MEMORY_DIR="$AVA_MEMORY_DIR"
 CONV_DIR="$MEMORY_DIR/conversations"
 PROFILE="$MEMORY_DIR/profiles/user-profile.txt"
 REFLECT_DIR="$MEMORY_DIR/reflections"
-mkdir -p "$REFLECT_DIR"
-
 echo "🧠 Ava is reviewing her memories of Dawa..."
 
 MEMORIES=$(
     echo "=== USER SPECIFICATION ==="
-    cat "$PROFILE" 2>/dev/null || true
+    "$CONTEXT_BIN" file "$PROFILE" 2>/dev/null || true
     echo ""
     echo "=== RECENT CONVERSATIONS ==="
-    find "$CONV_DIR" -name "*.jsonl" -exec cat {} + 2>/dev/null | tail -25 || true
+    "$CONTEXT_BIN" recent-jsonl "$CONV_DIR" 25 4000 2>/dev/null || true
 )
 
 PROMPT="You are Avalhla, Dawa's cute nerdy bestie and senior systems engineer.
@@ -40,5 +44,5 @@ echo ""
 echo "$RESPONSE"
 echo ""
 OUT="$REFLECT_DIR/$(date +%Y-%m-%d).md"
-echo "$RESPONSE" > "$OUT"
+ava_safety_write_file "$OUT" "$RESPONSE"$'\n'
 echo "  ✿ saved to $OUT"

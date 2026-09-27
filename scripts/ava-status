@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
+HERE="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+source "$HERE/lib_runtime.sh"
 # ava-status -- where she is: service, api, context, memory.
 set -Eeuo pipefail
 
 MODEL="${AVALHLA_MODEL:-avalhla}"
-OLLAMA_HOST="${OLLAMA_HOST:-http://localhost:11434}"
 
 svc="$(systemctl --user is-active ollama.service 2>/dev/null || echo unknown)"
 if curl -fsS "$OLLAMA_HOST/api/tags" >/dev/null 2>&1; then api="up"; else api="down"; fi
-mem_size="$(du -sh "$HOME/.ai-memory" 2>/dev/null | cut -f1 || echo 0)"
+mem_size="$(du -sh "$AVA_MEMORY_DIR" 2>/dev/null | cut -f1 || echo 0)"
 ctx="$(ollama show "$MODEL" --parameters 2>/dev/null | awk '/num_ctx/{print $NF}' || true)"
-conv="$(find "$HOME/.ai-memory/conversations" -type f -name '*.jsonl' 2>/dev/null | wc -l)"
-kb="$(find "$HOME/.ai-memory/knowledge-base" -type f 2>/dev/null | wc -l)"
+conv="$(find "$AVA_CONVERSATIONS_DIR" -type f -name '*.jsonl' 2>/dev/null | wc -l)"
+kb="$(find "$AVA_KNOWLEDGE_DIR" -type f 2>/dev/null | wc -l)"
 
 case "${1:-}" in
     --json)

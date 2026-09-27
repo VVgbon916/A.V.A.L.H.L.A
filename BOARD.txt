@@ -152,7 +152,7 @@
     ~/Avalhla/persona/avalhla.Modelfile     her source of truth
     ~/Avalhla/persona/system-prompt.txt     plain version
     ~/Avalhla/scripts/start-avalhla.sh      launcher
-    ~/Avalhla/scripts/ai-with-memory        memory chat
+    ~/Avalhla/scripts/ai-chat --read        memory chat
     ~/Avalhla/scripts/ai-learn              indexer
     ~/Avalhla/scripts/ai-remember           reflection
     ~/.config/containers/systemd/ollama.container        container def

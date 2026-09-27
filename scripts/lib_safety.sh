@@ -398,13 +398,68 @@ ava_safety_write_file() {
     ava_safety_assert_memory_write "$target" || return 1
 
     local parent
-    parent="$(dirname "$target")"
+    parent="$(dirname -- "$target")"
     mkdir -p -- "$parent"
 
     ava_safety_assert_memory_write "$target" || return 1
 
-    printf '%s' "$content" > "$target"
-    ava_safety_audit "memory-write" "commit" "$target"
+    local lock_file="$target.lock"
+    local tmp=""
+    local mode=""
+    local rc=0
+
+    exec 9>"$lock_file"
+    flock -x 9
+
+    # Re-check after acquiring the lock to reduce TOCTOU risk.
+    ava_safety_assert_memory_write "$target" || {
+        rc=1
+    }
+
+    if (( rc == 0 )); then
+        if [[ -e "$target" && ! -L "$target" ]]; then
+            mode="$(stat -c '%a' -- "$target" 2>/dev/null || true)"
+        fi
+
+        tmp="$(mktemp -- "$parent/.ava-write.XXXXXX")" || rc=1
+
+        if (( rc == 0 )); then
+            if [[ -n "$mode" ]]; then
+                chmod "$mode" "$tmp" || rc=1
+            fi
+        fi
+
+        if (( rc == 0 )); then
+            if ! printf '%s' "$content" > "$tmp"; then
+                rc=1
+            fi
+        fi
+
+        if (( rc == 0 )); then
+            if ! ava_safety_assert_memory_write "$target"; then
+                rc=1
+            fi
+        fi
+
+        if (( rc == 0 )); then
+            if ! mv -f -- "$tmp" "$target"; then
+                rc=1
+            fi
+            tmp=""
+        fi
+    fi
+
+    if [[ -n "$tmp" ]]; then
+        rm -f -- "$tmp"
+    fi
+
+    if (( rc == 0 )); then
+        ava_safety_audit "memory-write" "commit" "$target" || rc=1
+    fi
+
+    flock -u 9
+    exec 9>&-
+    return "$rc"
 }
 
 ava_safety_append_file() {
@@ -414,13 +469,32 @@ ava_safety_append_file() {
     ava_safety_assert_memory_write "$target" || return 1
 
     local parent
-    parent="$(dirname "$target")"
+    parent="$(dirname -- "$target")"
     mkdir -p -- "$parent"
 
     ava_safety_assert_memory_write "$target" || return 1
 
-    printf '%s' "$content" >> "$target"
-    ava_safety_audit "memory-append" "commit" "$target"
+    local lock_file="$target.lock"
+    local rc=0
+
+    exec 9>"$lock_file"
+    flock -x 9
+
+    ava_safety_assert_memory_write "$target" || rc=1
+
+    if (( rc == 0 )); then
+        if ! printf '%s' "$content" >> "$target"; then
+            rc=1
+        fi
+    fi
+
+    if (( rc == 0 )); then
+        ava_safety_audit "memory-append" "commit" "$target" || rc=1
+    fi
+
+    flock -u 9
+    exec 9>&-
+    return "$rc"
 }
 
 # ---------------------------------------------------------------------------
@@ -429,62 +503,234 @@ ava_safety_append_file() {
 
 ava_safety_self_test() {
     local failures=0
-    local tmp
+    local tmp_root=""
+    local tmp_memory=""
+    local tmp_outside=""
+    local safe_file=""
+    local sensitive_file=""
+    local key_file=""
+    local inside_file=""
+    local safe_link=""
+    local escape_link=""
+    local traversal_file=""
+    local memory_future=""
+    local memory_actual=""
+    local memory_sensitive=""
+    local memory_escape_link=""
+    local outside_file=""
+    local bytes=""
+    local rel_outside=""
 
-    printf '%s\n' '-- safety capability matrix --'
+    pass() {
+        printf '  [ OK ] %s\n' "$1"
+    }
+
+    fail() {
+        printf '  [FAIL] %s\n' "$1"
+        failures=$((failures + 1))
+    }
+
+    printf '%s\n' '-- public safety self-test contract --'
+    printf '%s\n' '  contract: ava-safety --self-test'
+    printf '%s\n' '  runtime-root: canonical'
+    printf '%s\n' '  context-read: bounded / root-constrained / sensitive-deny'
+
+    printf '%s\n' '-- capability matrix --'
 
     for cap in read inference memory-write local-api; do
         if ava_safety_capability "$cap"; then
-            printf '  [ OK ] allow %s\n' "$cap"
+            pass "allow $cap"
         else
-            printf '  [FAIL] allow %s\n' "$cap"
-            failures=$((failures + 1))
+            fail "allow $cap"
         fi
     done
 
     for cap in external-network shell system-mutation external-side-effect; do
         if ava_safety_capability "$cap"; then
-            printf '  [FAIL] deny %s\n' "$cap"
-            failures=$((failures + 1))
+            fail "deny $cap"
         else
-            printf '  [ OK ] deny %s\n' "$cap"
+            pass "deny $cap"
         fi
     done
 
-    tmp="$(mktemp -d)"
+    printf '%s\n' '-- canonical isolation --'
 
-    printf 'safe\n' > "$tmp/safe.txt"
-    printf 'secret\n' > "$tmp/.env"
-    printf 'key\n' > "$tmp/id_ed25519"
-
-    if ava_safety_sensitive "$tmp/safe.txt"; then
-        printf '  [FAIL] ordinary file accepted\n'
-        failures=$((failures + 1))
+    if [[ "$AVA_ROOT" == "/var/home/VVgbon/Avalhla" ]]; then
+        pass "canonical root is /var/home/VVgbon/Avalhla"
     else
-        printf '  [ OK ] ordinary file accepted\n'
+        fail "canonical root was weakened or redirected: $AVA_ROOT"
     fi
 
-    if ava_safety_sensitive "$tmp/.env"; then
-        printf '  [ OK ] .env denied\n'
+    if [[ "$AVA_MEMORY_DIR" == "/var/home/VVgbon/Avalhla/memory" ]]; then
+        pass "canonical memory is /var/home/VVgbon/Avalhla/memory"
     else
-        printf '  [FAIL] .env denied\n'
-        failures=$((failures + 1))
+        fail "canonical memory was weakened or redirected: $AVA_MEMORY_DIR"
     fi
 
-    if ava_safety_sensitive "$tmp/id_ed25519"; then
-        printf '  [ OK ] private key denied\n'
+    printf '%s\n' '-- isolated read/context tests --'
+
+    tmp_root="$(mktemp -d "$AVA_ROOT/.ava-safety-self-test.XXXXXX")" || {
+        fail "create isolated repo-root test directory"
+        return 1
+    }
+
+    tmp_memory="$(mktemp -d "$AVA_MEMORY_DIR/.ava-safety-self-test.XXXXXX")" || {
+        fail "create isolated memory test directory"
+        rm -rf -- "$tmp_root"
+        return 1
+    }
+
+    tmp_outside="$(mktemp -d)" || {
+        fail "create isolated outside-root test directory"
+        rm -rf -- "$tmp_root" "$tmp_memory"
+        return 1
+    }
+
+    trap 'rm -rf -- "${tmp_root:-}" "${tmp_memory:-}" "${tmp_outside:-}"' EXIT
+
+    safe_file="$tmp_root/safe.txt"
+    sensitive_file="$tmp_root/.env"
+    key_file="$tmp_root/id_ed25519"
+    inside_file="$tmp_root/inside.txt"
+    safe_link="$tmp_root/safe-link.txt"
+    escape_link="$tmp_root/escape-link.txt"
+    outside_file="$tmp_outside/outside.txt"
+
+    printf 'safe-context\n' > "$safe_file"
+    printf 'SECRET\n' > "$sensitive_file"
+    printf 'PRIVATE-KEY\n' > "$key_file"
+    printf 'inside-context\n' > "$inside_file"
+    printf 'outside-context\n' > "$outside_file"
+
+    ln -s -- "$(basename "$inside_file")" "$safe_link"
+    ln -s -- "$outside_file" "$escape_link"
+
+    rel_outside="$(realpath -m --relative-to="$AVA_ROOT" "$outside_file")"
+    traversal_file="$AVA_ROOT/$rel_outside"
+
+    if ava_safety_assert_context_readable "$safe_file"; then
+        pass "context allow safe file"
     else
-        printf '  [FAIL] private key denied\n'
-        failures=$((failures + 1))
+        fail "context allow safe file"
     fi
 
-    rm -rf "$tmp"
+    if ava_safety_assert_context_readable "$sensitive_file"; then
+        fail "context deny sensitive .env"
+    else
+        pass "context deny sensitive .env"
+    fi
+
+    if ava_safety_assert_context_readable "$key_file"; then
+        fail "context deny private key"
+    else
+        pass "context deny private key"
+    fi
+
+    if ava_safety_assert_context_readable "$outside_file"; then
+        fail "context deny outside-root file"
+    else
+        pass "context deny outside-root file"
+    fi
+
+    if ava_safety_assert_context_readable "$traversal_file"; then
+        fail "context deny traversal path"
+    else
+        pass "context deny traversal path"
+    fi
+
+    if ava_safety_assert_context_readable "$escape_link"; then
+        fail "context deny escaping symlink"
+    else
+        pass "context deny escaping symlink"
+    fi
+
+    if ava_safety_assert_context_readable "$safe_link"; then
+        pass "context allow canonical in-root symlink"
+    else
+        fail "context allow canonical in-root symlink"
+    fi
+
+    if [[ "$(ava_safety_read_file "$safe_file" 2>/dev/null)" == "safe-context" ]]; then
+        pass "trusted context read returns safe content"
+    else
+        fail "trusted context read returns safe content"
+    fi
+
+    if [[ "$(ava_safety_read_file "$escape_link" 2>/dev/null)" == "" ]]; then
+        pass "trusted context read blocks escaping symlink"
+    else
+        fail "trusted context read blocks escaping symlink"
+    fi
+
+    bytes="$(ava_safety_read_head "$safe_file" 4 2>/dev/null | wc -c | tr -d '[:space:]')"
+    if [[ "$bytes" =~ ^[0-9]+$ ]] && (( bytes <= 4 )); then
+        pass "trusted context read is byte-bounded"
+    else
+        fail "trusted context read is byte-bounded"
+    fi
+
+    printf '%s\n' '-- isolated memory-write tests --'
+
+    memory_future="$tmp_memory/future.txt"
+    memory_actual="$tmp_memory/actual.txt"
+    memory_sensitive="$tmp_memory/.env"
+    memory_escape_link="$tmp_memory/escape-write.txt"
+
+    if ava_safety_assert_memory_write "$memory_future"; then
+        pass "memory-write allow future in-root target"
+    else
+        fail "memory-write allow future in-root target"
+    fi
+
+    if ava_safety_assert_memory_write "$outside_file"; then
+        fail "memory-write deny outside-memory target"
+    else
+        pass "memory-write deny outside-memory target"
+    fi
+
+    if ava_safety_assert_memory_write "$memory_sensitive"; then
+        fail "memory-write deny sensitive target"
+    else
+        pass "memory-write deny sensitive target"
+    fi
+
+    ln -s -- "$outside_file" "$memory_escape_link"
+
+    if ava_safety_assert_memory_write "$memory_escape_link"; then
+        fail "memory-write deny escaping symlink"
+    else
+        pass "memory-write deny escaping symlink"
+    fi
+
+    if ava_safety_write_file "$memory_actual" "write-test"; then
+        if [[ "$(cat -- "$memory_actual" 2>/dev/null)" == "write-test" ]]; then
+            pass "memory-write commit stays inside canonical memory"
+        else
+            fail "memory-write commit content mismatch"
+        fi
+    else
+        fail "memory-write commit allowed"
+    fi
+
+    if ava_safety_append_file "$memory_actual" $'\nappend-test'; then
+        if grep -qx 'append-test' "$memory_actual" 2>/dev/null; then
+            pass "memory append stays inside canonical memory"
+        else
+            fail "memory append content mismatch"
+        fi
+    else
+        fail "memory append allowed"
+    fi
+
+    printf '%s\n' '-- self-test result --'
 
     if (( failures == 0 )); then
+        printf '%s\n' 'SELF_TEST_STATUS=PASS'
         printf '%s\n' 'result: SAFETY SELF-TEST CLEAN'
         return 0
     fi
 
+    printf 'SELF_TEST_STATUS=FAIL failures=%d\n' "$failures"
     printf 'result: %d SAFETY FAILURE(S)\n' "$failures"
     return 1
 }

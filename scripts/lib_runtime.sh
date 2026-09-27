@@ -2,21 +2,23 @@
 # Avalhla shared runtime ownership.
 # Source this file; do not execute it directly.
 
-if [[ -n "${AVA_RUNTIME_LOADED:-}" ]]; then
-    return 0
-fi
+AVA_CANONICAL_ROOT="/var/home/VVgbon/Avalhla"
 AVA_RUNTIME_LOADED=1
 
-AVA_ROOT="${AVA_ROOT:-$HOME/Avalhla}"
+# Canonical path ownership.
+# Inherited environment path values are ignored and replaced.
+AVA_ROOT="$AVA_CANONICAL_ROOT"
+AVA_MEMORY_DIR="$AVA_CANONICAL_ROOT/memory"
+AVA_SCRIPTS_DIR="$AVA_CANONICAL_ROOT/scripts"
+AVA_CONVERSATIONS_DIR="$AVA_CANONICAL_ROOT/memory/conversations"
+AVA_REFLECTIONS_DIR="$AVA_CANONICAL_ROOT/memory/reflections"
+AVA_REVIEWED_DIR="$AVA_CANONICAL_ROOT/memory/reviewed"
+AVA_KNOWLEDGE_DIR="$AVA_CANONICAL_ROOT/memory/knowledge-base"
+AVA_AUTOREAD_DIR="$AVA_CANONICAL_ROOT/memory/auto-read"
+AVA_PROFILES_DIR="$AVA_CANONICAL_ROOT/memory/profiles"
+AVA_REALITY_DIR="$AVA_CANONICAL_ROOT/memory/reality"
 
-if [[ -L "$HOME/.ai-memory" ]]; then
-    AVA_MEMORY_DIR="${AVA_MEMORY_DIR:-$(readlink -f "$HOME/.ai-memory")}"
-else
-    AVA_MEMORY_DIR="${AVA_MEMORY_DIR:-$AVA_ROOT/memory}"
-fi
-
-AVA_SCRIPTS_DIR="${AVA_SCRIPTS_DIR:-$AVA_ROOT/scripts}"
-OLLAMA_HOST="${OLLAMA_HOST:-http://localhost:11434}"
+OLLAMA_HOST="http://127.0.0.1:11434"
 
 AVA_MODEL="${AVA_MODEL:-${AVALHLA_MODEL:-avalhla}}"
 AVA_CHAT_MODEL="${AVA_CHAT_MODEL:-avalhla-chat}"
@@ -35,3 +37,8 @@ export AVA_ROOT AVA_MEMORY_DIR AVA_SCRIPTS_DIR OLLAMA_HOST
 export AVA_MODEL AVA_CHAT_MODEL AVA_CODE_MODEL AVA_REVIEW_MODEL
 export AVA_CONVERSATIONS_DIR AVA_REFLECTIONS_DIR AVA_REVIEWED_DIR
 export AVA_KNOWLEDGE_DIR AVA_AUTOREAD_DIR AVA_PROFILES_DIR AVA_REALITY_DIR
+export GIT_PAGER=cat
+export PAGER=cat
+export SYSTEMD_PAGER=cat
+export GH_PAGER=cat
+export LESS=

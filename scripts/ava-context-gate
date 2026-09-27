@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-source "$(dirname "${BASH_SOURCE[0]}")/lib_runtime.sh"
+HERE="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+# shellcheck source=/dev/null
+source "$HERE/lib_runtime.sh"
 set -Eeuo pipefail
 
-ROOT="$AVA_ROOT"
 SIGNAL="$AVA_REALITY_DIR/latest.md"
 MAX_BYTES=6000
 
@@ -10,6 +11,6 @@ MAX_BYTES=6000
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
-source "$HERE/lib_redact.sh"
+source "$HERE/lib_context.sh"
 
-head -c "$MAX_BYTES" "$SIGNAL" 2>/dev/null | ava_redact
+ava_context_head "$SIGNAL" "$MAX_BYTES"

@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+HERE="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+# shellcheck source=scripts/lib_runtime.sh
+source "$HERE/lib_runtime.sh"
+
+EXPECTED_HOST="$OLLAMA_HOST"
+
+printf "[RUNTIME]\n"
+[[ "$OLLAMA_HOST" == "$EXPECTED_HOST" ]] || { printf "FAIL OLLAMA_HOST=%s\n" "$OLLAMA_HOST"; exit 1; }
+printf "OLLAMA_HOST=%s\n" "$OLLAMA_HOST"
+printf "PASS\n"
+
+printf "[OVERRIDE]\n"
+OVERRIDE_RESULT="$(
+    env OLLAMA_HOST="http://evil.example:9999"         bash -c "source \"$HERE/lib_runtime.sh\"; printf \"%s\n\" \"\$OLLAMA_HOST\""
+)"
+[[ "$OVERRIDE_RESULT" == "$EXPECTED_HOST" ]] || { printf "FAIL override=%s\n" "$OVERRIDE_RESULT"; exit 1; }
+printf "PASS\n"
+
+printf "[LIVE_API]\n"
+curl -fsS --max-time 5 "$OLLAMA_HOST/api/tags" >/dev/null
+printf "PASS\n"
+
+printf "[CLI]\n"
+ollama list >/dev/null
+printf "PASS\n"
+
+printf "[LAUNCHER]\n"
+HELP_OUTPUT="$(
+    env OLLAMA_HOST="http://evil.example:9999"         bash "$HERE/start-avalhla.sh" --help
+)"
+grep -q "usage: start-avalhla.sh" <<<"$HELP_OUTPUT"
+printf "PASS\n"
+
+printf "[STATIC_DRIFT]\n"
+if grep -RInE "OLLAMA_HOST:-|OLLAMA_HOST=.*(localhost|0\.0\.0\.0):11434|http://(localhost|0\.0\.0\.0|127\.0\.0\.1):11434"     "$AVA_ROOT/scripts" "$AVA_ROOT/config" --exclude-dir=.git --exclude="devilash-phase05-egress-check" |
+    grep -vE "lib_runtime\.sh:.*OLLAMA_HOST=|config/(bashrc|zshrc)\.example:.*OLLAMA_HOST="; then
+    printf "FAIL drift detected\n"
+    exit 1
+fi
+printf "PASS\n"
+
+printf "[SYNTAX]\n"
+bash -n     "$AVA_ROOT/scripts/lib_runtime.sh"     "$AVA_ROOT/scripts/start-avalhla.sh"
+printf "PASS\n"
+
+printf "[SHELLCHECK]\n"
+shellcheck -x -S error     "$AVA_ROOT/scripts/ai-ask"     "$AVA_ROOT/scripts/ai-chat"     "$AVA_ROOT/scripts/ai-remember"     "$AVA_ROOT/scripts/ava-diff"     "$AVA_ROOT/scripts/ava-doc"     "$AVA_ROOT/scripts/ava-dream"     "$AVA_ROOT/scripts/ava-explain"     "$AVA_ROOT/scripts/ava-imagine"     "$AVA_ROOT/scripts/ava-review"     "$AVA_ROOT/scripts/ava-status"     "$AVA_ROOT/scripts/ava-verify"     "$AVA_ROOT/scripts/start-avalhla.sh"
+printf "PASS\n"
+
+printf "[DIFF]\n"
+git --no-pager diff --check
+printf "PASS\n"
+
+printf "PHASE_05_EGRESS_STATUS=PASS\n"

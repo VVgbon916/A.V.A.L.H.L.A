@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck source=scripts/lib_runtime.sh
 source "$(dirname "${BASH_SOURCE[0]}")/lib_runtime.sh"
 # ava-verify -- end-to-end pipeline check. Pure bash, no LLM.
 # Exit 0 = all pass, 1 = any fail.
@@ -29,12 +30,12 @@ echo ""
 echo "-- root layout --"
 [[ -d "$REPO/.git" ]]  && ok "repo git"          || bad "repo git"       "no .git at $REPO"
 [[ -d "$MEM" ]]        && ok "memory dir"        || bad "memory dir"     "missing $MEM"
-[[ -L ~/.ai-memory ]]  && ok "~/.ai-memory link" || bad "~/.ai-memory"   "not a symlink"
+[[ -L "$HOME/.ai-memory" ]]  && ok "$HOME/.ai-memory link" || bad "$HOME/.ai-memory"   "not a symlink"
 
 # 2. ollama server + models
 echo ""
 echo "-- ollama --"
-if curl -fsS "${OLLAMA_HOST:-http://localhost:11434}/api/tags" >/dev/null 2>&1; then
+if curl -fsS "$OLLAMA_HOST/api/tags" >/dev/null 2>&1; then
     ok "server reachable"
 else
     bad "server reachable" "curl failed"
@@ -97,7 +98,7 @@ else
     bad "ava-reflect.timer active" "not active"
 fi
 if systemctl --user is-active ollama.service >/dev/null 2>&1 \
-   || curl -fsS "${OLLAMA_HOST:-http://localhost:11434}/api/tags" >/dev/null 2>&1; then
+   || curl -fsS "$OLLAMA_HOST/api/tags" >/dev/null 2>&1; then
     ok "ollama service"
 else
     bad "ollama service" "not active"

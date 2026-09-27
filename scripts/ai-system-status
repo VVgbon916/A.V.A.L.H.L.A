@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+HERE="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+# shellcheck source=/dev/null
+source "$HERE/lib_runtime.sh"
 set -Eeuo pipefail
 
 export LC_ALL=C
@@ -63,7 +66,7 @@ printf '\n=== OLLAMA API ===\n'
 
 if command -v curl >/dev/null 2>&1 &&
    curl -fsS --max-time 5 \
-      "${OLLAMA_HOST:-http://localhost:11434}/api/tags" \
+      "$OLLAMA_HOST/api/tags" \
       >/tmp/ava-ollama-tags.json 2>/dev/null
 then
     printf 'api=up\n'

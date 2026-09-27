@@ -5,14 +5,14 @@
 export PATH
 export JAVA_HOME=/opt/java-21
 export PATH="$JAVA_HOME/bin:$PATH"
-export OLLAMA_HOST="http://localhost:11434"
+export OLLAMA_HOST="http://127.0.0.1:11434"
 export AVALHLA_MODEL="avalhla"
 
 ## Aliases
-alias ai-chat='~/Avalhla/scripts/ai-with-memory'
+alias ai-chat='~/Avalhla/scripts/ai-chat'
 alias ai-learn='~/Avalhla/scripts/ai-learn'
 alias ai-remember='~/Avalhla/scripts/ai-remember'
-alias ai-tool='~/Avalhla/scripts/ai-chat-tool'
+alias ai-tool='~/Avalhla/scripts/ai-chat --read'
 alias ask='~/Avalhla/scripts/ai-ask'
 alias avacheat='cat ~/Avalhla/AVALHLA_CHEATSHEET.txt'
 alias avacommands='cat ~/Avalhla/AVALHLA_COMMANDS.txt'

@@ -8,6 +8,7 @@ source "$(dirname "${BASH_SOURCE[0]}")/lib_output_gate.sh"
 set -Eeuo pipefail
 
 MODEL="${AVA_DOC_MODEL:-$AVA_REVIEW_MODEL}"
+CONTEXT_BIN="$AVA_SCRIPTS_DIR/lib_context.sh"
 MAX_BYTES=15000
 
 FILE=""
@@ -30,7 +31,7 @@ if ! curl -fsS "$OLLAMA_HOST/api/tags" >/dev/null 2>&1; then
     exit 1
 fi
 
-BODY="$(head -c "$MAX_BYTES" "$FILE")"
+BODY="$("$CONTEXT_BIN" head "$FILE" "$MAX_BYTES" 2>/dev/null || true)"
 
 read -r -d '' PROMPT <<EOF || true
 [TASK]

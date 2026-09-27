@@ -15,10 +15,10 @@ Host:      VVgBazz
 |  SECTION 01  //  ALIASES                                                                         |
 +==================================================================================================+
 
-alias ai-chat='~/Avalhla/scripts/ai-with-memory'
+alias ai-chat='~/Avalhla/scripts/ai-chat'
 alias ai-learn='~/Avalhla/scripts/ai-learn'
 alias ai-remember='~/Avalhla/scripts/ai-remember'
-alias ai-tool='~/Avalhla/scripts/ai-chat-tool'
+alias ai-tool='~/Avalhla/scripts/ai-chat --read'
 alias ask='~/Avalhla/scripts/ai-ask'
 alias avacheat='cat ~/Avalhla/AVALHLA_CHEATSHEET.txt'
 alias avacommands='cat ~/Avalhla/AVALHLA_COMMANDS.txt'
