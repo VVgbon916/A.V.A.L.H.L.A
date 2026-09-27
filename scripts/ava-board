@@ -2,7 +2,8 @@
 source "$(dirname "${BASH_SOURCE[0]}")/lib_runtime.sh"
 set -Eeuo pipefail
 
-OUT="$HOME/COMMANDS_BOARD.txt"
+OUT="$HOME/.cache/avalhla/board.txt"
+mkdir -p -- "$(dirname "$OUT")"
 ROOT="$AVA_ROOT"
 DREAM_DIR="$AVA_REFLECTIONS_DIR/dreams"
 

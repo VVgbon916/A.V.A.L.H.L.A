@@ -46,13 +46,13 @@ The board is her face in the terminal.
 ## INVOCATION
 
 board                       interactive (TTY) / quiet (pipe)
-commands-board.sh           same
-commands-board.sh --quiet   5-line output for pipes/logs
-commands-board.sh --show    print once, exit
-commands-board.sh --system  system view
-commands-board.sh --world   the world view
-commands-board.sh --doors   doors only
-commands-board.sh --dream   dream view
+ava-board           same
+ava-board --quiet   5-line output for pipes/logs
+ava-board --show    print once, exit
+ava-board --system  system view
+ava-board --world   the world view
+ava-board --doors   doors only
+ava-board --dream   dream view
 
 ## DOORS
 

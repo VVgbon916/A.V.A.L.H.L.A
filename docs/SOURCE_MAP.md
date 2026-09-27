@@ -1,37 +1,69 @@
-# Source Map -- Cheatsheets Repo
+# Avalhla Source Map
 
-## Layout
+01 / CORE
+  1.1 README.md
+      first-contact entry
+  1.2 docs/FAST_VIEW.md
+      standard fast-reading grammar
+  1.3 docs/AVALHLA_SPINE.md
+      authority + information-flow architecture
 
-    persona/         Avalhla personality + Modelfile
-    scripts/         All executable helpers
-    docs/            Documentation (this folder)
-    RITUAL.txt       Daily update ritual
-    Makefile         Shortcuts (ritual, board, push)
+02 / EXECUTION + PROOF
+  2.1 docs/PHASING.md
+      execution gates and exit evidence
+  2.2 docs/HANDOFF.md
+      current resume state only
+  2.3 docs/CROSS_AVAILABILITY.md
+      boundary law
+  2.4 docs/CONVERSATION_LAW.md
+      speech/output laws
+  2.5 docs/DEVELOPMENT.md
+      Bazzite + development workflow
 
-## Scripts
+03 / HUMAN MAP + DOORS
+  3.1 BOARD.txt
+      human-facing board / map
+  3.2 docs/BOARD.md
+      board contract
+  3.3 COMMANDS.txt
+      Ava door inventory
+  3.4 QUICKREF.txt
+      compact operational reference
+  3.5 ORDER.md
+      reading + care order
+  3.6 PROMPT_FRAME.txt
+      reusable terminal cheat-sheet framing prompt
 
-| Script | Purpose |
-|---|---|
-| `scripts/ai-chat` | Persistent chat with canonical Avalhla memory |
-| `scripts/ai-learn` | Index files into knowledge base |
-| `scripts/ai-remember` | Reflect on recent sessions |
-| `scripts/ai-ask` | One-shot question with context |
-| `scripts/ai-chat --read` | Chat with controlled file-read bridge |
-| `scripts/start-avalhla.sh` | Launch ollama + container |
-| `scripts/commands-board.sh` | Harvest all commands into board |
-| `scripts/ava-reality` | Sanitized terminal/repository Reality Signal |
+04 / AWA
+  4.1 AwA_ATLAS.md
+      find the source
+  4.2 AwA_WEAVE.md
+      relationships
+  4.3 AwA_DREAM.md
+      possibility
+  4.4 AwA_TERMINAL.md
+      terminal identity
 
-## Local (not in repo)
+05 / MACHINE
+  5.1 memory/auto-read/00_AI_COBUILD.json
+      primary machine-readable Co-Builder context
+  5.2 scripts/lib_runtime.sh
+      canonical runtime authority
+  5.3 scripts/lib_safety.sh
+      deterministic safety authority
+  5.4 scripts/lib_context.sh
+      controlled context bridge
 
-| File | Purpose |
-|---|---|
-| `~/COMMANDS_BOARD.txt` | Generated board (local only) |
-| `~/system-snapshot-ai.json` | AI-parseable system snapshot |
-| `~/system-snapshot-human.txt` | Human-readable snapshot |
-| `~/snapshot.sh` | Refresh both snapshots |
-| `~/ollama-backups/avalhla.Modelfile` | Local Modelfile backup |
+06 / DERIVED / NON-AUTHORITY
+  6.1 docs/HOST_COMMAND_CATALOG.txt
+      frozen host snapshot; not system authority
+  6.2 ~/.cache/avalhla/board.txt
+      generated board cache; not source
 
-## Topgrade config
+NAMING LAW
+  One concept -> one canonical name -> one canonical artifact.
+  Filename = address.
+  concept_id = identity.
 
-`~/.config/topgrade.toml` -- controlled update list.
-Docs: see RITUAL.txt Section 03.
+Do not create a second Map, Guide, Overview, Cheatsheet, or Reference
+for an existing semantic role. Add an alias or update the canonical source.

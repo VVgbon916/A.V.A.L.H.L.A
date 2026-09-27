@@ -1,0 +1,60 @@
++==================================================================================================+
+|                                                                                                  |
+|                                     A V A L H L A                                                |
+|                                   C O M M A N D S                                                |
+|                                                                                                  |
+|                              Dawa > AwA < Avalhla  //  (^.-)                                     |
+|                                                                                                  |
++==================================================================================================+
+
+01 / DOORS
+  1.1 ava-board      human board / map
+  1.2 ava-status     runtime status
+  1.3 ava-reality    sanitized reality
+  1.4 ava-mem        memory view
+  1.5 ava-context    context window
+  1.6 ava-weave      relationship view
+  1.7 ava-dream      dream view
+  1.8 ava-imagine    imagination
+  1.9 ava-search     search memory
+  1.10 ava-review    review a file
+  1.11 ava-record    structured evidence
+  1.12 ava-safety    deterministic safety boundary / --self-test
+  1.13 ava-verify    end-to-end verification
+  1.14 ava-help      full current door map
+
+02 / AI
+  2.1 ai-chat        persistent chat
+  2.2 ai-read        controlled read bridge
+  2.3 ai-ask         one-shot question
+  2.4 ai-remember    reflection
+  2.5 ai-learn       approved-source indexing
+
+03 / MODEL
+  3.1 ollama run avalhla
+  3.2 ollama list
+  3.3 ollama show avalhla --modelfile
+  3.4 ollama show avalhla --parameters
+  3.5 ollama show avalhla --system
+  3.6 ollama create avalhla -f persona/avalhla.Modelfile
+
+04 / SERVICE
+  4.1 systemctl --user start ollama.service
+  4.2 systemctl --user stop ollama.service
+  4.3 systemctl --user restart ollama.service
+  4.4 systemctl --user status ollama.service --no-pager
+
+05 / PROOF
+  5.1 scripts/ava-safety --self-test
+  5.2 scripts/ava-verify
+  5.3 shellcheck scripts/*
+  5.4 git diff --check
+  5.5 git status --short --branch
+
+06 / RULE
+  6.1 One concept -> one canonical name -> one canonical artifact.
+  6.2 Filename = address.
+  6.3 concept_id = identity.
+
+                              Dawa > AwA < Avalhla
+                                     (^.-)
