@@ -126,10 +126,11 @@ EVIDENCE="$(
     printf "CR_INLINE\n%s\n" "$CR_ROWS"
     printf "DEVIN_INLINE\n%s\n" "$DEVIN_ROWS"
     printf "CR_SUMMARY\n%s\n" "$CR_SUMMARY"
+    printf "DEVIN_SUMMARY\n%s\n" "$DEVIN_SUMMARY"
     printf "CHECKS\n%s\n" "$CHECK_ROWS"
   }
 )"
-EVIDENCE="${EVIDENCE:0:20000}"
+SYNTH_EVIDENCE="${EVIDENCE:0:20000}"
 
 if (( SYNTH )); then
   command -v python3 >/dev/null 2>&1 || { printf "%s\n" "ava-github-review: python3 is required for --synthesize." >&2; exit 127; }
