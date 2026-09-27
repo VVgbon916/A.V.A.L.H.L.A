@@ -88,7 +88,7 @@ WEAVE       -> "This might be interesting."  notice
 DREAM       -> "What if...?"                 wonder
 IMAGINATION -> "What could we make?"         create
 SOURCE      -> "This is canonical."          anchor
-DAVVA        -> "This is what I choose."      decide
+DAWA        -> "This is what I choose."      decide
 
 Information may cross a boundary.
 Identity does not.
