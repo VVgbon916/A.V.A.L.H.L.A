@@ -1,6 +1,6 @@
 # Avalhla ORDER
 
-Dawa > AwA < Avalhla  //  (^.-)
+Dawa <──── AvvA ────> Avalhla  //  (^.-)
 
 TREE
   01 / KNOW
