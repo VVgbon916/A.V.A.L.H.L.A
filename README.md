@@ -15,7 +15,7 @@ TREE
       BOARD = MAP
       COMMANDS = DOORS
       AVALHLA = PRESENCE
-      DAVVA = CHOICE
+      DAWA = CHOICE
 
 ## FAST VIEW
 
@@ -28,7 +28,7 @@ TREE
   INPUT -> BOUNDARY -> STORE -> PROCESS -> OUTPUT
 
 03 AUTHORITY
-  DAVVA -> choice
+  DAWA -> choice
   RUNTIME / SAFETY -> deterministic boundary
   MODEL -> approved visibility only
 
