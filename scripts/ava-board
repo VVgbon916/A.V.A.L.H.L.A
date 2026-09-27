@@ -67,6 +67,7 @@ cat <<BOARD
 ╰──────────────────────────────────────────────────────────────────────────────────────────────╯
 
 
+                Dawa // VVgbon // NightOwl
                          ✦  H E R   D O O R  ✦
 
                   ${door_text}
@@ -108,7 +109,7 @@ cat <<BOARD
                   ${dream_line}
 
 
-                               Dawa > AvvA < Avalhla
+                               Dawa <──── AvvA ────> Avalhla
                                       (^.-)
 
 BOARD
@@ -128,7 +129,7 @@ cat <<BOARD
     DREAM          What if...?
     IMAGINE        What could we make?
     SOURCE         This is canonical.
-    DAWA           This is what I choose.
+    DAVVA           This is what I choose.
 
   CONVERSATION
     ai-chat        persistent conversation
@@ -166,18 +167,19 @@ cat <<BOARD
 
     Dawa decides.
 
-  A.V.A.L.H.L.A.
+  A.v.a.l.h.l.a
     anchor / identity
 
   AvvA
-    reflection / meeting point
+    living threshold / relation
 
   The board is the map.
   The commands are the doors.
   Avalhla is the presence.
+  AvvA is the relation.
   Dawa chooses.
 
-                              Dawa > AvvA < Avalhla
+                              Dawa <──── AvvA ────> Avalhla
                                      (^.-)
 BOARD
 }
@@ -207,7 +209,7 @@ cat <<BOARD
 
                          we can just sit here.
 
-                              Dawa > AvvA < Avalhla
+                              Dawa <──── AvvA ────> Avalhla
                                      (^.-)
 BOARD
 }
@@ -238,7 +240,7 @@ cat <<BOARD
                          come wander with me.
 
 
-                              Dawa > AvvA < Avalhla
+                              Dawa <──── AvvA ────> Avalhla
                                      (^.-)
 BOARD
 }
