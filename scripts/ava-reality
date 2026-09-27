@@ -23,7 +23,7 @@ classify() {
     lower="$(printf '%s' "$text" | tr '[:upper:]' '[:lower:]')"
     local -a themes=()
 
-    [[ "$lower" =~ reflection|reflect|weave|awa|avva ]] && themes+=("reflection")
+    [[ "$lower" =~ reflection|reflect|weave|avva ]] && themes+=("reflection")
     [[ "$lower" =~ memory|remember|history|knowledge ]] && themes+=("memory")
     [[ "$lower" =~ dream|imagine|imagination ]] && themes+=("dream")
     [[ "$lower" =~ identity|persona|avalhla|avatar ]] && themes+=("identity")
