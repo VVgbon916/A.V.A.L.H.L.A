@@ -15,6 +15,22 @@ PURPOSE
     A failed gate holds the phase.
     A meaningful regression reopens the affected phase.
 
+    VERIFICATION LANES
+
+      WEB 4×
+        WEB SEARCH ONLY.
+        PRIMARY / INDEPENDENT / COUNTER / CURRENT.
+        Web seal is scoped only to the web finding.
+
+      REPO 4×
+        REPOSITORY / HISTORY / IMPLEMENTATION / BEHAVIOR.
+        Repository evidence stays separate from web evidence.
+
+      CROSS INFO 1×
+        One final WEB <-> REPO comparison.
+        Agreement, drift, or contradiction is recorded.
+        Neither lane is substituted for the other.
+
     PRIMARY WAY TO ACT
 
       READ
