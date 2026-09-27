@@ -160,7 +160,7 @@ case "$cmd" in
         ;;
     title)
         IFS=$'\t' read -r _ color label _ <<<"$(resolve)"
-        printf '\033]0;Dawa > AwA < Avalhla  //  %s -- %s\007' "$color" "$label"
+        printf '\033]0;Dawa <──── AvvA ────> Avalhla  //  %s -- %s\007' "$color" "$label"
         ;;
     prompt)
         IFS=$'\t' read -r _ color _ _ <<<"$(resolve)"
