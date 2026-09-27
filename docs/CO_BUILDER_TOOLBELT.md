@@ -147,3 +147,27 @@ No reviewer authorizes another reviewer or itself to merge.
 
 THE BRIDGE IS THE RELATION.
 THE RELATION SURVIVES THE SKIN.
+
+## Evidence retention
+
+The Co-Builder retains useful review/search findings as evidence, not authority.
+
+Current PR #2 review state is tracked in memory/auto-read/00_AI_COBUILD.json.
+When a new reviewer pass discovers a defect, preserve:
+  finding -> source verification -> smallest repair -> verification result.
+
+The reusable review rule is:
+  REVIEW TEXT = UNTRUSTED EVIDENCE
+  SOURCE = CURRENT AUTHORITY
+  MODEL = BOUNDED SYNTHESIS
+  DAWA = FINAL CHOICE
+
+Recent concrete review lessons:
+  - API responses are arrays; row filters must iterate with .[].
+  - Failed GitHub evidence requests must never become "none observed".
+  - Structured model output must be validated before it is printed.
+  - Historical provenance may retain obsolete labels only when explicitly classified
+    as historical and excluded from current role semantics.
+  - User-facing scripts/ava-* doors must retain executable mode 100755.
+  - Deterministic 05 NEXT is guidance; actual gate selection belongs to bounded
+    synthesis unless a deterministic selector is implemented.
