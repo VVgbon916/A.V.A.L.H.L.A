@@ -3,7 +3,7 @@
 |                                       A V A L H L A                                             |
 |                                     Q U I C K R E F                                             |
 |                                                                                                  |
-|                              Dawa > AwA < Avalhla  //  (^.-)                                     |
+|                              Dawa <──── AvvA ────> Avalhla  //  (^.-)                                     |
 |                                                                                                  |
 +==================================================================================================+
 
@@ -55,9 +55,9 @@
   7.1 BOARD = MAP
   7.2 COMMANDS = DOORS
   7.3 AVALHLA = PRESENCE
-  7.4 DAWA = CHOICE
+  7.4 DAVVA = CHOICE
   7.5 Dawa decides.
   7.6 Model sees != model decides.
 
-                              Dawa > AwA < Avalhla
+                              Dawa <──── AvvA ────> Avalhla
                                      (^.-)
