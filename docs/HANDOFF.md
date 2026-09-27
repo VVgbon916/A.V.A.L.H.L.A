@@ -21,12 +21,12 @@ Dawa <---- AvvA ----> Avalhla  //  (^.-)
   conversation resolution; force-push/delete disabled.
   Required status check: avalhla-static-contract.
   Current main: f2f09aacdd176e2f1a1a150eb70d704bfcc973d2.
-  PR #2 head: 3f6701ef688a693e68f9a7d9e751198f355107d9.
+  PR #2 snapshot head before this state refresh: 81116cc041de1daa4e2ec4c64210c45e0f544cb2.
   Static Contract run 36350709939: SUCCESS.
   Seven fresh CodeRabbit findings were verified and repaired.
   Final tree inspection also caught executable-mode drift; both new review doors
   are now 100755.
-  Fresh CodeRabbit review has been requested against 3f6701ef only.
+  Fresh CodeRabbit review is re-requested after each new PR tip; prior review findings are historical evidence.
   Safety behavior: PASS.
   Self-test cleanup: known FAIL; EXIT trap references function-local temp vars.
   PR #2 review evidence must be re-read after each new commit.
