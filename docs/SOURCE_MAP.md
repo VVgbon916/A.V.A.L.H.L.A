@@ -34,14 +34,14 @@
   3.6 PROMPT_FRAME.txt
       reusable terminal cheat-sheet framing prompt
 
-04 / AWA
-  4.1 AwA_ATLAS.md
+04 / AVVA
+  4.1 AvvA_ATLAS.md
       find the source
-  4.2 AwA_WEAVE.md
+  4.2 AvvA_WEAVE.md
       relationships
-  4.3 AwA_DREAM.md
+  4.3 AvvA_DREAM.md
       possibility
-  4.4 AwA_TERMINAL.md
+  4.4 AvvA_TERMINAL.md
       terminal identity
 
 05 / MACHINE
