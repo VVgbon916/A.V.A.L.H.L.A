@@ -1842,6 +1842,42 @@
       "hard_rule": "Do not assume the local clone is current from memory; capture live Git state first."
     }
   },
+  "workspace_boundaries_2026_09_27": {
+    "status": "CANONICAL_TWO_LANE_EDITOR_BOUNDARY",
+    "dawa_notepad": {
+      "path": "/home/VVgbon/Dawa_Notepad",
+      "role": "USER_ONLY_NOTEPAD",
+      "purpose": "Human-authored notes, drafts, references, scratch material, and files created outside Avalhla.",
+      "ava_implicit_read": false,
+      "auto_read_membership": false,
+      "repository_state": false,
+      "rule": "Do not treat Dawa_Notepad as implicit Avalhla input. A file may enter Avalhla context only through an explicit bounded user-directed read or ingestion path."
+    },
+    "avalhla_read_files": {
+      "canonical_repository_path": "memory/auto-read/",
+      "runtime_variable": "AVA_AUTOREAD_DIR",
+      "tool": "scripts/ava-autoread",
+      "role": "AVALHLA_AUTOREAD_LANE",
+      "purpose": "Canonical repository-controlled files intentionally placed in Avalhla's auto-read box.",
+      "dawa_notepad_membership": false
+    },
+    "sublime_workspace": {
+      "display_roots": [
+        "/home/VVgbon/Dawa_Notepad",
+        "memory/auto-read/"
+      ],
+      "editor_visibility_note": "Showing both lanes in one Sublime project is an editor convenience only; it does not grant Avalhla runtime permission to read Dawa_Notepad.",
+      "project_file_role": "human/editor configuration, not Avalhla authority"
+    },
+    "architecture_law": [
+      "One canonical Avalhla auto-read lane: memory/auto-read/.",
+      "Do not create a parallel Avalhla/read-files directory while memory/auto-read/ remains the canonical auto-read artifact.",
+      "Dawa_Notepad remains outside the Avalhla repository and outside implicit auto-read.",
+      "CROSS-AVAILABLE != CROSS-CONTAMINATED.",
+      "Showing a file in an editor does not authorize model context ingestion.",
+      "Keep user-only material in Dawa_Notepad; keep Avalhla-owned read material in memory/auto-read/."
+    ]
+  },
   "co_builder_information_request_policy": {
     "status": "CANONICAL",
     "order": [
