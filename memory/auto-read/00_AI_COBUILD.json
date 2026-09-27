@@ -126,6 +126,80 @@
         "published_at",
         "retrieved_at"
       ]
+    },
+    "last_web_seal": {
+      "schema_version": "avalhla.seal.v1",
+      "seal_id": "web4x-sublime-settings-2026-09-26",
+      "scope": "WEB_4X",
+      "subject": "Sublime Text 4 editor settings for deterministic Avalhla 100C/80C geometry",
+      "checked_at": "2026-09-26",
+      "checker": "AvvA",
+      "status": "SEALED",
+      "checks": {
+        "primary": {
+          "source": "Sublime Community Documentation",
+          "result": "PASS",
+          "evidence_ref": "https://docs.sublimetext.io/reference/settings.html"
+        },
+        "independent": {
+          "source": "Sublime Text Forum - Freezing Editor",
+          "result": "PASS",
+          "evidence_ref": "https://forum.sublimetext.com/t/freezing-editor/75670"
+        },
+        "counter": {
+          "source": "Sublime Text Forum - Interaction between wrap_width_style and draw_centered",
+          "result": "PASS",
+          "evidence_ref": "https://forum.sublimetext.com/t/interaction-between-wrap_width_style-and-draw_centered/66418"
+        },
+        "current": {
+          "source": "Sublime HQ - Download / Build 4215",
+          "result": "PASS",
+          "evidence_ref": "https://www.sublimetext.com/download?country=20"
+        }
+      },
+      "convergence": "AGREES",
+      "conflicts": [],
+      "limitations": [
+        "wrap_width is inert while word_wrap=false; it remains part of the declared 80-column geometry contract.",
+        "Visual glyph width can depend on font and viewport; the numeric ruler contract remains explicit."
+      ],
+      "conclusion_basis": "The four web checks agree that the selected settings are valid Sublime Text settings and that draw_centered=false is the deterministic choice for Avalhla's explicit 100C canvas and 80C core.",
+      "source_refs": [
+        {
+          "source_id": "ST-DOCS",
+          "title": "Settings",
+          "origin": "Sublime Community Documentation",
+          "url": "https://docs.sublimetext.io/reference/settings.html",
+          "published_at": null,
+          "retrieved_at": "2026-09-26"
+        },
+        {
+          "source_id": "ST-FORUM-75670",
+          "title": "Freezing Editor",
+          "origin": "Sublime Text Forum",
+          "url": "https://forum.sublimetext.com/t/freezing-editor/75670",
+          "published_at": null,
+          "retrieved_at": "2026-09-26"
+        },
+        {
+          "source_id": "ST-FORUM-66418",
+          "title": "Interaction between wrap_width_style and draw_centered",
+          "origin": "Sublime Text Forum",
+          "url": "https://forum.sublimetext.com/t/interaction-between-wrap_width_style-and_draw_centered/66418",
+          "published_at": "2022-12-16",
+          "retrieved_at": "2026-09-26"
+        },
+        {
+          "source_id": "ST-HQ-4215",
+          "title": "Download - Sublime Text",
+          "origin": "Sublime HQ",
+          "url": "https://www.sublimetext.com/download?country=20",
+          "published_at": "2026-09-25",
+          "retrieved_at": "2026-09-26"
+        }
+      ],
+      "evidence_hash": "cd24bd4a9da548df7d669c04cdce8d60fb399a81d38f0a98f72598b988b46aab",
+      "record_hash": "fc2719caacdee2df404301d2f8514dcb7a8549ed6b5bb577e457430326fcefb3"
     }
   },
   "editor": {
@@ -141,13 +215,41 @@
       "wrap_width": 80,
       "wrap_width_style": "constant",
       "rulers": [
-        [10, "dotted", 1],
-        [20, "dotted", 1],
-        [40, "stippled", 1],
-        [60, "dotted", 1],
-        [80, "stippled", 1],
-        [90, "dotted", 1],
-        [100, "solid", 2]
+        [
+          10,
+          "dotted",
+          1
+        ],
+        [
+          20,
+          "dotted",
+          1
+        ],
+        [
+          40,
+          "stippled",
+          1
+        ],
+        [
+          60,
+          "dotted",
+          1
+        ],
+        [
+          80,
+          "stippled",
+          1
+        ],
+        [
+          90,
+          "dotted",
+          1
+        ],
+        [
+          100,
+          "solid",
+          2
+        ]
       ]
     },
     "change_law": "No silent Sublime changes. AI may detect, explain, or propose. Dawa must be told before settings change."
@@ -230,5 +332,91 @@
     "COMMIT",
     "PUSH",
     "REMOTE_CONFIRM"
-  ]
+  ],
+  "phasing": {
+    "status": "PRIMARY_SEQUENCE",
+    "current_gate": "PHASE_2_SAFETY_HEART",
+    "next_code_target": "Make the public safety self-test contract real and keep test isolation compatible with canonical runtime ownership.",
+    "phases": [
+      {
+        "id": 0,
+        "name": "FORENSIC_FREEZE",
+        "goal": "Establish exact state and resolve contradictions.",
+        "exit": "Real state inventory and contradictions recorded."
+      },
+      {
+        "id": 1,
+        "name": "RUNTIME_CANON",
+        "goal": "One canonical root and memory ownership.",
+        "exit": "Runtime cannot be redirected by inherited duplicate-path state."
+      },
+      {
+        "id": 2,
+        "name": "SAFETY_HEART",
+        "goal": "Central trusted read/write/append boundary and real self-test contract.",
+        "exit": "Positive and negative safety tests pass; test isolation is proven without weakening canonical ownership."
+      },
+      {
+        "id": 3,
+        "name": "MEMORY_WRITE_HEART",
+        "goal": "Migrate direct memory writers to the central safety boundary one writer class at a time.",
+        "exit": "Persistent memory writers are centrally gated and behavior-preserving."
+      },
+      {
+        "id": 4,
+        "name": "MEMORY_READ_HEART",
+        "goal": "Route context reads through lib_context -> lib_safety.",
+        "exit": "Memory/context readers fail closed on forbidden paths and unsafe symlinks."
+      },
+      {
+        "id": 5,
+        "name": "MEMORY_SEMANTICS",
+        "goal": "Preserve Reality, Memory, Reflection, Weave, Dream, Imagine, Record, and Dawa distinctions.",
+        "exit": "No layer silently becomes another layer's authority."
+      },
+      {
+        "id": 6,
+        "name": "AVA_RECORD",
+        "goal": "Prove record schema, provenance, trust, integrity, self-test, callers, and storage.",
+        "exit": "Record system has real callers/storage and verifier semantics are evidenced."
+      },
+      {
+        "id": 7,
+        "name": "MODEL_AUTHORITY_WALL",
+        "goal": "Enforce model visibility without model self-authorization.",
+        "exit": "Model can observe outputs/context but cannot authorize consequential actions."
+      },
+      {
+        "id": 8,
+        "name": "BOARD_DOORS",
+        "goal": "Keep board as map and doors as commands without dashboard drift.",
+        "exit": "Human-facing board remains small, present, and choice-preserving."
+      },
+      {
+        "id": 9,
+        "name": "ADVERSARIAL_VERIFY",
+        "goal": "Attack paths, writes, symlinks, records, authority, stale paths, and remote/local divergence.",
+        "exit": "Negative-path evidence is recorded and unresolved edges are explicit."
+      },
+      {
+        "id": 10,
+        "name": "GIT_CHECKPOINT",
+        "goal": "Freeze a verified state and reconcile local/remote.",
+        "exit": "VERIFY -> DIFF -> REVIEW -> COMMIT -> PUSH -> REMOTE_CONFIRM all pass."
+      }
+    ],
+    "transition_law": "A phase advances only on its exit evidence. A failed gate holds the phase; a meaningful regression reopens the affected phase.",
+    "primary_way_to_act": [
+      "READ",
+      "REAL_STATE",
+      "UNDERSTAND",
+      "COMPARE",
+      "CROSS_CHECK",
+      "MINIMAL_EDIT",
+      "TEST",
+      "VERIFY",
+      "DIFF",
+      "REVIEW"
+    ]
+  }
 }
