@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
+cd "$ROOT"
+
+PASS=0
+FAIL=0
+ok() { printf "  [ OK ] %s\n" "$1"; PASS=$((PASS + 1)); }
+bad() { printf "  [FAIL] %s -- %s\n" "$1" "$2"; FAIL=$((FAIL + 1)); }
+printf "%s\n" "== avalhla static contract =="
+printf "root: %s\n\n" "$ROOT"
+printf "%s\n" "-- canonical files --"
+for f in docs/FAST_VIEW.md docs/AVALHLA_SPINE.md docs/PHASING.md docs/CO_BUILDER_TOOLBELT.md memory/auto-read/00_AI_COBUILD.json scripts/ava-resume scripts/ava-github-review scripts/ava-ci-contract AGENTS.md .github/workflows/avalhla-static-verify.yml; do
+  [[ -f "$f" ]] && ok "present $f" || bad "present $f" "missing"
+done
+
+printf "%s\n" "" "-- shell syntax --"
+while IFS= read -r -d "" f; do
+  if bash -n "$f" >/dev/null 2>&1; then ok "bash -n ${f#$ROOT/}"; else bad "bash -n ${f#$ROOT/}" "syntax error"; fi
+done < <(find scripts -maxdepth 1 -type f -perm -u+x -print0 2>/dev/null)
+
+printf "%s\n" "" "-- JSON --"
+if python3 -m json.tool memory/auto-read/00_AI_COBUILD.json >/dev/null; then ok "CoBuilder JSON parses"; else bad "CoBuilder JSON parses" "invalid JSON"; fi
+
+printf "%s\n" "" "-- semantic invariants --"
+if git grep -n -E "DAVVA|Dawa > AwA < Avalhla|Dawa > AvvA < Avalhla" -- ":!memory/conversations/" ":!memory/reflections/" >/dev/null 2>&1; then
+  bad "authority/relation naming" "active legacy or DAVVA label found"
+else
+  ok "authority/relation naming"
+fi
+if grep -Eq "reflection\|reflect\|weave\|awa\|avva" scripts/ava-reality; then ok "historical AwA classifier compatibility"; else bad "historical AwA classifier compatibility" "historical alias not preserved"; fi
+if grep -qF "DAWA" scripts/ava-weave && ! grep -qF "DAVVA" scripts/ava-weave; then ok "weave human authority label"; else bad "weave human authority label" "authority drift"; fi
+if grep -qF "git diff HEAD --check" scripts/ava-resume; then ok "resume checks staged + unstaged diff"; else bad "resume checks staged + unstaged diff" "HEAD-scoped diff proof missing"; fi
+if grep -qF "AVA_ROOT does not match this repository" scripts/ava-resume; then ok "resume rejects redirected AVA_ROOT"; else bad "resume rejects redirected AVA_ROOT" "redirect guard missing"; fi
+if ! grep -qF "/var/home/VVgbon/Avalhla" scripts/ava-resume; then ok "resume derives repository root"; else bad "resume derives repository root" "hardcoded root remains"; fi
+
+printf "%s\n" "" "== summary =="
+printf "  pass: %d\n  fail: %d\n" "$PASS" "$FAIL"
+if [[ "$FAIL" -eq 0 ]]; then printf "%s\n" "  result: ALL GREEN"; else printf "%s\n" "  result: FAIL"; exit 1; fi

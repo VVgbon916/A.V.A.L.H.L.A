@@ -24,7 +24,7 @@ DREAM
 SOURCE
 "This is actually canonical."
 
-DAVVA
+DAWA
 "This is what I choose."
 
 ## Boundaries
@@ -110,7 +110,7 @@ v
 SOURCE
 |
 v
-DAVVA
+DAWA
 |
 v
 CHOICE

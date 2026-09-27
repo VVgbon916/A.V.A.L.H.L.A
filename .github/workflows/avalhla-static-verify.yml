@@ -1,0 +1,20 @@
+name: Avalhla Static Contract
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  avalhla-static-contract:
+    name: avalhla-static-contract
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Run deterministic contract
+        run: bash scripts/ava-ci-contract

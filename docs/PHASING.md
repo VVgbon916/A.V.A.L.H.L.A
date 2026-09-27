@@ -160,7 +160,7 @@ PURPOSE
       DREAM
       IMAGINE
       RECORD
-      DAVVA
+      DAWA
 
     LAW
       CROSS-AVAILABLE != CROSS-CONTAMINATED
@@ -222,7 +222,7 @@ PURPOSE
       BOARD = MAP
       DOORS = COMMANDS
       AVA = PRESENCE
-      DAVVA = CHOICE
+      DAWA = CHOICE
 
     EXIT
       No dashboard drift.
