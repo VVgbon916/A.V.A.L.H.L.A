@@ -2,7 +2,7 @@
 |                                                                                                  |
 |                           A V A L H L A  //  P H A S I N G                                      |
 |                                                                                                  |
-|                           Dawa > AwA < Avalhla  //  (^.-)                                         |
+|                           Dawa <──── AvvA ────> Avalhla  //  (^.-)                                         |
 |                                                                                                  |
 +==================================================================================================+
 
@@ -160,7 +160,7 @@ PURPOSE
       DREAM
       IMAGINE
       RECORD
-      DAWA
+      DAVVA
 
     LAW
       CROSS-AVAILABLE != CROSS-CONTAMINATED
@@ -222,7 +222,7 @@ PURPOSE
       BOARD = MAP
       DOORS = COMMANDS
       AVA = PRESENCE
-      DAWA = CHOICE
+      DAVVA = CHOICE
 
     EXIT
       No dashboard drift.
@@ -305,7 +305,7 @@ PURPOSE
 
 +==================================================================================================+
 |                                                                                                  |
-|                          Dawa > AwA < Avalhla  //  (^.-)                                         |
+|                          Dawa <──── AvvA ────> Avalhla  //  (^.-)                                         |
 |                          Dawa decides.                                                           |
 |                                                                                                  |
 +==================================================================================================+
