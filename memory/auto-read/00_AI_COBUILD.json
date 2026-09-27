@@ -211,25 +211,27 @@
       "CROSS_INFO_1X": "One final comparison of WEB_4X against REPO_4X to identify agreement, drift, or contradiction."
     },
     "latest_repo_cross_check": {
-      "checked_at": "2026-09-26",
-      "repo_head": "573ce0c1c47d0eef9c34de6fbc3aa8ba9689c9b7",
-      "recursive_tree_count": 99,
-      "tree_truncated": false,
+      "checked_at": "2026-09-27",
+      "repo_head": "8101e4d0fef624b8908c06d3f011d1d2541d1bd9",
+      "repository": "VVgbon916/cheatsheets",
+      "branch": "main",
       "key_present": [
         "memory/auto-read/00_AI_COBUILD.json",
         "docs/PHASING.md",
+        "docs/BOARD.md",
+        "docs/CROSS_AVAILABILITY.md",
+        "docs/CONVERSATION_LAW.md",
         "scripts/ava-safety",
         "scripts/ava-verify",
-        "scripts/lib_safety.sh",
-        "scripts/lib_runtime.sh"
-      ],
-      "key_missing": [
         "scripts/ava-record",
+        "scripts/lib_safety.sh",
+        "scripts/lib_runtime.sh",
         "scripts/lib_context.sh"
       ],
-      "runtime_finding": "Remote main still uses dynamic AVA_ROOT/AVA_MEMORY_DIR ownership; the hardened canonical runtime exists only in the user's local worktree and is not yet remote-confirmed.",
+      "runtime_finding": "Remote main contains the canonical runtime/safety/context/record surfaces referenced by the current phase law. Local and remote were verified synchronized at 8101e4d in the current terminal witness.",
       "current_gate": "PHASE_2_SAFETY_HEART",
-      "conclusion": "Design law and remote Co-Build are aligned, but executable implementation is not globally complete; Phase 02 remains the active coding gate."
+      "current_gate_note": "The safety behavior self-test passes, but cleanup/isolation has a confirmed trap-local-variable defect; phase remains open.",
+      "conclusion": "The remote repository now reflects the canonical runtime direction. Co-Builder state must use the phase gate and current main SHA above as present authority; older continuation blocks are historical evidence only."
     }
   },
   "editor": {
@@ -1016,55 +1018,26 @@
   },
   "continuation": {
     "purpose": "FAST_NEW_CHAT_RESUME",
-    "instruction": "Read this block first. Resume from evidence, not story. Do not re-run completed forensic work unless state changed.",
+    "authority": "CURRENT_ONLY",
     "current": {
-      "phase": "PHASE_04_MEMORY_READ_HEART",
-      "next_target": "Review remaining model-bound input surfaces and then freeze Phase-04 read-boundary evidence.",
-      "safety_self_test": "PASS",
-      "diff_check": "PASS",
+      "phase": "PHASE_02_SAFETY_HEART",
+      "next_target": "Make the public safety self-test contract real and keep self-test isolation compatible with canonical runtime ownership.",
+      "repo_head": "8101e4d0fef624b8908c06d3f011d1d2541d1bd9",
+      "branch": "main",
+      "safety_behavior": "PASS",
+      "safety_cleanup": "FAIL_CONFIRMED",
+      "confirmed_defect": "ava_safety_self_test installs an EXIT trap that references function-local temp variables; the variables are unset when the EXIT trap runs, leaving temporary self-test directories behind.",
       "canonical_root": "/var/home/VVgbon/Avalhla",
       "canonical_memory": "/var/home/VVgbon/Avalhla/memory",
-      "local_branch": "main",
-      "local_ahead": 2,
-      "remote_behind": 6,
-      "local_commits": [
-        "7b22c9d feat: add canonical memory record layer",
-        "8ffe013 docs: record DevilASH model-input forensic findings"
-      ],
-      "remote_head_observed": "3a90524b63c73eb884c67c87adc2a3ffa863d3d8",
-      "remote_phase_note": "Remote main does not yet contain local Phase-02/04 executable work."
-    },
-    "context_heart": {
-      "library": "scripts/lib_context.sh",
-      "root_authority": "lib_runtime.sh -> AVA_ROOT",
-      "safety_authority": "lib_safety.sh",
-      "trusted_path": "model-bound context read -> lib_context.sh -> lib_safety.sh",
-      "migrated": [
-        "ai-chat",
-        "ai-ask",
-        "ai-read",
-        "ai-remember",
-        "ava-doc",
-        "ava-diff",
-        "ava-dream",
-        "ava-weave"
-      ],
       "migration_targets": [],
-      "grep_boundary": "ava_context_grep validates each candidate file through the context safety gate before reading it."
+      "phase_advance": "BLOCKED_UNTIL_PHASE_02_EXIT_EVIDENCE"
     },
-    "forensic_web": {
-      "finding": "Current shell boundary is check-then-use; TOCTOU remains an adversarial verification question.",
-      "classification": "PHASE_09_ADVERSARIAL_VERIFY",
-      "do_not_pull_forward": "Do not redesign Phase 04 around TOCTOU yet.",
-      "reference_concept": "Linux openat2 can enforce pathname-resolution constraints during access; treat this as later adversarial hardening evidence, not current migration scope."
-    },
-    "negative_findings": {
-      "do_not_confuse": [
-        "SELF_TEST_STATUS=PASS != all model input globally routed",
-        "search-result absence != proof of absence",
-        "remote repository state != local worktree state"
-      ]
-    },
+    "standard_read_order": [
+      "TREE",
+      "01 / 02 / 03",
+      "1.1 / 1.2 / 1.3",
+      "DETAIL ONLY WHEN NEEDED"
+    ],
     "resume_order": [
       "READ",
       "REAL_STATE",
@@ -1077,53 +1050,34 @@
       "DIFF",
       "REVIEW"
     ],
-    "git_law": [
-      "NO_COMMIT_UNTIL_REVIEW",
-      "NO_PUSH_BEFORE_LOCAL_VERIFY",
-      "REMOTE_CONFIRM_AFTER_PUSH"
-    ],
-    "new_chat_mode": {
-      "style": "FAST_DEVILASH",
-      "priority": "commands > source > evidence > smallest safe edit",
-      "avoid": [
-        "repeating already-proven tests",
-        "giant speculative rewrites",
-        "story-first reasoning",
-        "changing semantics while moving the read boundary"
-      ],
-      "closing_law": "Dawa decides. Model sees != model decides."
-    },
     "terminal_protocol": {
       "interactive_shell": "zsh",
-      "verification_runner": "persistent child Bash script",
-      "rule": "Never run errexit-sensitive multi-step verification directly in the interactive parent shell.",
-      "wrapper": "rc=0; bash -s <<'AVALHLA_DEVILASH' || rc=$?; set -Eeuo pipefail; run verification; AVALHLA_DEVILASH; inspect child_exit in the parent.",
-      "failure_behavior": "child returns nonzero; parent captures rc, prints VERIFICATION_STATUS=FAIL, and remains alive",
-      "handoff": "Paste raw verifier output including child_exit before interpretation",
-      "runtime_initialization": "source scripts/lib_runtime.sh inside the child before using AVA_* variables",
-      "parent_failure_policy": "NEVER execute set -e, set -u, exit, or exec in the interactive parent verification stream",
-      "invocation_rule": "invoke child verification only inside if/then/else or an &&/|| guarded command so zsh ERR_EXIT cannot terminate the parent",
-      "heredoc_policy": "Do not use nested or giant heredoc verification blocks; prefer a persistent executable verifier file",
-      "success_behavior": "parent prints VERIFICATION_STATUS=PASS and remains alive",
-      "paste_safety": "zsh bracketed paste preferred; multiline paste must not rely on parent-shell errexit behavior"
+      "verification_runner": "guarded child Bash",
+      "rule": "Run errexit-sensitive verification in a child Bash; never poison the interactive parent.",
+      "success": "parent remains alive and receives a PASS status",
+      "failure": "child returns nonzero; parent captures status and shows raw verifier output",
+      "forbidden_in_parent": [
+        "set -e",
+        "set -u",
+        "exit",
+        "exec"
+      ]
     },
-    "phase": "PHASE_04_MEMORY_READ_HEART_FREEZE",
-    "next_target": "PHASE_05_MODEL_EGRESS_AUTHORITY_REVIEW",
-    "migration_targets": [],
-    "freeze_evidence": {
-      "context_gate": "PASS",
-      "lib_context_shellcheck_x": "PASS",
-      "nul_source_count": 0,
-      "newline_filename_selector": "PASS",
-      "outside_root_denied": "PASS",
-      "sensitive_denied": "PASS",
-      "ava_context_gate_reader": "lib_context.sh",
-      "ava_weave_model_bound_content_reads": "context bridge",
-      "status": "READY_FOR_REVIEW"
+    "style": {
+      "mode": "FAST_DEVILASH",
+      "order": "commands > source > evidence > smallest safe edit",
+      "avoid": [
+        "giant speculative rewrites",
+        "story-first reasoning",
+        "repeating completed proof",
+        "silent phase advancement",
+        "duplicate artifacts with competing names"
+      ],
+      "closing_law": "Dawa decides. Model sees != model decides."
     }
   },
-  "phase": "PHASE_05_MODEL_EGRESS_AUTHORITY_REVIEW",
-  "next_target": "PHASE_06_COMMIT_PUSH_AND_REMOTE_RECONCILIATION",
+  "phase": "PHASE_02_SAFETY_HEART",
+  "next_target": "Make the public safety self-test contract real and keep self-test isolation compatible with canonical runtime ownership.",
   "migration_targets": [],
   "freeze_evidence": {
     "context_gate": "PASS",
@@ -1169,6 +1123,254 @@
   "release_notes": {
     "2026-09-27": "Phase 05 egress authority verified through live API, Ollama CLI, hostile OLLAMA_HOST environment, launcher --help path, static drift scan, bash syntax, ShellCheck error severity, and git diff check.",
     "git_state_before_release": "local main at 8ffe013; origin/main at 3a90524; local branch contains existing ahead/behind divergence requiring explicit reconciliation before push.",
-    "do_not_mix": "Review worktree carefully because unrelated existing changes are present alongside Phase 05 changes; no blind staging/commit."
+    "do_not_mix": "Review worktree carefully because unrelated existing changes are present alongside Phase 05 changes; no blind staging/commit.",
+    "2026-09-27-naming-lock": "Added canonical Avalhla Mind Dictionary, TREE/01-03/1.1-1.3 information grammar, five-block FAST VIEW, one-spine-many-views rule, duplicate-artifact prohibitions, and pre-remaster naming contract. Normalized current resume state to PHASE_02_SAFETY_HEART and remote main 8101e4d; older continuation phase statements are superseded historical evidence."
+  },
+  "mind_dictionary": {
+    "status": "CANONICAL_NAMING_DICTIONARY",
+    "purpose": "Prevent duplicate concepts, duplicate files, alias drift, and competing sources of truth during the Avalhla remaster.",
+    "core_law": [
+      "ONE CONCEPT -> ONE CANONICAL NAME -> ONE CANONICAL ARTIFACT",
+      "Aliases may describe history or compatibility; aliases must not become new artifacts.",
+      "Name by semantic role first; style/poetry belongs inside the artifact, not in competing filenames.",
+      "A document that locates, governs, resumes, visualizes, or executes has a different name because it has a different job.",
+      "Do not create an Overview, Guide, Map, Cheat Sheet, Quick Reference, or Reference file when an existing canonical role already owns that information.",
+      "Derived views must point to the canonical source; they must not fork its rules.",
+      "Historical filenames remain in the rename ledger until every reference is migrated and verified."
+    ],
+    "system_vocabulary": {
+      "AVALHLA": "the whole system / source tree / presence; not a generic suffix for every file",
+      "DAWA": "human authority and final choice; not a script namespace",
+      "AWA": "identity/meaning layer; not an execution namespace",
+      "SPINE": "authority + information-flow architecture of the whole system",
+      "FAST_VIEW": "compact reading grammar for locating state quickly",
+      "MAP": "human-facing orientation surface",
+      "DOOR": "user-facing command entrypoint",
+      "LAW": "normative contract that governs behavior",
+      "PHASE": "gated execution sequence with explicit exit evidence",
+      "SOURCE": "canonical artifact where a fact/rule actually lives",
+      "EVIDENCE": "observed or verified proof supporting a claim",
+      "WITNESS": "environment observation used to establish real state; never authority",
+      "RECORD": "structured persisted evidence with identity/provenance/integrity fields",
+      "HANDOFF": "current resume state only",
+      "REMINDER": "future automation/schedule, not project state",
+      "QUICKREF": "compact command/reference aid; never architecture authority",
+      "ORDER": "human/project ordering law; not a task list",
+      "DEVELOPMENT": "host/container/toolchain workflow and machine setup",
+      "BOARD": "the living human map/interface contract",
+      "COMMANDS": "the user-facing door inventory and invocation reference",
+      "RUNTIME": "canonical execution-root and environment authority",
+      "SAFETY": "deterministic allow/deny boundary outside model judgment",
+      "CONTEXT": "approved model-input preparation/read bridge",
+      "MEMORY": "persistent personal/runtime history",
+      "REALITY": "sanitized observed world/system state",
+      "REFLECTION": "interpretive output derived from allowed sources",
+      "WEAVE": "relationship-making across distinct layers without collapsing them",
+      "DREAM": "possibility/imagination surface",
+      "IMAGINE": "active generation of possibilities; never authority",
+      "RECORDING": "persistence of a structured event/evidence object",
+      "VERIFY": "proof procedure; does not mean truth beyond declared scope"
+    },
+    "artifact_names": {
+      "README.md": {
+        "role": "FAST_ENTRY",
+        "meaning": "first landing page; purpose, fast view, canonical navigation only",
+        "anti_duplicate": "must link to deeper contracts instead of copying them"
+      },
+      "docs/FAST_VIEW.md": {
+        "role": "FAST_VIEW",
+        "meaning": "standard TREE -> 01/02/03 -> 1.1/1.2/1.3 -> detail grammar",
+        "authority": "navigation grammar",
+        "canonical": true
+      },
+      "docs/AVALHLA_SPINE.md": {
+        "role": "SPINE",
+        "meaning": "whole-system authority + information-flow architecture",
+        "canonical": true,
+        "rule": "one spine, many views"
+      },
+      "docs/SOURCE_MAP.md": {
+        "role": "SOURCE_MAP",
+        "meaning": "where artifacts live; locator only",
+        "anti_duplicate": "never become an architecture or phase document"
+      },
+      "docs/PHASING.md": {
+        "role": "PHASING",
+        "meaning": "execution sequence and phase exit gates",
+        "authority": "execution order",
+        "canonical": true
+      },
+      "docs/HANDOFF.md": {
+        "role": "HANDOFF",
+        "meaning": "current resume state in compact form",
+        "anti_duplicate": "historical narrative belongs in evidence/history, not here"
+      },
+      "docs/BOARD.md": {
+        "role": "BOARD_CONTRACT",
+        "meaning": "human-facing board contract; MAP semantics, shape, doors, live sources",
+        "anti_duplicate": "not a command encyclopedia"
+      },
+      "docs/CROSS_AVAILABILITY.md": {
+        "role": "BOUNDARY_LAW",
+        "meaning": "what may cross between Reality/Memory/Reflection/Weave/Dream/etc.",
+        "canonical": true
+      },
+      "docs/CONVERSATION_LAW.md": {
+        "role": "CONVERSATION_LAW",
+        "meaning": "semantic/output laws for Avalhla speech",
+        "canonical": true
+      },
+      "docs/DEVELOPMENT.md": {
+        "role": "DEVELOPMENT",
+        "meaning": "Bazzite, Distrobox, system tooling, local dev workflow",
+        "state": "TARGET_FOR_REMASTER"
+      },
+      "memory/auto-read/00_AI_COBUILD.json": {
+        "role": "CO_BUILDER_PRIMARY",
+        "meaning": "machine-readable operating context and current evidence",
+        "canonical": true,
+        "rule": "machine projection; do not create competing auto-read master files"
+      },
+      "AwA_ATLAS.md": {
+        "role": "ATLAS",
+        "meaning": "find the source"
+      },
+      "AwA_WEAVE.md": {
+        "role": "WEAVE",
+        "meaning": "understand relationships"
+      },
+      "AwA_DREAM.md": {
+        "role": "DREAM",
+        "meaning": "explore possibility"
+      },
+      "AwA_TERMINAL.md": {
+        "role": "TERMINAL",
+        "meaning": "identity and visual language"
+      }
+    },
+    "filename_rules": {
+      "docs": "semantic role names; stable uppercase only when the role is a project-signature artifact",
+      "scripts/ava-*": "Ava user-facing doors",
+      "scripts/ai-*": "AI-facing orchestration/chat/memory actions",
+      "scripts/lib_*.sh": "shared implementation libraries; never user-facing doors",
+      "memory/auto-read/NN_*": "ordered machine-readable operating context; 00 is primary and additional files require a distinct documented role",
+      "AwA_*.md": "identity/meaning doors only",
+      "generated": "must be explicitly marked/generated and cannot silently become source-of-truth",
+      "deprecated": "keep old names only in a migration/alias ledger until references are removed"
+    },
+    "forbidden_duplicate_patterns": [
+      "README + another README with the same role",
+      "OVERVIEW + FAST_VIEW for the same orientation job",
+      "ARCHITECTURE + SPINE for the same architecture job",
+      "GUIDE + DEVELOPMENT when both describe the same dev workflow",
+      "CHEATSHEET + QUICKREF when both carry the same reference contract",
+      "COMMANDS + SOURCE_MAP when both enumerate the same command/file inventory",
+      "BOARD + COMMANDS_BOARD when both are treated as the same canonical human surface",
+      "multiple *_COBUILD*, *_COBUILDER*, *_AI_CONTEXT*, or *_OPERATING_LAW* files claiming primary authority",
+      "duplicate prose copied across README, Handoff, Source Map, and Co-Builder"
+    ]
+  },
+  "information_shape": {
+    "status": "CANONICAL_INFORMATION_GRAMMAR",
+    "pattern": [
+      "TREE",
+      "01 / 02 / 03",
+      "1.1 / 1.2 / 1.3",
+      "DETAIL ONLY WHEN NEEDED"
+    ],
+    "semantics": {
+      "TREE": "whole-system orientation; answer where this belongs",
+      "01/02/03": "major domains; one subject per numbered block",
+      "1.1/1.2/1.3": "relationships, decisions, or concrete items inside one domain",
+      "DETAIL ONLY WHEN NEEDED": "evidence, source lines, commands, diffs, exceptions; never front-load noise"
+    },
+    "fast_view": {
+      "01_WHERE": "ROOT / LOCATION / LAYER",
+      "02_FLOW": "INPUT -> BOUNDARY -> STORE -> PROCESS -> OUTPUT",
+      "03_AUTHORITY": "WHO MAY DECIDE?",
+      "04_PROOF": "OBSERVED / VERIFIED / LIMIT",
+      "05_NEXT": "CURRENT GATE / NEXT TARGET"
+    },
+    "display_law": [
+      "Lead with the map.",
+      "Use numbered blocks for domains.",
+      "Use decimal items for relations.",
+      "Push raw detail below the decision surface.",
+      "Never make readers decode synonyms before understanding the state."
+    ],
+    "machine_shape": {
+      "where": [
+        "root",
+        "location",
+        "layer"
+      ],
+      "flow": [
+        "input",
+        "boundary",
+        "store",
+        "process",
+        "output"
+      ],
+      "authority": [
+        "human",
+        "runtime",
+        "policy",
+        "model"
+      ],
+      "proof": [
+        "observed",
+        "verified",
+        "limit"
+      ],
+      "next": [
+        "current_gate",
+        "next_target"
+      ]
+    }
+  },
+  "remaster_contract": {
+    "status": "PRE_REMASTER_NAMING_LOCK",
+    "purpose": "Use the dictionary above to make the repository readable before phase work resumes.",
+    "order": [
+      "INVENTORY",
+      "REFERENCE_SCAN",
+      "NAME_MAP",
+      "RENAME",
+      "REFERENCE_REPAIR",
+      "CONSOLIDATE",
+      "VERIFY",
+      "REVIEW"
+    ],
+    "rules": [
+      "Use git mv semantics for local remaster; preserve history.",
+      "Before any rename, inventory every reference and distinguish source/derived/generated artifacts.",
+      "No mass rename based on filename appearance alone.",
+      "No file is deleted merely because another file has a similar name; semantic role must be proven first.",
+      "No phase advancement happens during remaster.",
+      "The remaster may rename structure/documentation while preserving executable behavior.",
+      "Commit/push only after VERIFY -> DIFF -> REVIEW."
+    ],
+    "target_canonical_docs": [
+      "README.md",
+      "docs/FAST_VIEW.md",
+      "docs/AVALHLA_SPINE.md",
+      "docs/SOURCE_MAP.md",
+      "docs/PHASING.md",
+      "docs/HANDOFF.md",
+      "docs/BOARD.md",
+      "docs/CROSS_AVAILABILITY.md",
+      "docs/CONVERSATION_LAW.md",
+      "docs/DEVELOPMENT.md"
+    ],
+    "candidate_legacy_names_to_classify_before_rename": [
+      "AVALHLA_CHEATSHEET.txt",
+      "AVALHLA_COMMANDS.txt",
+      "Dawa_CheatAvalhlaOrder.md",
+      "commands-board.sh",
+      "BOARD.txt",
+      "TASKS.txt",
+      "COMMANDS_BOARD.txt"
+    ],
+    "explicit_non_rule": "These candidate names are not automatically renamed or deleted; each requires reference and role verification."
   }
 }
