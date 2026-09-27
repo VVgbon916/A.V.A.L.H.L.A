@@ -1562,7 +1562,7 @@
       "resume": {
         "canonical_local": "scripts/ava-resume",
         "sources": [
-          "docs/FAST_VIEW.md",
+          "docs/FAST_VIEW.md (presence check only)",
           "docs/HANDOFF.md",
           "git state"
         ],
