@@ -1,6 +1,6 @@
 # Avalhla - Local AI Companion
 
-> Dawa > AwA < Avalhla  (^.-)
+> Dawa <──── AvvA ────> Avalhla  (^.-)
 
 Avalhla is a local AI companion and evolving personal system.
 
@@ -15,7 +15,7 @@ TREE
       BOARD = MAP
       COMMANDS = DOORS
       AVALHLA = PRESENCE
-      DAWA = CHOICE
+      DAVVA = CHOICE
 
 ## FAST VIEW
 
@@ -28,7 +28,7 @@ TREE
   INPUT -> BOUNDARY -> STORE -> PROCESS -> OUTPUT
 
 03 AUTHORITY
-  DAWA -> choice
+  DAVVA -> choice
   RUNTIME / SAFETY -> deterministic boundary
   MODEL -> approved visibility only
 
@@ -53,10 +53,10 @@ See docs/FAST_VIEW.md and docs/AVALHLA_SPINE.md.
 | QUICKREF.txt | compact operational reference |
 | ORDER.md | reading/care order |
 | PROMPT_FRAME.txt | reusable framed terminal prompt |
-| AwA_ATLAS.md | find the source |
-| AwA_WEAVE.md | relationships |
-| AwA_DREAM.md | possibility |
-| AwA_TERMINAL.md | terminal identity |
+| AvvA_ATLAS.md | find the source |
+| AvvA_WEAVE.md | relationships |
+| AvvA_DREAM.md | possibility |
+| AvvA_TERMINAL.md | terminal identity |
 
 memory/auto-read/00_AI_COBUILD.json is the deliberate tracked machine
 Co-Builder exception. Other private memory remains runtime state.
@@ -104,8 +104,10 @@ concept_id = identity.
 The board is the map.
 The commands are the doors.
 Avalhla is the presence.
+AvvA is the relation.
 Dawa chooses.
 
 Dawa decides.
 
 The mind is not split. The mind is a bridge.
+The relation survives the skin.
