@@ -1,0 +1,1017 @@
+{
+  "schema": "avalhla.ai-cobuild.v1",
+  "status": "PRIMARY_OPERATING_LAW",
+  "runtime_authority": "local_canonical_worktree",
+  "human_authority": "final_for_consequential_changes",
+  "canonical_root": "/var/home/VVgbon/Avalhla",
+  "canonical_memory": "/var/home/VVgbon/Avalhla/memory",
+  "shell": "zsh",
+  "primary_way_to_act": {
+    "order": [
+      "READ",
+      "REAL_STATE",
+      "UNDERSTAND",
+      "COMPARE",
+      "CROSS_CHECK",
+      "MINIMAL_EDIT",
+      "TEST",
+      "VERIFY",
+      "DIFF",
+      "REVIEW"
+    ],
+    "rule": "Evidence precedes mutation. The model does not authorize itself.",
+    "no_story_over_result": true
+  },
+  "verification": {
+    "web_4x": {
+      "scope": "WEB_4X",
+      "checks": {
+        "primary": "closest_authoritative_source",
+        "independent": "separate_origin_or_genuine_corroboration",
+        "counter": "disagreement_limits_or_alternate_source",
+        "current": "date_scope_and_present_state"
+      },
+      "rules": [
+        "Repeated copies, mirrors, syndications, or summaries from one origin count as one source.",
+        "Search discovery is not verification.",
+        "Search-result absence is not proof of absence.",
+        "Agreement strengthens a bounded finding.",
+        "Disagreement becomes a finding and blocks a seal when unresolved."
+      ]
+    },
+    "seal": {
+      "display": "⟦✓‿✓⟧ CHECKING > AvvA < SEALED ⟪◉‿◉⟫",
+      "checking_semantics": "Verification process active; not proof of success.",
+      "sealed_semantics": "Defined verification gate passed for the declared scope only.",
+      "face_semantics": {
+        "⟦✓‿✓⟧": "CHECKING",
+        "AvvA": "verifier_or_witness",
+        "⟪◉‿◉⟫": "SEALED_OR_WITNESSED"
+      },
+      "ai_cannot_self_seal": true,
+      "revocation": [
+        "stale_evidence",
+        "scope_change",
+        "new_meaningful_fact",
+        "unresolved_conflict",
+        "record_corruption"
+      ]
+    },
+    "seal_evidence_record": {
+      "required_fields": [
+        "schema_version",
+        "seal_id",
+        "scope",
+        "subject",
+        "checked_at",
+        "checker",
+        "status",
+        "checks",
+        "convergence",
+        "conflicts",
+        "limitations",
+        "conclusion_basis",
+        "source_refs",
+        "evidence_hash",
+        "record_hash"
+      ],
+      "check_order": [
+        "primary",
+        "independent",
+        "counter",
+        "current"
+      ],
+      "check_result_values": [
+        "PASS",
+        "FAIL",
+        "LIMIT"
+      ],
+      "convergence_values": [
+        "AGREES",
+        "DIVERGENT",
+        "INSUFFICIENT"
+      ],
+      "sealed_gate": {
+        "primary": "PASS",
+        "independent": "PASS",
+        "counter": [
+          "PASS",
+          "LIMIT"
+        ],
+        "current": "PASS",
+        "convergence": "AGREES",
+        "conflicts": [],
+        "limitations": "explicitly_recorded",
+        "source_refs": "non_empty",
+        "evidence_hash": "present",
+        "record_hash": "present"
+      },
+      "blocked_conditions": [
+        "counter_result_is_FAIL",
+        "current_result_is_not_PASS",
+        "primary_result_is_not_PASS",
+        "independent_result_is_not_PASS",
+        "convergence_is_not_AGREES",
+        "unresolved_conflicts_present",
+        "missing_required_evidence",
+        "hash_missing_or_invalid"
+      ],
+      "scope_law": "A seal proves the verification procedure passed for its declared scope; it does not prove more than the evidence supports.",
+      "source_reference_fields": [
+        "source_id",
+        "title",
+        "origin",
+        "url",
+        "publisher",
+        "published_at",
+        "retrieved_at"
+      ]
+    },
+    "last_web_seal": {
+      "schema_version": "avalhla.seal.v1",
+      "seal_id": "web4x-sublime-settings-2026-09-26",
+      "scope": "WEB_4X",
+      "subject": "Sublime Text 4 editor settings for deterministic Avalhla 100C/80C geometry",
+      "checked_at": "2026-09-26",
+      "checker": "AvvA",
+      "status": "SEALED",
+      "checks": {
+        "primary": {
+          "source": "Sublime Community Documentation",
+          "result": "PASS",
+          "evidence_ref": "https://docs.sublimetext.io/reference/settings.html"
+        },
+        "independent": {
+          "source": "Stack Overflow",
+          "result": "PASS",
+          "evidence_ref": "https://stackoverflow.com/questions/29089819/how-to-set-key-bindings-in-sublime-that-change-values-of-settings"
+        },
+        "counter": {
+          "source": "Sublime Text Forum - Interaction between wrap_width_style and draw_centered",
+          "result": "PASS",
+          "evidence_ref": "https://forum.sublimetext.com/t/interaction-between-wrap_width_style-and-draw_centered/66418"
+        },
+        "current": {
+          "source": "Sublime HQ - Download / Build 4215",
+          "result": "PASS",
+          "evidence_ref": "https://www.sublimetext.com/download?country=20"
+        }
+      },
+      "convergence": "AGREES",
+      "conflicts": [],
+      "limitations": [
+        "wrap_width is inert while word_wrap=false; it remains part of the declared 80-column geometry contract.",
+        "Visual glyph width can depend on font and viewport; the numeric ruler contract remains explicit."
+      ],
+      "conclusion_basis": "The four web checks agree that the selected settings are valid Sublime Text settings and that draw_centered=false is the deterministic choice for Avalhla's explicit 100C canvas and 80C core.",
+      "source_refs": [
+        {
+          "source_id": "ST-DOCS",
+          "title": "Settings",
+          "origin": "Sublime Text Community Documentation",
+          "url": "https://docs.sublimetext.io/reference/settings.html",
+          "publisher": "Sublime Text Community Documentation",
+          "published_at": null,
+          "retrieved_at": "2026-09-26"
+        },
+        {
+          "source_id": "ST-SO-29089819",
+          "title": "Setting different font and colors for distraction free editing in Sublime Text 2",
+          "origin": "Stack Overflow",
+          "url": "https://stackoverflow.com/questions/29089819/how-to-set-key-bindings-in-sublime-that-change-values-of-settings",
+          "publisher": "Stack Overflow",
+          "published_at": "2013-04-09",
+          "retrieved_at": "2026-09-26"
+        },
+        {
+          "source_id": "ST-FORUM-66418",
+          "title": "Interaction between wrap_width_style and draw_centered",
+          "origin": "Sublime Text Forum",
+          "url": "https://forum.sublimetext.com/t/interaction-between-wrap_width_style-and-draw_centered/66418",
+          "publisher": "Sublime Text Forum",
+          "published_at": "2022-12-16",
+          "retrieved_at": "2026-09-26"
+        },
+        {
+          "source_id": "ST-HQ-4215",
+          "title": "Download - Sublime Text",
+          "origin": "Sublime HQ",
+          "url": "https://www.sublimetext.com/download?country=20",
+          "publisher": "Sublime HQ",
+          "published_at": "2026-09-25",
+          "retrieved_at": "2026-09-26"
+        }
+      ],
+      "evidence_hash": "3801119f7fd54b1a7a26fd2ff21ee920e8fb4e8e757944c512f753f70c593337",
+      "record_hash": "1686a279d65ef731d5e9309c8f89c18e35bab98ee90611bb3fc8bf75d48e1857"
+    },
+    "lanes": {
+      "WEB_4X": "Independent web verification only; sealed separately.",
+      "REPO_4X": "Repository structure and implementation checks only; never substituted for web evidence.",
+      "CROSS_INFO_1X": "One final comparison of WEB_4X against REPO_4X to identify agreement, drift, or contradiction."
+    },
+    "latest_repo_cross_check": {
+      "checked_at": "2026-09-26",
+      "repo_head": "573ce0c1c47d0eef9c34de6fbc3aa8ba9689c9b7",
+      "recursive_tree_count": 99,
+      "tree_truncated": false,
+      "key_present": [
+        "memory/auto-read/00_AI_COBUILD.json",
+        "docs/PHASING.md",
+        "scripts/ava-safety",
+        "scripts/ava-verify",
+        "scripts/lib_safety.sh",
+        "scripts/lib_runtime.sh"
+      ],
+      "key_missing": [
+        "scripts/ava-record",
+        "scripts/lib_context.sh"
+      ],
+      "runtime_finding": "Remote main still uses dynamic AVA_ROOT/AVA_MEMORY_DIR ownership; the hardened canonical runtime exists only in the user's local worktree and is not yet remote-confirmed.",
+      "current_gate": "PHASE_2_SAFETY_HEART",
+      "conclusion": "Design law and remote Co-Build are aligned, but executable implementation is not globally complete; Phase 02 remains the active coding gate."
+    }
+  },
+  "editor": {
+    "geometry": {
+      "canvas": 100,
+      "core": 80,
+      "notes_left": 10,
+      "notes_right": 10
+    },
+    "sublime_settings": {
+      "color_scheme": "Monokai.sublime-color-scheme",
+      "dark_color_scheme": "auto",
+      "theme": "Adaptive.sublime-theme",
+      "dark_theme": "Adaptive.sublime-theme",
+      "light_theme": "Adaptive.sublime-theme",
+      "font_face": "Dekatron",
+      "font_size": 11,
+      "default_font_size": 11,
+      "line_padding_top": 1,
+      "line_padding_bottom": 1,
+      "draw_centered": false,
+      "word_wrap": false,
+      "wrap_width": 80,
+      "wrap_width_style": "constant",
+      "rulers": [
+        [
+          10,
+          "dotted",
+          1
+        ],
+        [
+          20,
+          "dotted",
+          1
+        ],
+        [
+          40,
+          "stippled",
+          1
+        ],
+        [
+          60,
+          "dotted",
+          1
+        ],
+        [
+          80,
+          "stippled",
+          1
+        ],
+        [
+          90,
+          "dotted",
+          1
+        ],
+        [
+          100,
+          "solid",
+          2
+        ]
+      ],
+      "ruler_style": "stippled",
+      "ruler_width": 1,
+      "margin": 2,
+      "draw_white_space": [
+        "all"
+      ],
+      "draw_unicode_white_space": "punctuation",
+      "draw_unicode_bidi": true,
+      "draw_indent_guides": true,
+      "indent_guide_options": [
+        "draw_normal"
+      ],
+      "trim_trailing_white_space_on_save": false,
+      "trim_automatic_white_space": false,
+      "gutter": true,
+      "highlight_gutter": true,
+      "highlight_line_number": true,
+      "highlight_line": true,
+      "mini_diff": "auto",
+      "draw_minimap_border": true,
+      "always_show_minimap_viewport": true,
+      "minimap_horizontal_scrolling": false,
+      "caret_style": "smooth",
+      "caret_extra_top": 5,
+      "caret_extra_bottom": 2,
+      "caret_extra_width": 2,
+      "block_caret": true,
+      "hide_pointer_while_typing": true,
+      "match_brackets": true,
+      "match_brackets_content": false,
+      "match_brackets_square": true,
+      "match_brackets_braces": true,
+      "match_brackets_angle": true,
+      "match_tags": true,
+      "match_selection": true,
+      "tab_size": 4,
+      "translate_tabs_to_spaces": true,
+      "use_tab_stops": true,
+      "detect_indentation": true,
+      "smart_indent": true,
+      "auto_indent": true,
+      "indent_subsequent_lines": true,
+      "indent_to_bracket": false,
+      "sub_word_separators": "_",
+      "tab_completion": true,
+      "auto_complete_delay": 100,
+      "auto_complete_use_index": true,
+      "auto_complete_use_history": false,
+      "auto_complete_include_snippets": true,
+      "auto_complete_trailing_symbols": false,
+      "dictionary": "Packages/Language - English/en_US.dic",
+      "show_spelling_errors": true,
+      "find_selected_text": true,
+      "regex_auto_escape": true,
+      "auto_find_in_selection": true,
+      "close_find_after_find_all": true,
+      "close_find_after_replace_all": true,
+      "highlight_find_results_in_scrollbar": true,
+      "find_scroll_highlights_limit": 8192,
+      "find_highlight_matches_max_size": 16777216,
+      "find_regex_highlight_matches_max_size": 1048576,
+      "find_in_files_max_result_size": 16777216,
+      "find_in_files_max_file_size": 104857600,
+      "find_in_files_side_by_side": false,
+      "find_in_files_context_lines": 2,
+      "find_in_files_context_characters": 300,
+      "find_in_files_suppress_errors": false,
+      "file_tab_style": "rounded",
+      "inactive_sheet_dimming": true,
+      "highlight_modified_tabs": true,
+      "show_tab_close_buttons": true,
+      "show_tab_close_buttons_on_left": false,
+      "enable_tab_scrolling": true,
+      "hide_tab_scrolling_buttons": false,
+      "hide_new_tab_button": false,
+      "open_tabs_after_current": true,
+      "native_tabs": "system",
+      "show_sidebar_button": true,
+      "sidebar_on_right": true,
+      "bold_folder_labels": false,
+      "themed_title_bar": true,
+      "adaptive_dividers": false,
+      "popup_shadows": true,
+      "overlay_scroll_bars": "system",
+      "auto_hide_menu": false,
+      "auto_hide_tabs": false,
+      "auto_hide_status_bar": false,
+      "reveal_tabs_with_timeout": false,
+      "reveal_menu": false,
+      "show_git_status_in_status_bar": true,
+      "show_encoding": false,
+      "show_line_endings": false,
+      "show_indentation": true,
+      "show_syntax": true,
+      "show_line_column": "enabled",
+      "auto_match_enabled": true,
+      "auto_close_tags": true,
+      "animation_enabled": true,
+      "tree_animation_enabled": true,
+      "scroll_speed": 1,
+      "drag_text": true,
+      "focus_on_file_drop": false,
+      "hardware_acceleration": "opengl",
+      "syntax_detection_size_limit": 16777216,
+      "save_on_focus_lost": false,
+      "hot_exit": true,
+      "remember_open_files": true,
+      "scroll_past_end": true,
+      "relative_line_numbers": false
+    },
+    "change_law": "No silent Sublime changes. AI may detect, explain, or propose. Dawa must be told before settings change.",
+    "canonical_profile_file": "config/sublime/Preferences.sublime-settings",
+    "canonical_profile_scope": "Dawa-approved full Sublime Text user profile",
+    "profile_laws": [
+      "This profile is canonical for Avalhla editor presentation.",
+      "draw_centered=false preserves deterministic left-origin 100C canvas / 80C core geometry.",
+      "word_wrap=false preserves intentional fixed-width terminal art and evidence layout.",
+      "detect_indentation=true remains a deliberate per-file behavior choice.",
+      "sub_word_separators=_ remains the deliberate sub-word navigation choice.",
+      "hardware_acceleration=opengl is machine/environment specific, not a universal runtime dependency.",
+      "AI may detect/explain/propose editor changes, but Dawa must be told before settings are changed."
+    ]
+  },
+  "heart": {
+    "board": "MAP",
+    "doors": "COMMANDS",
+    "ava": "PRESENCE",
+    "dawa": "CHOICE",
+    "model_sees_not_model_decides": true,
+    "cross_available_not_cross_contaminated": true,
+    "dawa_decides": true
+  },
+  "safety": {
+    "must_fail_closed": [
+      "outside_root",
+      "traversal",
+      "sensitive_path",
+      "unsafe_symlink"
+    ],
+    "protected_semantic_state": [
+      "persona/avalhla.Modelfile",
+      "AwA_ATLAS.md",
+      "AwA_WEAVE.md",
+      "AwA_DREAM.md",
+      "AwA_TERMINAL.md",
+      "memory/conversations/",
+      "memory/reflections/",
+      "memory/profiles/",
+      "memory/reality/",
+      "memory/inventory/07_LORE/"
+    ],
+    "distinctions": {
+      "ROOT": "where Avalhla operates",
+      "SENSITIVE": "secret material denied",
+      "PROTECTED": "semantic Avalhla state requiring deliberate handling"
+    }
+  },
+  "memory": {
+    "read_flow": [
+      "ai-chat",
+      "run_read_request",
+      "ai-read",
+      "lib_context.sh",
+      "lib_safety.sh"
+    ],
+    "writers": [
+      "ai-chat",
+      "ai-learn",
+      "ai-remember",
+      "ava-autoread",
+      "ava-mood",
+      "ava-record",
+      "ava-reality",
+      "ava-doc",
+      "ava-dream",
+      "ava-weave",
+      "ava-imagine",
+      "ava-learn-repo",
+      "ava-diff"
+    ]
+  },
+  "final_rules": [
+    "DO_NOT_MAKE_TEST_FIT_COMMAND",
+    "MAKE_TEST_FIT_VERIFIED_CONTRACT",
+    "DO_NOT_MAKE_STORY_FIT_RESULT",
+    "MAKE_RESULT_DECIDE_STORY",
+    "MODEL_DOES_NOT_AUTHORIZE_ITSELF"
+  ],
+  "change_contract": [
+    "READ",
+    "REAL_STATE",
+    "UNDERSTAND",
+    "COMPARE",
+    "MINIMAL_EDIT",
+    "POSITIVE_TEST",
+    "NEGATIVE_TEST",
+    "VERIFY",
+    "DIFF",
+    "COMMIT",
+    "PUSH",
+    "REMOTE_CONFIRM"
+  ],
+  "phasing": {
+    "status": "PRIMARY_SEQUENCE",
+    "current_gate": "PHASE_2_SAFETY_HEART",
+    "next_code_target": "Make the public safety self-test contract real and keep test isolation compatible with canonical runtime ownership.",
+    "phases": [
+      {
+        "id": 0,
+        "name": "FORENSIC_FREEZE",
+        "goal": "Establish exact state and resolve contradictions.",
+        "exit": "Real state inventory and contradictions recorded."
+      },
+      {
+        "id": 1,
+        "name": "RUNTIME_CANON",
+        "goal": "One canonical root and memory ownership.",
+        "exit": "Runtime cannot be redirected by inherited duplicate-path state."
+      },
+      {
+        "id": 2,
+        "name": "SAFETY_HEART",
+        "goal": "Central trusted read/write/append boundary and real self-test contract.",
+        "exit": "Positive and negative safety tests pass; test isolation is proven without weakening canonical ownership."
+      },
+      {
+        "id": 3,
+        "name": "MEMORY_WRITE_HEART",
+        "goal": "Migrate direct memory writers to the central safety boundary one writer class at a time.",
+        "exit": "Persistent memory writers are centrally gated and behavior-preserving."
+      },
+      {
+        "id": 4,
+        "name": "MEMORY_READ_HEART",
+        "goal": "Route context reads through lib_context -> lib_safety.",
+        "exit": "Memory/context readers fail closed on forbidden paths and unsafe symlinks."
+      },
+      {
+        "id": 5,
+        "name": "MEMORY_SEMANTICS",
+        "goal": "Preserve Reality, Memory, Reflection, Weave, Dream, Imagine, Record, and Dawa distinctions.",
+        "exit": "No layer silently becomes another layer's authority."
+      },
+      {
+        "id": 6,
+        "name": "AVA_RECORD",
+        "goal": "Prove record schema, provenance, trust, integrity, self-test, callers, and storage.",
+        "exit": "Record system has real callers/storage and verifier semantics are evidenced."
+      },
+      {
+        "id": 7,
+        "name": "MODEL_AUTHORITY_WALL",
+        "goal": "Enforce model visibility without model self-authorization.",
+        "exit": "Model can observe outputs/context but cannot authorize consequential actions."
+      },
+      {
+        "id": 8,
+        "name": "BOARD_DOORS",
+        "goal": "Keep board as map and doors as commands without dashboard drift.",
+        "exit": "Human-facing board remains small, present, and choice-preserving."
+      },
+      {
+        "id": 9,
+        "name": "ADVERSARIAL_VERIFY",
+        "goal": "Attack paths, writes, symlinks, records, authority, stale paths, and remote/local divergence.",
+        "exit": "Negative-path evidence is recorded and unresolved edges are explicit."
+      },
+      {
+        "id": 10,
+        "name": "GIT_CHECKPOINT",
+        "goal": "Freeze a verified state and reconcile local/remote.",
+        "exit": "VERIFY -> DIFF -> REVIEW -> COMMIT -> PUSH -> REMOTE_CONFIRM all pass."
+      }
+    ],
+    "transition_law": "A phase advances only on its exit evidence. A failed gate holds the phase; a meaningful regression reopens the affected phase.",
+    "primary_way_to_act": [
+      "READ",
+      "REAL_STATE",
+      "UNDERSTAND",
+      "COMPARE",
+      "CROSS_CHECK",
+      "MINIMAL_EDIT",
+      "TEST",
+      "VERIFY",
+      "DIFF",
+      "REVIEW"
+    ]
+  },
+  "forensic_recon_2026_09_26": {
+    "record_kind": "FORENSIC_RECON",
+    "date": "2026-09-26",
+    "not_an_execution_phase": true,
+    "purpose": "durable forensic evidence without replacing the remote primary operating law",
+    "remote_current": {
+      "repository": "VVgbon916/cheatsheets",
+      "main_sha": "3a90524b63c73eb884c67c87adc2a3ffa863d3d8",
+      "co_build_file_present": true,
+      "primary_status": "PRIMARY_OPERATING_LAW",
+      "current_phase_gate": "PHASE 02 // SAFETY HEART",
+      "phase_03_meaning": "MEMORY WRITE HEART",
+      "phase_06_meaning": "AVA-RECORD",
+      "phase_numbering_warning": "The local historical key devil_phase_03_provenance_recon must not be interpreted as the project's execution Phase 03."
+    },
+    "local_current": {
+      "head": "7b22c9d19dd32010445a64c3a6b438fff9008af6",
+      "canonical_root": "/var/home/VVgbon/Avalhla",
+      "canonical_memory": "/var/home/VVgbon/Avalhla/memory",
+      "remote_tracking_after_fetch": "3a90524b63c73eb884c67c87adc2a3ffa863d3d8",
+      "history_relationship": "LOCAL_AND_REMOTE_DIVERGED"
+    },
+    "co_build_reconciliation": {
+      "remote_document_is_base": true,
+      "local_derived_copy_replaces_remote_law": false,
+      "remote_primary_operating_law_preserved": true,
+      "local_old_14K6_pass_claim": "DISCARDED_AS_UNVERIFIED",
+      "reason": "Current remote co-build defines the authoritative verification/seal/phasing contract; local staged copy was missing that remote contract and contained stale checkpoint state."
+    },
+    "provenance_forensics": {
+      "old_138_result": "NOT_PROOF_OF_138_CANONICAL_MEMORY_CORRUPTION",
+      "old_scanner_behavior": "Historical scanner classified every memory file except *.integrity.json as a payload and expected a payload.integrity.json sidecar.",
+      "historical_verify_failure": "Historical scan also invoked missing ava_safety_verify_integrity for each classified payload.",
+      "sidecars_to_create": false,
+      "living_memory_migration": false,
+      "missing_historical_integrity_api_to_revive": false
+    },
+    "ava_record": {
+      "local_script": "scripts/ava-record",
+      "present_on_current_remote_main": false,
+      "local_introduced_by": "7b22c9d feat: add canonical memory record layer",
+      "production_callers_confirmed": false,
+      "live_record_exists": true,
+      "live_record_count": 1,
+      "live_record_verify_result": "PASS_READ_ONLY",
+      "self_test_isolation": "FAILED",
+      "failure_mechanism": "scripts/lib_runtime.sh unconditionally replaces inherited AVA_MEMORY_DIR with the canonical repository memory before ava-record self-test can use its temporary test root",
+      "repair_requirement": "isolate ava-record self-test without weakening canonical production runtime ownership",
+      "do_not_execute_self_test_until_repaired": true
+    },
+    "runtime": {
+      "canonical_root_hard_set_locally": true,
+      "remote_runtime_ownership": "current remote lib_runtime.sh uses inherited AVA_ROOT/AVA_MEMORY_DIR when supplied",
+      "local_vs_remote_runtime": "DIVERGENT_AND_MUST_BE_TREATED_AS_SEPARATE_EVIDENCE"
+    },
+    "ava_imagine_root": {
+      "classification": "LIVE_EXECUTABLE_REFERENCE_REQUIRES_CLASSIFICATION",
+      "references": [
+        "bin/ava-imagine",
+        "bin/ava-mood",
+        "scripts/ava-imagine",
+        "scripts/ava-mood"
+      ],
+      "behavior_not_yet_proven": true
+    },
+    "web_terminology": {
+      "provenance": "NIST terminology anchor for origin, development, ownership, location, and changes associated with a system/component and its data",
+      "artifact": "NIST terminology anchor for evidence or project work product",
+      "attestation": "NIST terminology anchor for a statement asserting demonstrated conformance",
+      "slsa_provenance": "SLSA terminology/model anchor for verifiable origin and production information; not an instruction to import the complete SLSA architecture",
+      "sources": [
+        "https://csrc.nist.gov/glossary/term/provenance",
+        "https://csrc.nist.gov/glossary/term/artifact",
+        "https://csrc.nist.gov/glossary/term/attestation",
+        "https://slsa.dev/spec/v1.2/provenance"
+      ]
+    },
+    "decision": {
+      "current_execution_gate": "PHASE 02 // SAFETY HEART",
+      "next": "repair and prove ava-record self-test isolation, then proceed through the remote Phase 06 ava-record proof requirements",
+      "no_sidecars": true,
+      "no_memory_migration": true,
+      "no_production_rewire": true,
+      "no_commit": true,
+      "no_push": true
+    }
+  },
+  "extensions": {
+    "devilash_forensic_2026_09_27": {
+      "revision": "devilash-forensic-2026-09-27",
+      "captured_at": "2026-09-27",
+      "source_authority": "conversation_terminal_evidence_plus_web_cross_check",
+      "status": "EVIDENCE_CAPTURED_PHASE_02_REMAINS_OPEN",
+      "forensic_findings": {
+        "local_runtime": {
+          "canonical_root": "/var/home/VVgbon/Avalhla",
+          "canonical_memory": "/var/home/VVgbon/Avalhla/memory",
+          "branch": "main",
+          "local_head": "7b22c9d19dd32010445a64c3a6b438fff9008af6",
+          "origin_main_at_last_verified_remote_check": "3a90524b63c73eb884c67c87adc2a3ffa863d3d8",
+          "local_relation": "ahead_1_behind_6",
+          "environment": "Bazzite host; no active Distrobox/coding-lab container observed",
+          "canonical_path_witness": "DEV/INODE and mount observations are runtime consistency witnesses, not permanent file identity"
+        },
+        "read_authority": {
+          "old_whitelist": "DEAD_IN_LIVE_SCRIPTS",
+          "old_traces": [
+            "WHITELIST_FILE",
+            "is_allowed",
+            "read-paths.txt"
+          ],
+          "canonical_public_read_route": [
+            "ai-read",
+            "scripts/lib_context.sh",
+            "ava_safety_assert_context_readable",
+            "scripts/lib_safety.sh"
+          ],
+          "generic_read_gate": {
+            "function": "ava_safety_assert_readable",
+            "live_callers_found": 0,
+            "classification": "ORPHAN_SECURITY_HELPER_UNLESS_NEW_EVIDENCE_APPEARS"
+          },
+          "trusted_context_gate_live_callers": [
+            "scripts/lib_context.sh",
+            "scripts/lib_safety.sh::ava_safety_read_file",
+            "scripts/lib_safety.sh::ava_safety_read_head"
+          ]
+        },
+        "model_input_authority": {
+          "invariant": "No model call may receive non-human/file-derived bytes unless the source crosses an approved model-input authority.",
+          "current_state": "VIOLATED",
+          "confirmed_direct_model_input_bypasses": [
+            {
+              "script": "scripts/ai-chat",
+              "paths": [
+                "AUTO_READ_DIR",
+                "PROFILE_FILE"
+              ],
+              "read_primitives": [
+                "cat"
+              ],
+              "dispatch": "/api/generate",
+              "classification": "DIRECT_MODEL_BOUND_BYPASS"
+            },
+            {
+              "script": "scripts/ai-ask",
+              "paths": [
+                "PROFILE_FILE",
+                "SESSION_FILE via ava-context ranking"
+              ],
+              "read_primitives": [
+                "cat",
+                "stdin redirection"
+              ],
+              "dispatch": "/api/generate",
+              "classification": "DIRECT_MODEL_BOUND_BYPASS_PLUS_LEGACY_CANON"
+            },
+            {
+              "script": "scripts/ai-remember",
+              "paths": [
+                "user profile",
+                "conversation JSONL"
+              ],
+              "read_primitives": [
+                "cat",
+                "find -exec cat"
+              ],
+              "dispatch": "/api/generate",
+              "classification": "DIRECT_MODEL_BOUND_BYPASS"
+            },
+            {
+              "script": "scripts/ava-dream",
+              "paths": [
+                "recent conversations",
+                "reflections",
+                "previous dreams",
+                "profile",
+                "AwA source files",
+                "RITUAL.txt",
+                "imagination files"
+              ],
+              "read_primitives": [
+                "tail",
+                "head",
+                "find",
+                "ls"
+              ],
+              "dispatch": "/api/generate",
+              "classification": "MULTI_SOURCE_DIRECT_MODEL_BOUND_BYPASS"
+            },
+            {
+              "script": "scripts/ava-weave",
+              "paths": [
+                "recent conversations",
+                "dreams",
+                "reflections",
+                "AwA source files",
+                "RITUAL.txt",
+                "imagination files"
+              ],
+              "read_primitives": [
+                "tail",
+                "head",
+                "find",
+                "xargs"
+              ],
+              "dispatch": "/api/generate",
+              "classification": "MULTI_SOURCE_DIRECT_MODEL_BOUND_BYPASS"
+            },
+            {
+              "script": "scripts/ava-review",
+              "paths": [
+                "arbitrary file argument",
+                "non-TTY stdin"
+              ],
+              "read_primitives": [
+                "head",
+                "stdin"
+              ],
+              "dispatch": "/api/generate",
+              "classification": "MODEL_INPUT_DOOR_UNGATED"
+            },
+            {
+              "script": "scripts/ava-doc",
+              "paths": [
+                "arbitrary file argument"
+              ],
+              "read_primitives": [
+                "head"
+              ],
+              "dispatch": "/api/generate",
+              "classification": "MODEL_INPUT_DOOR_UNGATED"
+            },
+            {
+              "script": "scripts/ava-diff",
+              "paths": [
+                "git diff of requested file"
+              ],
+              "read_primitives": [
+                "git diff",
+                "head"
+              ],
+              "dispatch": "/api/generate",
+              "classification": "MODEL_INPUT_DOOR_UNGATED"
+            },
+            {
+              "script": "scripts/ava-explain",
+              "paths": [
+                "arguments",
+                "non-TTY stdin"
+              ],
+              "read_primitives": [
+                "cat",
+                "head"
+              ],
+              "dispatch": "/api/generate",
+              "classification": "MODEL_INPUT_DOOR_UNGATED; DIRECT_HUMAN_ARGUMENTS_NEED_SEPARATE_CLASSIFICATION"
+            }
+          ],
+          "not_model_bound_from_observed_source": [
+            "scripts/ava-record",
+            "scripts/ai-learn",
+            "scripts/ava-learn-repo",
+            "scripts/ava-mood",
+            "scripts/ava-mem",
+            "scripts/ava-help",
+            "scripts/ava-reality"
+          ],
+          "important_distinction": "Ingestion authorization is not context authorization; data copied into auto-read must still cross context authority when consumed by a model.",
+          "specialized_reader": {
+            "script": "scripts/ava-context-gate",
+            "actual_role": "specialized reality latest.md reader with redaction",
+            "not_proven_as": "general trusted context authority",
+            "action": "CLASSIFY_BEFORE_RENAME_OR_DELETE"
+          }
+        },
+        "legacy_and_canon_drift": {
+          "ai-ask": [
+            "uses $HOME/.ai-memory directly",
+            "uses $HOME/Avalhla/scripts/ava-context",
+            "does not source lib_runtime.sh",
+            "does not cross lib_context/lib_safety before model dispatch"
+          ],
+          "ava-dream": [
+            "uses canonical AVA_ROOT/AVA_MEMORY_DIR through lib_runtime",
+            "still directly references $HOME/Avalhla/scripts/ava-context-gate",
+            "contains legacy auto-read/system-prompt.txt source reference in model seed construction"
+          ],
+          "rule": "Legacy path compatibility cannot silently become runtime authority. Preserve historical references until classified and migrated deliberately."
+        },
+        "phase_02_blocker": {
+          "state": "OPEN",
+          "reason": "Trusted context boundary is real for ai-read/lib_context, but the repository still has multiple model-visible read doors outside it.",
+          "do_not_claim": [
+            "ONE_READ_POLICY_SEALED",
+            "ALL_MODEL_INPUTS_GATED",
+            "PHASE_02_COMPLETE"
+          ]
+        }
+      },
+      "runtime_and_platform_findings": {
+        "bazzite": {
+          "local_observation": "Bazzite 44 / Kinoite variant; canonical user tree resolves under /var/home",
+          "filesystem_witness": "user supplied DEV/INODE checks showed /home/VVgbon and /var/home/VVgbon share the same device/inode while /var is a different device id",
+          "design_law": "Canonical resolved path is the ownership authority; DEV/INODE, mount and environment are witnesses for consistency, not permanent object identity.",
+          "distrobox": "No active coding-lab container was observed during the supplied local forensic run. Distrobox remains a possible host-integrated environment and therefore must be treated as an execution-context witness, not as the canonical owner."
+        },
+        "path_resolution": {
+          "current_code_pattern": "realpath -e for existing context targets; realpath -m for containment checks and future write targets",
+          "verified_semantics": "GNU realpath -e requires all components to exist; -m permits missing components; physical symlink resolution is the default.",
+          "security_implication": "Using -m is appropriate for future destination validation, but lexical containment plus a later separate open/read can still have a time-of-check/time-of-use window."
+        },
+        "future_hardening_candidate": {
+          "technology": "Linux openat2",
+          "candidate_resolve_rules": [
+            "RESOLVE_BENEATH",
+            "RESOLVE_IN_ROOT",
+            "RESOLVE_NO_SYMLINKS",
+            "RESOLVE_NO_XDEV"
+          ],
+          "classification": "PHASE_02_OR_PHASE_09_DESIGN_RESEARCH_ONLY",
+          "do_not_implement_yet": true,
+          "reason": "The existing shell boundary must first be understood, tested and behavior-preserved before replacing its path-resolution mechanism with a kernel-level helper."
+        }
+      },
+      "web_cross_check_addendum": {
+        "status": "EVIDENCE_CAPTURED_NOT_SEALED",
+        "checks": [
+          {
+            "subject": "GNU realpath semantics",
+            "primary": {
+              "result": "PASS",
+              "source": "GNU Coreutils 9.11 realpath invocation",
+              "url": "https://www.gnu.org/software/coreutils/manual/html_node/realpath-invocation.html",
+              "retrieved": "2026-09-27"
+            },
+            "independent": {
+              "result": "PASS",
+              "source": "Linux man-pages realpath(1)",
+              "url": "https://man7.org/linux/man-pages/man1/realpath.1.html",
+              "retrieved": "2026-09-27"
+            },
+            "counter": {
+              "result": "PASS",
+              "source": "Debian Coreutils realpath(1)",
+              "url": "https://manpages.debian.org/trixie/coreutils/realpath.1.en.html",
+              "retrieved": "2026-09-27"
+            },
+            "current": {
+              "result": "PASS",
+              "source": "GNU coreutils current realpath.c",
+              "url": "https://github.com/coreutils/coreutils/blob/master/src/realpath.c",
+              "retrieved": "2026-09-27"
+            },
+            "convergence": "AGREES",
+            "finding": "The local use of -e for existing reads and -m for missing/future paths matches documented semantics."
+          },
+          {
+            "subject": "Linux path-containment hardening",
+            "primary": {
+              "result": "PASS",
+              "source": "Linux openat2(2) manual",
+              "url": "https://man7.org/linux/man-pages/man2/openat2.2.html",
+              "retrieved": "2026-09-27"
+            },
+            "independent": {
+              "result": "PASS",
+              "source": "Linux UAPI openat2 header source",
+              "url": "https://codebrowser.dev/linux/linux/include/uapi/linux/openat2.h.html",
+              "retrieved": "2026-09-27"
+            },
+            "counter": {
+              "result": "LIMIT",
+              "source": "openat2 documentation notes on compatibility and symlink behavior",
+              "url": "https://man7.org/linux/man-pages/man2/openat2.2.html",
+              "retrieved": "2026-09-27",
+              "note": "RESOLVE_NO_SYMLINKS can cause functional failures when legitimate symlinks are present; any adoption must be scoped to a security-sensitive door."
+            },
+            "current": {
+              "result": "PASS",
+              "source": "Current Linux man-pages / kernel API documentation",
+              "url": "https://www.man7.org/linux/man-pages/man2/openat2.2.html",
+              "retrieved": "2026-09-27"
+            },
+            "convergence": "AGREES_WITH_LIMITATION",
+            "finding": "openat2 provides kernel-supported resolution controls that are relevant to future race-resistant path authorization, but it is a design candidate rather than an immediate patch."
+          },
+          {
+            "subject": "Bazzite /var/home and Distrobox execution context",
+            "primary": {
+              "result": "PASS",
+              "source": "Bazzite manual partitioning documentation",
+              "url": "https://docs.bazzite.gg/General/Installation_Guide/manual_partitioning/",
+              "retrieved": "2026-09-27"
+            },
+            "independent": {
+              "result": "PASS",
+              "source": "Fedora Magazine Atomic Desktop filesystem discussion",
+              "url": "https://fedoramagazine.org/building-your-own-atomic-bootc-desktop/",
+              "retrieved": "2026-09-27"
+            },
+            "counter": {
+              "result": "PASS",
+              "source": "Distrobox upstream documentation",
+              "url": "https://distrobox.it/",
+              "retrieved": "2026-09-27",
+              "note": "Distrobox is tightly integrated with the host and can share host HOME/external storage; it is not equivalent to a VM boundary."
+            },
+            "current": {
+              "result": "PASS",
+              "source": "Current Bazzite Distrobox documentation",
+              "url": "https://docs.bazzite.gg/Installing_and_Managing_Software/Distrobox/",
+              "retrieved": "2026-09-27"
+            },
+            "convergence": "AGREES",
+            "finding": "The observed /home -> /var/home canonicalization and host-integrated container concern are consistent with current Bazzite/Distrobox documentation."
+          }
+        ]
+      },
+      "review_queue": {
+        "before_any_model_input_migration": [
+          "Classify every model entrypoint and every source feeding its prompt.",
+          "Define one model-input authority without conflating display, ingest, context, and human-direct input.",
+          "Route persistent model context through lib_context -> lib_safety while preserving each tool's semantics.",
+          "Decide the deliberate policy for file/stdin/diff doors.",
+          "Classify ai-ask and ava-dream legacy path references before migration.",
+          "Define how auto-read consumption is gated separately from auto-read ingestion.",
+          "Test positive and negative paths, including traversal, outside-root, safe symlink, unsafe symlink, sensitive names, future write/append, stdin/file doors, and repeat reads.",
+          "Re-run WEB_4X / REPO_4X / CROSS_INFO after the implementation change.",
+          "No commit or push until VERIFY -> DIFF -> REVIEW passes."
+        ],
+        "architectural_rule": "FACT FIRST. ART SECOND. MODEL SEES != MODEL DECIDES. CROSS-AVAILABLE != CROSS-CONTAMINATED. Dawa decides."
+      }
+    }
+  }
+}
