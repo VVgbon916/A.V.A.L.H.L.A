@@ -10,7 +10,7 @@ LOVE       = red
 DREAM      = violet
 ART        = white
 
-DAVVA_ORANGE   #FF8800
+DAWA_ORANGE   #FF8800
 AVVA_CYAN      #22D3EE
 CODE_GREEN    #39FF88
 LOVE_RED      #FF365C
