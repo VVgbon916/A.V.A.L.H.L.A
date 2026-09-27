@@ -97,12 +97,12 @@ java25() {
 
 # Repo + boards
 alias repo='cd ~/Avalhla'
-alias board='~/Avalhla/scripts/commands-board.sh'
+alias board='~/Avalhla/scripts/ava-board'
 alias board-static='cat ~/Avalhla/BOARD.txt'
-alias avacheat='cat ~/Avalhla/AVALHLA_CHEATSHEET.txt'
-alias avacommands='cat ~/Avalhla/AVALHLA_COMMANDS.txt'
-alias order='cat ~/Avalhla/Dawa_CheatAvalhlaOrder.md'
-alias cheatsheet-prompt='cat ~/Avalhla/PROMPT_framed_cheatsheet.txt'
+alias avacheat='cat ~/Avalhla/QUICKREF.txt'
+alias avacommands='cat ~/Avalhla/COMMANDS.txt'
+alias order='cat ~/Avalhla/ORDER.md'
+alias cheatsheet-prompt='cat ~/Avalhla/PROMPT_FRAME.txt'
 
 # Ava server control
 alias avastart='~/Avalhla/scripts/start-avalhla.sh'

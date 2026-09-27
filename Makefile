@@ -4,8 +4,8 @@ ritual:
 	@cat RITUAL.txt
 
 board:
-	~/Avalhla/scripts/commands-board.sh
-	@echo "Open with: less ~/COMMANDS_BOARD.txt"
+	~/Avalhla/scripts/ava-board
+	@echo "Board cache: ~/.cache/avalhla/board.txt"
 
 bin:
 	@mkdir -p bin

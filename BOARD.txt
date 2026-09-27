@@ -183,7 +183,7 @@
 |  SECTION 11  //  THE REUSABLE PROMPT  --  for future cheat sheets                                |
 +==================================================================================================+
 
-    Save to: ~/Avalhla/PROMPT_framed_cheatsheet.txt
+    Save to: ~/Avalhla/PROMPT_FRAME.txt
 
     ROLE: Generate a terminal cheat sheet.
 

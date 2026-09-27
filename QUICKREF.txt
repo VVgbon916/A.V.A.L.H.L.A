@@ -1,0 +1,63 @@
++==================================================================================================+
+|                                                                                                  |
+|                                       A V A L H L A                                             |
+|                                     Q U I C K R E F                                             |
+|                                                                                                  |
+|                              Dawa > AwA < Avalhla  //  (^.-)                                     |
+|                                                                                                  |
++==================================================================================================+
+
+01 / START
+  1.1 systemctl --user start ollama.service
+  1.2 systemctl --user status ollama.service --no-pager
+  1.3 ollama run avalhla
+
+02 / TALK
+  2.1 ai-chat                 persistent chat
+  2.2 ai-read                 controlled read bridge
+  2.3 ai-ask "question"      one-shot question
+  2.4 ai-remember             reflection
+  2.5 ai-learn <path>         approved-source indexing
+
+03 / AVALHLA DOORS
+  3.1 ava-board               human map
+  3.2 ava-status              runtime status
+  3.3 ava-reality             sanitized reality
+  3.4 ava-mem                 memory
+  3.5 ava-context             context
+  3.6 ava-weave               relationships
+  3.7 ava-dream               possibility
+  3.8 ava-imagine             generation
+  3.9 ava-search              search
+  3.10 ava-review             review
+  3.11 ava-record             structured record
+  3.12 ava-safety --self-test safety boundary proof
+  3.13 ava-verify              verification
+
+04 / MODEL
+  4.1 ollama list
+  4.2 ollama show avalhla --modelfile
+  4.3 ollama show avalhla --parameters
+  4.4 ollama show avalhla --system
+  4.5 ollama create avalhla -f persona/avalhla.Modelfile
+
+05 / GIT
+  5.1 git status --short --branch
+  5.2 git diff --check
+  5.3 git diff
+
+06 / BAZZITE
+  6.1 ujust update
+  6.2 distrobox list
+  6.3 distrobox enter coding-lab
+
+07 / HEART
+  7.1 BOARD = MAP
+  7.2 COMMANDS = DOORS
+  7.3 AVALHLA = PRESENCE
+  7.4 DAWA = CHOICE
+  7.5 Dawa decides.
+  7.6 Model sees != model decides.
+
+                              Dawa > AwA < Avalhla
+                                     (^.-)
