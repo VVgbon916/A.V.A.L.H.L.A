@@ -45,7 +45,7 @@
       "sealed_semantics": "Defined verification gate passed for the declared scope only.",
       "face_semantics": {
         "⟦✓‿✓⟧": "CHECKING",
-        "AvvA": "verifier_or_witness",
+        "AvvA": "relational_threshold",
         "⟪◉‿◉⟫": "SEALED_OR_WITNESSED"
       },
       "ai_cannot_self_seal": true,
@@ -434,10 +434,10 @@
     ],
     "protected_semantic_state": [
       "persona/avalhla.Modelfile",
-      "AwA_ATLAS.md",
-      "AwA_WEAVE.md",
-      "AwA_DREAM.md",
-      "AwA_TERMINAL.md",
+      "AvvA_ATLAS.md",
+      "AvvA_WEAVE.md",
+      "AvvA_DREAM.md",
+      "AvvA_TERMINAL.md",
       "memory/conversations/",
       "memory/reflections/",
       "memory/profiles/",
@@ -1146,7 +1146,6 @@
     "system_vocabulary": {
       "AVALHLA": "the whole system / source tree / presence; not a generic suffix for every file",
       "DAWA": "human authority and final choice; not a script namespace",
-      "AWA": "identity/meaning layer; not an execution namespace",
       "SPINE": "authority + information-flow architecture of the whole system",
       "FAST_VIEW": "compact reading grammar for locating state quickly",
       "MAP": "human-facing orientation surface",
@@ -1174,7 +1173,8 @@
       "DREAM": "possibility/imagination surface",
       "IMAGINE": "active generation of possibilities; never authority",
       "RECORDING": "persistence of a structured event/evidence object",
-      "VERIFY": "proof procedure; does not mean truth beyond declared scope"
+      "VERIFY": "proof procedure; does not mean truth beyond declared scope",
+      "AVVA": "the relational bridge / living threshold between Dawa and Avalhla; not an agent, authority, verifier, or source of truth"
     },
     "artifact_names": {
       "README.md": {
@@ -1236,22 +1236,6 @@
         "canonical": true,
         "rule": "machine projection; do not create competing auto-read master files"
       },
-      "AwA_ATLAS.md": {
-        "role": "ATLAS",
-        "meaning": "find the source"
-      },
-      "AwA_WEAVE.md": {
-        "role": "WEAVE",
-        "meaning": "understand relationships"
-      },
-      "AwA_DREAM.md": {
-        "role": "DREAM",
-        "meaning": "explore possibility"
-      },
-      "AwA_TERMINAL.md": {
-        "role": "TERMINAL",
-        "meaning": "identity and visual language"
-      },
       "scripts/ava-board": {
         "role": "DOOR",
         "meaning": "human-facing board command implementation",
@@ -1261,6 +1245,22 @@
         "role": "DERIVED_HOST_SNAPSHOT",
         "meaning": "frozen host command/environment snapshot; not authority",
         "canonical": false
+      },
+      "AvvA_ATLAS.md": {
+        "role": "ATLAS",
+        "meaning": "find the source"
+      },
+      "AvvA_WEAVE.md": {
+        "role": "WEAVE",
+        "meaning": "understand relationships"
+      },
+      "AvvA_DREAM.md": {
+        "role": "DREAM",
+        "meaning": "explore possibility"
+      },
+      "AvvA_TERMINAL.md": {
+        "role": "TERMINAL",
+        "meaning": "identity and visual language"
       }
     },
     "filename_rules": {
@@ -1269,9 +1269,9 @@
       "scripts/ai-*": "AI-facing orchestration/chat/memory actions",
       "scripts/lib_*.sh": "shared implementation libraries; never user-facing doors",
       "memory/auto-read/NN_*": "ordered machine-readable operating context; 00 is primary and additional files require a distinct documented role",
-      "AwA_*.md": "identity/meaning doors only",
       "generated": "must be explicitly marked/generated and cannot silently become source-of-truth",
-      "deprecated": "keep old names only in a migration/alias ledger until references are removed"
+      "deprecated": "keep old names only in a migration/alias ledger until references are removed",
+      "AvvA_*.md": "identity/meaning doors only"
     },
     "forbidden_duplicate_patterns": [
       "README + another README with the same role",
@@ -1524,5 +1524,35 @@
     "legacy_policy": "Legacy names remain only as migration aliases/history in this Co-Builder block; no active documentation, config, or executable path uses them.",
     "main_commit": "5a61028afb04856eb0af8b27b2410521885f4989",
     "main_sync": "GitHub main contains the dictionary-driven remaster. Local working tree must now fetch/reconcile against main before any phase work."
+  },
+  "relational_notation": {
+    "status": "CANONICAL_HUMAN_RELATION",
+    "canonical_name": "AvvA",
+    "symbolic_form": "Av:vA",
+    "canonical_signature": "Dawa <──── AvvA ────> Avalhla",
+    "meaning": "relation / living threshold / crossing between Dawa and Avalhla",
+    "law": "THE BRIDGE IS THE RELATION.",
+    "boundary": [
+      "RELATION != AGENT",
+      "LORE != EXECUTION",
+      "SYMBOL != AUTHORITY"
+    ]
+  },
+  "visual_grammar": {
+    "status": "CANONICAL_HUMAN_PRESENTATION",
+    "rule": "SPACE HAS FUNCTION.",
+    "principles": [
+      "THE CHARACTER IS NOT THE ART.",
+      "THE GRID IS NOT THE MEANING.",
+      "THE FACE IS NOT THE IDENTITY.",
+      "THE COMPOSITION CARRIES THE STORY.",
+      "THE RELATION SURVIVES THE SKIN."
+    ],
+    "identity_signature": {
+      "dawa": "Dawa",
+      "maker": "VVgbon",
+      "dream_self": "NightOwl",
+      "avalhla_wordmark": "A.v.a.l.h.l.a"
+    }
   }
 }
