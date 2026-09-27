@@ -79,7 +79,6 @@ esac
 EVIDENCE="$( { printf "REPO=%s\nPR=%s\nSTATE=%s\nDECISION=%s\nBASE=%s\nHEAD_BRANCH=%s\nHEAD_SHA=%s\n" "$REPO" "$PR" "$STATE" "$DECISION" "$BASE" "$HEAD_BRANCH" "$HEAD_SHA"; printf "REVIEW_ROWS\n%s\n" "$REVIEW_ROWS"; printf "CR_INLINE\n%s\n" "$CR_ROWS"; printf "DEVIN_INLINE\n%s\n" "$DEVIN_ROWS"; printf "CR_SUMMARY\n%s\n" "$CR_SUMMARY"; printf "CHECKS\n%s\n" "$CHECK_ROWS"; } | head -c 20000 )"
 
 if (( SYNTH )); then
-  command -v curl >/dev/null 2>&1 || { printf "%s\n" "ava-github-review: curl is required for --synthesize." >&2; exit 127; }
   command -v python3 >/dev/null 2>&1 || { printf "%s\n" "ava-github-review: python3 is required for --synthesize." >&2; exit 127; }
   OLLAMA_HOST="${OLLAMA_HOST:-http://127.0.0.1:11434}"
   AVA_REVIEW_MODEL="${AVA_REVIEW_MODEL:-avalhla-review}"
