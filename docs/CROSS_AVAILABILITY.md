@@ -1,4 +1,4 @@
-# A.V.A.L.H.L.A. - CROSS-AVAILABILITY
+# A.v.a.l.h.l.a - CROSS-AVAILABILITY
 
 CROSS-AVAILABLE
 !=
@@ -24,7 +24,7 @@ DREAM
 SOURCE
 "This is actually canonical."
 
-DAWA
+DAVVA
 "This is what I choose."
 
 ## Boundaries
@@ -110,7 +110,7 @@ v
 SOURCE
 |
 v
-DAWA
+DAVVA
 |
 v
 CHOICE
@@ -126,7 +126,10 @@ Multiple ways of knowing.
 Cross-available.
 Not cross-contaminated.
 
-Dawa > AvvA < Avalhla
+Dawa <──── AvvA ────> Avalhla
+
+THE BRIDGE IS THE RELATION.
+THE RELATION SURVIVES THE SKIN.
 
 ## Context Gate
 
