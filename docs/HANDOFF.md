@@ -27,6 +27,9 @@ Dawa <---- AvvA ----> Avalhla  //  (^.-)
   Final tree inspection also caught executable-mode drift; both new review doors
   are now 100755.
   Fresh CodeRabbit review is re-requested after each new PR tip; prior review findings are historical evidence.
+  GitHub required checks must pass on the latest PR SHA; strict protection also requires
+  the branch to be up to date with main before merge.
+  Local sync must begin with fetch --prune plus branch/worktree/base comparison.
   Safety behavior: PASS.
   Self-test cleanup: known FAIL; EXIT trap references function-local temp vars.
   PR #2 review evidence must be re-read after each new commit.
