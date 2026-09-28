@@ -1,44 +1,72 @@
 #!/usr/bin/env bash
-source "$(dirname "${BASH_SOURCE[0]}")/lib_runtime.sh"
-source "$(dirname "${BASH_SOURCE[0]}")/lib_output_gate.sh"
-# ava-review -- review a file (or stdin) with avalhla-review
-# Usage: ava-review <file>
-#        cat foo | ava-review
 set -Eeuo pipefail
 
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+source "$SCRIPT_DIR/lib_runtime.sh"
+source "$SCRIPT_DIR/lib_output_gate.sh"
+source "$SCRIPT_DIR/lib_model_input.sh"
+
 MODEL="${AVA_REVIEW_MODEL}"
+REVIEW_GATE="$SCRIPT_DIR/lib_review_gate.sh"
 MAX_BYTES=60000
+
+usage() {
+    printf '%s\n' 'usage: ava-review <file>' '       cat file | ava-review' >&2
+}
 
 case "${1:-}" in
     -h|--help)
-        echo "usage: ava-review <file>"
-        echo "       cat file | ava-review"
+        usage
         exit 0
         ;;
 esac
 
-if ! curl -fsS "$OLLAMA_HOST/api/tags" >/dev/null 2>&1; then
-    echo "X Ollama server not reachable at $OLLAMA_HOST" >&2
-    exit 1
-fi
-
-if [[ $# -ge 1 && -f "$1" ]]; then
-    SRC="$1"
-    CODE=$(head -c "$MAX_BYTES" "$SRC")
-elif [[ ! -t 0 ]]; then
-    SRC="<stdin>"
-    CODE=$(head -c "$MAX_BYTES")
-else
-    echo "usage: ava-review <file>" >&2
-    echo "       cat foo | ava-review" >&2
+if (( $# > 1 )); then
+    usage
     exit 2
 fi
 
+if (( $# == 1 )); then
+    SRC="$1"
+    [[ -f "$SRC" ]] || {
+        printf 'X not a file: %s\n' "$SRC" >&2
+        exit 1
+    }
+    CODE="$(ava_model_input_file "REVIEW_SOURCE" "$SRC" "$MAX_BYTES")" || {
+        printf '%s\n' 'X safety: review source denied' >&2
+        exit 1
+    }
+else
+    [[ ! -t 0 ]] || { usage; exit 2; }
+    CODE="$(ava_model_input_stdin "REVIEW_STDIN")" || {
+        printf '%s\n' 'X safety: review stdin denied' >&2
+        exit 1
+    }
+    SRC="<stdin>"
+fi
+
+BYTES="$(printf '%s' "$CODE" | wc -c | tr -d '[:space:]')"
+[[ "$BYTES" =~ ^[0-9]+$ ]] || exit 1
+if (( BYTES > MAX_BYTES )); then
+    printf 'X input exceeds %s bytes\n' "$MAX_BYTES" >&2
+    exit 1
+fi
+
+curl -fsS --connect-timeout 3 --max-time 10 \
+    "$OLLAMA_HOST/api/tags" >/dev/null || {
+    printf 'X Ollama server not reachable at %s\n' "$OLLAMA_HOST" >&2
+    exit 1
+}
+
 PROMPT="[TASK]
 mode: review
-goal: audit the file below. Emit exactly the five blocks: BUGS / SECURITY / PERF / STYLE / VERDICT.
-      One bullet per finding, format: file:line -- problem -- fix.
-      Clean block = \"none\". Do not restate code. Do not explain what it does.
+goal: audit the file below. Emit exactly five sections in this order:
+BUGS / SECURITY / PERF / STYLE / VERDICT.
+One bullet per finding: file:line -- problem -- fix.
+Use exactly 'none' for a clean finding section.
+VERDICT must contain a concise review conclusion.
+Do not claim approval or merge authorization.
+Do not restate code or explain what it does.
 
 [CONTEXT]
 source: $SRC
@@ -46,11 +74,15 @@ source: $SRC
 [USER]
 $CODE"
 
-echo ""
-echo "== ava-review :: $SRC =="
-echo ""
+PAYLOAD="$(jq -n --arg m "$MODEL" --arg p "$PROMPT" \
+    '{model:$m,prompt:$p,stream:false}')"
 
-curl -s "$OLLAMA_HOST/api/generate" \
-    -d "$(jq -n --arg m "$MODEL" --arg p "$PROMPT" \
-    '{model: $m, prompt: $p, stream: false}')" \
-    | jq -r '.response' | ava_output_gate
+RESPONSE="$(curl -fsS --connect-timeout 3 --max-time 180 \
+    "$OLLAMA_HOST/api/generate" \
+    -H 'Content-Type: application/json' \
+    -d "$PAYLOAD" |
+    jq -er '.response | strings')"
+
+printf '%s\n' "$RESPONSE" |
+    ava_output_gate |
+    bash "$REVIEW_GATE"

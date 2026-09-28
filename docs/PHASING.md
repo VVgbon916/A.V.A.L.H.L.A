@@ -39,10 +39,13 @@ PURPOSE
        -> COMPARE
        -> CROSS-CHECK
        -> MINIMAL EDIT
-       -> TEST
+       -> POSITIVE TEST
+       -> NEGATIVE TEST
        -> VERIFY
+       -> DEVILASH ATTACK
        -> DIFF
        -> REVIEW
+       -> DAWA HUMAN GATE
 
 
 +==================================================================================================+
@@ -276,8 +279,10 @@ PURPOSE
       model authority edges
 
     EXIT
-      Negative-path evidence is recorded.
+      Positive and negative test evidence is recorded.
+      DevilAsh attack findings are reported.
       Unresolved edges are explicit.
+      A failed required gate holds the phase.
 
 
 +==================================================================================================+
@@ -289,14 +294,22 @@ PURPOSE
 
     ORDER
       VERIFY
+       -> DEVILASH ATTACK
        -> DIFF
        -> REVIEW
+       -> DAWA HUMAN GATE
        -> COMMIT
        -> PUSH
        -> REMOTE CONFIRM
 
+      A passing test or DevilAsh report is evidence, not permission.
+      COMMIT, PUSH, and MERGE require explicit Dawa approval.
+
     EXIT
-      Local and remote agree on the verified checkpoint.
+      VERIFY, DEVILASH ATTACK, DIFF, and REVIEW pass.
+      Dawa explicitly approves before COMMIT, PUSH, or MERGE.
+      After approved Git actions, REMOTE CONFIRM establishes
+      local/remote agreement on the verified checkpoint.
 
 
 +==================================================================================================+

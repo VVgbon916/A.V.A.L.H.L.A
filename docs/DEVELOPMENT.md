@@ -44,7 +44,8 @@
 
 05 CHANGE LOOP
   READ -> REAL STATE -> UNDERSTAND -> COMPARE -> CROSS-CHECK
-  -> MINIMAL EDIT -> TEST -> VERIFY -> DIFF -> REVIEW
+  -> MINIMAL EDIT -> POSITIVE TEST -> NEGATIVE TEST
+  -> VERIFY -> DEVILASH ATTACK -> DIFF -> REVIEW -> DAWA HUMAN GATE
 
 06 SAFETY
   6.1 Runtime authority
@@ -58,8 +59,10 @@
 
 07 GIT
   7.1 Review gate
-      VERIFY -> DIFF -> REVIEW
-  7.2 Integration gate
+      VERIFY -> DEVILASH ATTACK -> DIFF -> REVIEW
+  7.2 Human gate
+      Dawa explicitly approves consequential Git actions
+  7.3 Integration gate
       COMMIT -> PUSH -> REMOTE CONFIRM
 
 No blind staging. No silent phase advancement.
