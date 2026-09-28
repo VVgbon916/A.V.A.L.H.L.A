@@ -51,44 +51,43 @@ Canonical first-contact order:
        ->
     DAWA HUMAN GATE
 
-The two-lane Sublime project remains:
+The editor has two visible roots with different ownership:
 
-    Dawa_Notepad/
-      DAWA / SYNCABLE USER LANE
-      tracked repository section
-      outside implicit Avalhla auto-read
+    PRIVATE
+      ../Dawa_Notepad/
+      private Dawa repository
 
-    memory/auto-read/
+    AVALHLA
+      memory/auto-read/
       canonical Avalhla auto-read lane
 
-    Showing both folders in Sublime is editor visibility only.
+Showing both folders in Sublime is editor visibility only.
 
-Explicit Sublime updater:
+Private != auto-read.
+Private != model input.
+Tracked != model input.
 
-    scripts/ava-sublime-update --check
-    scripts/ava-sublime-update --apply
-    scripts/ava-sublime-update --paths
-
-The updater changes only the local Sublime user settings target.
-Repository sync refreshes the tracked Dawa_Notepad project itself.
-
-Dawa_Notepad is not an auto-read lane.
-Tracked is not trusted.
-Tracked is not model input.
+The private Dawa repository owns Dawa_Avalhla.sublime-project.
+The public Avalhla repository owns only the canonical global Sublime settings.
 
 ## Sublime updater door
 
 scripts/ava-sublime-update
 
-The updater is a host-side editor configuration door, not an Avalhla memory
-reader. It resolves the current Sublime data directory through
-`XDG_CONFIG_HOME`, defaults to `~/.config/sublime-text`, and falls back to an
-existing `sublime-text-3` data directory when the ST4 directory is absent.
+The updater is a host-side editor-settings door only.
 
-`--apply` updates `Packages/User/Preferences.sublime-settings` from the
-canonical repository source. `--check` verifies the global settings target
-and the repo-local two-lane project. The tracked project itself is refreshed
-by Git synchronization.
+    --check
+    --apply
+    --paths
+
+It updates:
+
+    config/sublime/Preferences.sublime-settings
+        ->
+    current Sublime user settings target
+
+It does not read, sync, ingest, or mutate the private Dawa repository.
+The private Dawa project is synchronized by its own repository.
 
 ## Local resume door
 

@@ -4,8 +4,6 @@ set -Eeuo pipefail
 SCRIPT_PATH="$(readlink -f -- "${BASH_SOURCE[0]}")"
 ROOT="$(cd -- "$(dirname -- "$SCRIPT_PATH")/.." && pwd -P)"
 PREF_SOURCE="$ROOT/config/sublime/Preferences.sublime-settings"
-DAWA_DIR="$ROOT/Dawa_Notepad"
-PROJECT_FILE="$DAWA_DIR/Dawa_Avalhla.sublime-project"
 BACKUP_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/avalhla/sublime-backups"
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 
@@ -18,19 +16,18 @@ USER_DIR="$ST_DATA/Packages/User"
 PREF_TARGET="$USER_DIR/Preferences.sublime-settings"
 
 usage() {
-  cat <<'EOF'
+  cat <<'USAGE'
 usage: ava-sublime-update [--check] [--apply] [--paths]
 
-  --check   verify canonical Sublime settings and repo-local Dawa project
+  --check   verify canonical Sublime settings against the user target
   --apply   install canonical Preferences.sublime-settings
   --paths   print resolved source and target paths
 
 Default: --check
 
-Dawa_Notepad is now a tracked repository lane.
-Repository sync refreshes its project file. This door does not move,
-read, ingest, or auto-import Dawa_Notepad content.
-EOF
+This door updates Avalhla Sublime user settings only.
+It does not read, sync, ingest, or mutate the private Dawa repository.
+USAGE
 }
 
 die() {
@@ -38,12 +35,10 @@ die() {
   exit 1
 }
 
-require_sources() {
+require_source() {
   [[ -r "$PREF_SOURCE" ]] || die "missing source: $PREF_SOURCE"
-  [[ -r "$PROJECT_FILE" ]] || die "missing project: $PROJECT_FILE"
   command -v python3 >/dev/null 2>&1 || die "python3 is required"
   python3 -m json.tool "$PREF_SOURCE" >/dev/null
-  python3 -m json.tool "$PROJECT_FILE" >/dev/null
 }
 
 print_paths() {
@@ -51,8 +46,6 @@ print_paths() {
   printf 'ROOT           %s\n' "$ROOT"
   printf 'PREF_SOURCE    %s\n' "$PREF_SOURCE"
   printf 'PREF_TARGET    %s\n' "$PREF_TARGET"
-  printf 'DAWA_DIR       %s\n' "$DAWA_DIR"
-  printf 'PROJECT_FILE   %s\n' "$PROJECT_FILE"
   printf 'BACKUP_DIR     %s\n' "$BACKUP_DIR"
 }
 
@@ -81,54 +74,25 @@ atomic_install() {
 }
 
 check() {
-  local bad=0
-  require_sources
+  require_source
   print_paths
   printf '\n%s\n' '=== CHECK ==='
 
   if cmp -s "$PREF_SOURCE" "$PREF_TARGET" 2>/dev/null; then
     printf '%s\n' '  [ MATCH ] Preferences'
-  else
-    printf '%s\n' '  [ DRIFT/MISSING ] Preferences'
-    bad=1
-  fi
-
-  if [[ -f "$PROJECT_FILE" ]]; then
-    printf '%s\n' '  [ PRESENT ] Dawa project'
-  else
-    printf '%s\n' '  [ MISSING ] Dawa project'
-    bad=1
-  fi
-
-  if python3 - "$PROJECT_FILE" <<'PY'
-import json
-import sys
-
-with open(sys.argv[1], encoding="utf-8") as fh:
-    doc = json.load(fh)
-
-folders = doc.get("folders")
-paths = [item.get("path") for item in folders or [] if isinstance(item, dict)]
-raise SystemExit(0 if "." in paths and "../memory/auto-read" in paths else 1)
-PY
-  then
-    printf '%s\n' '  [ MATCH ] two-lane project paths'
-  else
-    printf '%s\n' '  [ DRIFT ] two-lane project paths'
-    bad=1
-  fi
-
-  if (( bad == 0 )); then
     printf '%s\n' 'CHECK PASS'
-  else
-    printf '%s\n' 'CHECK FAIL'
-    return 1
+    return 0
   fi
+
+  printf '%s\n' '  [ DRIFT/MISSING ] Preferences'
+  printf '%s\n' 'CHECK FAIL'
+  return 1
 }
 
 apply() {
-  require_sources
+  require_source
   printf '%s\n' '=== APPLY USER SETTINGS ==='
+
   if [[ -e "$PREF_TARGET" ]]; then
     if cmp -s "$PREF_SOURCE" "$PREF_TARGET"; then
       printf '%s\n' '  already       Preferences.sublime-settings matches'
@@ -136,24 +100,16 @@ apply() {
     fi
     backup_target "$PREF_TARGET" 'Preferences.sublime-settings'
   fi
+
   atomic_install "$PREF_SOURCE" "$PREF_TARGET"
   printf '  installed     %s\n' "$PREF_TARGET"
 }
 
-print_paths
 case "${1:-check}" in
-  --check)
-    check
-    ;;
-  --apply)
-    apply
-    ;;
-  --paths)
-    exit 0
-    ;;
-  -h|--help)
-    usage
-    ;;
+  --check) check ;;
+  --apply) apply ;;
+  --paths) print_paths ;;
+  -h|--help) usage ;;
   *)
     usage >&2
     exit 2

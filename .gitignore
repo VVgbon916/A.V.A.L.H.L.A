@@ -30,5 +30,3 @@ bin/
 lore/
 
 # Dawa syncable lane: only explicit local-only pocket stays untracked
-Dawa_Notepad/private/
-Dawa_Notepad/*.sublime-workspace

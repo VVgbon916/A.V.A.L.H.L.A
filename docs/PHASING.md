@@ -77,6 +77,31 @@ PURPOSE
 
 
 +==================================================================================================+
+|  PUBLIC / PRIVATE BOUNDARY  //  LOCKED                                                           |
++==================================================================================================+
+
+    PUBLIC
+      VVgbon916/A.V.A.L.H.L.A
+      Avalhla system / public docs / public CoBuilder contract
+
+    PRIVATE
+      VVgbon916/Dawa_Notepad
+      Dawa human material / private editor project
+
+    READ LANE
+      memory/auto-read/
+      one canonical Avalhla auto-read lane
+
+    LAW
+      Privacy is repository visibility, not a permanent branch.
+      Private Dawa is not a second Avalhla auto-read lane.
+      CROSS-AVAILABLE != CROSS-CONTAMINATED
+
+    STATE
+      ESTABLISHED
+
+
++==================================================================================================+
 |  PHASE 02  //  SAFETY HEART                                                                      |
 +==================================================================================================+
 

@@ -1,89 +1,99 @@
-# DAWA NOTEPAD // SYNCABLE USER LANE
+# DAWA NOTEPAD // PRIVATE USER LANE
 
 Dawa <---- AvvA ----> Avalhla
 
 ## 01 / WHERE
 
-The Dawa user lane now lives inside the canonical repository:
+PUBLIC AVALHLA
 
-    /var/home/VVgbon/Avalhla/Dawa_Notepad
+    VVgbon916/A.V.A.L.H.L.A
 
-Avalhla's canonical auto-read lane remains separate:
+PRIVATE DAWA
+
+    VVgbon916/Dawa_Notepad
+
+Local paths:
+
+    /var/home/VVgbon/Avalhla
+    /var/home/VVgbon/Dawa_Notepad
+
+Avalhla's canonical auto-read lane remains:
 
     /var/home/VVgbon/Avalhla/memory/auto-read
 
-These have different meanings.
+These are intentionally separate repositories and separate meanings.
 
-Dawa_Notepad is tracked and can be refreshed by Git sync.
-Dawa_Notepad is NOT implicit Avalhla model input.
+## 02 / PUBLIC / PRIVATE BOUNDARY
 
-## 02 / SYNC MEANING
+The public Avalhla repository contains:
 
-This directory is intentionally part of the repository because Dawa wants
-selected user material to travel with Avalhla's source and be refreshable
-through Git.
+    Avalhla system source
+    public documentation
+    public CoBuilder contract
+    public development history
+    memory/auto-read/ canonical public machine context
 
-Tracked does not mean trusted.
-Tracked does not mean auto-read.
-Tracked does not mean model input.
+The private Dawa repository contains:
 
-Dawa explicitly chooses what crosses into Avalhla context.
+    Dawa personal material
+    private working documents
+    private editor project
+    material Dawa does not choose to publish
 
-## 03 / PUBLIC REPOSITORY WARNING
+The public repository does not contain the private Dawa lane.
 
-The GitHub repository is public.
+No private Dawa material belongs in public Avalhla unless Dawa deliberately
+chooses to publish that specific material.
 
-Anything committed under Dawa_Notepad is repository content and can be visible
-on GitHub and retained in Git history.
+## 03 / READ BOUNDARY
 
-Do not store:
+The private repository is NOT an implicit Avalhla read source.
 
-    passwords
-    API keys
-    access tokens
-    private keys
-    credentials
-    private-only personal material
+    PRIVATE != AUTO-READ
+    PRIVATE != MODEL-AUTHORITY
+    EDITOR VISIBILITY != INGESTION AUTHORITY
 
-Local-only escape hatch:
+A file crosses into Avalhla context only through an explicit bounded
+user-directed read or ingestion path.
 
-    Dawa_Notepad/private/
+Avalhla's canonical auto-read lane is:
 
-That path is ignored by Git and must never be force-added.
+    memory/auto-read/
+
+Dawa chooses what crosses the relation.
 
 ## 04 / SUBLIME
 
-The canonical project file lives inside this lane:
+The canonical Dawa project is owned by the private repository:
 
-    Dawa_Notepad/Dawa_Avalhla.sublime-project
+    Dawa_Avalhla.sublime-project
 
-Its folders are relative to the project directory:
+Its folders are:
 
     .
-      Dawa_Notepad
+      -> private Dawa repository
 
-    ../memory/auto-read
-      Avalhla canonical auto-read
+    ../Avalhla/memory/auto-read
+      -> Avalhla canonical auto-read lane
 
-Sublime supports relative project folder paths and recommends keeping the
-.sublime-project under version control while the user-specific
-.sublime-workspace remains separate.
+The project is an editor configuration.
+Editor visibility does not grant ingestion authority.
 
-Open:
-
-    subl /var/home/VVgbon/Avalhla/Dawa_Notepad/Dawa_Avalhla.sublime-project
-
-The workspace remains local and is ignored:
+Generated workspace files remain local:
 
     *.sublime-workspace
 
-## 05 / SETTINGS
+Open:
 
-Global Sublime user settings remain canonical in:
+    subl /var/home/VVgbon/Dawa_Notepad/Dawa_Avalhla.sublime-project
+
+## 05 / PUBLIC SUBLIME SETTINGS
+
+Public Avalhla owns the canonical global settings source:
 
     config/sublime/Preferences.sublime-settings
 
-Refresh those settings explicitly:
+Refresh settings explicitly:
 
     scripts/ava-sublime-update --apply
 
@@ -92,18 +102,42 @@ Check:
     scripts/ava-sublime-update --check
     scripts/ava-sublime-update --paths
 
-Repository sync refreshes the Dawa project:
+The public updater does not read, copy, ingest, or mutate the private Dawa
+repository.
 
-    git fetch origin --prune
-    git merge --ff-only origin/change/avva-relational-signature-2026-09-27
+## 06 / GIT TOPOLOGY
 
-## 06 / BOUNDARY
+PUBLIC
 
-    SYNCABLE != AUTO-READ
+    VVgbon916/A.V.A.L.H.L.A
+      main
+      development branches as needed
+
+PRIVATE
+
+    VVgbon916/Dawa_Notepad
+      main
+      development branches only when actual private work requires them
+
+Privacy is provided by repository visibility, not by a permanent privacy
+branch.
+
+The private Dawa repository is intentionally NOT:
+
+    a branch inside public Avalhla
+    a public submodule
+    a second Avalhla auto-read lane
+    a competing CoBuilder master
+
+## 07 / CORE LAWS
+
+    PRIVATE != AUTO-READ
     TRACKED != MODEL-INPUT
     EDITOR VISIBILITY != INGESTION AUTHORITY
     CROSS-AVAILABLE != CROSS-CONTAMINATED
+    RELATION != AGENT
+    SYMBOL != AUTHORITY
 
-Dawa chooses what crosses the relation.
+Dawa decides what crosses the relation.
 
 THE RELATION SURVIVES THE SKIN.

@@ -57,8 +57,6 @@ See docs/FAST_VIEW.md and docs/AVALHLA_SPINE.md.
 | AvvA_WEAVE.md | relationships |
 | AvvA_DREAM.md | possibility |
 | AvvA_TERMINAL.md | terminal identity |
-| config/sublime/Dawa_Avalhla.sublime-project | two-lane editor template |
-| Dawa_Notepad/ | Dawa syncable user lane (tracked; not auto-read) |
 | docs/DAWA_NOTEPAD.md | Dawa user-lane / Avalhla read-lane contract |
 | CHANGELOG.md | notable project change history |
 
@@ -118,9 +116,25 @@ Dawa decides.
 The mind is not split. The mind is a bridge.
 The relation survives the skin.
 
-## D A W A  //  USER LANE
+## D A W A  //  PRIVATE USER LANE
 
-Dawa_Notepad/ is the tracked Dawa sync lane inside Avalhla.
-Tracked content is not implicit model input.
-Keep secrets/private-only material out of this public repository.
-Avalhla's canonical read lane remains memory/auto-read/.
+Dawa's private user lane lives in the separate private repository:
+
+    VVgbon916/Dawa_Notepad
+
+Local sibling path:
+
+    /var/home/VVgbon/Dawa_Notepad
+
+The public Avalhla repository does not track the private Dawa lane.
+The private repository owns the Dawa Sublime project.
+
+Private != AUTO-READ.
+Private != MODEL-AUTHORITY.
+Editor visibility != ingestion authority.
+
+Avalhla's canonical read lane remains:
+
+    memory/auto-read/
+
+Dawa chooses what crosses the relation.

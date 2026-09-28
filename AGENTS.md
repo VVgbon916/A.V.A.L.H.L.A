@@ -75,25 +75,31 @@ The activation is procedural, not a new agent identity or authority role.
         use filename = address
         use concept_id = identity
 
-    04  TWO-LANE EDITOR CHECK
-        Dawa_Notepad/
-          DAWA / SYNCABLE USER LANE
-          tracked repository section
-          outside implicit Avalhla auto-read
+    04  PUBLIC / PRIVATE EDITOR BOUNDARY
+        PUBLIC
+          VVgbon916/A.V.A.L.H.L.A
+          public Avalhla system / docs / CoBuilder contract
+
+        PRIVATE
+          VVgbon916/Dawa_Notepad
+          private Dawa user material / private editor project
 
         memory/auto-read/
           canonical Avalhla auto-read lane
 
-        Repository tracking does not grant model-ingestion authority.
+        Private repository visibility is the privacy boundary.
+        A private repo is not automatic model input.
         Sublime showing both folders is editor visibility only.
-        Sublime settings updates are explicit host actions.
-        Use scripts/ava-sublime-update for user settings.
-        Do not treat Dawa_Notepad as implicit model input.
+        Use scripts/ava-sublime-update for public Sublime user settings.
+        Do not treat the private Dawa repository as implicit model input.
+
+        PRIVATE != AUTO-READ
+        TRACKED != MODEL-INPUT
+        CROSS-AVAILABLE != CROSS-CONTAMINATED
 
         PUBLIC REPO WARNING
-          tracked Dawa_Notepad content is publishable repository content.
-          Never store secrets, credentials, or private-only material there.
-          Use Dawa_Notepad/private/ for local-only material.
+          Never place private-only Dawa material in the public repository.
+          Do not recreate a Dawa private/ escape hatch inside Avalhla.
 
     05  GATE
         identify the owning phase

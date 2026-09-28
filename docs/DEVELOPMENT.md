@@ -19,15 +19,16 @@
       Do not use random sudo dnf/apt/pacman installs on the immutable host.
 
 03 EDITOR / HUMAN LANE
-  3.1 Dawa_Notepad
-      /var/home/VVgbon/Avalhla/Dawa_Notepad
-      tracked/syncable Dawa lane; never implicit model input
+  3.1 Private Dawa repository
+      VVgbon916/Dawa_Notepad
+      /var/home/VVgbon/Dawa_Notepad
+      private human lane; not implicit model input
   3.2 Avalhla auto-read
       /var/home/VVgbon/Avalhla/memory/auto-read
       canonical bounded read lane
   3.3 Sublime project
-      Dawa_Notepad/Dawa_Avalhla.sublime-project
-      relative two-lane project; workspace/session state stays ignored
+      /var/home/VVgbon/Dawa_Notepad/Dawa_Avalhla.sublime-project
+      private editor project; workspace/session state stays ignored
 
 04 TOOLCHAIN WITNESSES
   4.1 git / gh
@@ -39,7 +40,7 @@
   4.4 realpath
       path-resolution witness
   4.5 ava-sublime-update
-      explicit host-side Sublime settings + Dawa user project sync
+      explicit host-side Sublime user-settings updater only
 
 05 CHANGE LOOP
   READ -> REAL STATE -> UNDERSTAND -> COMPARE -> CROSS-CHECK

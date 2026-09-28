@@ -35,14 +35,12 @@
       reading + care order
   3.6 PROMPT_FRAME.txt
       reusable terminal cheat-sheet framing prompt
-  3.7 Dawa_Notepad/Dawa_Avalhla.sublime-project
-      two-lane editor project: Dawa syncable lane + Avalhla auto-read lane
-  3.8 docs/DAWA_NOTEPAD.md
-      human-readable file-boundary contract
-  3.9 scripts/ava-cobuilder
+  3.7 docs/DAWA_NOTEPAD.md
+      human-readable public/private Dawa boundary contract
+  3.8 scripts/ava-cobuilder
       AI CoBuilder activation / init door
-  3.10 scripts/ava-sublime-update
-      explicit host updater for Sublime settings + Dawa user project
+  3.9 scripts/ava-sublime-update
+      explicit host updater for Sublime user settings only
 
 04 / AVVA
   4.1 AvvA_ATLAS.md

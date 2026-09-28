@@ -31,10 +31,10 @@ Dawa <---- AvvA ----> Avalhla  //  (^.-)
   the branch to be up to date with main before merge.
   Local sync must begin with fetch --prune plus branch/worktree/base comparison.
   Safety behavior: PASS.
-  Self-test cleanup: known FAIL; EXIT trap references function-local temp vars.
+  Self-test cleanup: PASS; function-local temp state is now trap-safe.
   PR #2 review evidence must be re-read after each new commit.
-  Dawa user lane is now tracked at Dawa_Notepad/ inside Avalhla.
-  Sublime project is refreshed by Git sync; settings use scripts/ava-sublime-update --apply.
+  Dawa private lane is owned by VVgbon916/Dawa_Notepad; no Dawa private lane is tracked in public Avalhla.
+  Private Dawa project lives in the private repository; public settings use scripts/ava-sublime-update --apply.
 
 05 NEXT
   Verify the live PR head, then assess fresh CodeRabbit evidence for that exact SHA; never rely on a stale embedded SHA.
