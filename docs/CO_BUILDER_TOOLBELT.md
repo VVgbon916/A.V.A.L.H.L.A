@@ -49,6 +49,8 @@ Read-only GitHub evidence for the current pull request or a supplied PR number.
 Default mode does not call a model and does not mutate files, GitHub state,
 memory, or the PR.
 
+`gh pr checks`: exit 8 means pending. Exit 1 is accepted as empty checks only for the CLI `no checks reported on the ... branch` response; other exit-1 results remain errors.
+
 ## Optional local synthesis
 
 ava-github-review --synthesize

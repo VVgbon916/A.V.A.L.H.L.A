@@ -70,6 +70,14 @@ capture_pr_checks() {
     0|8)
       printf -v CHECK_ROWS '%s' "$result"
       ;;
+    1)
+      if [[ "$result" == "no checks reported on the "* ]]; then
+        CHECK_ROWS=""
+      else
+        printf 'ava-github-review: GitHub PR checks request failed (exit %d):\n%s\n' "$rc" "$result" >&2
+        return "$rc"
+      fi
+      ;;
     *)
       printf 'ava-github-review: GitHub PR checks request failed (exit %d):\n%s\n' "$rc" "$result" >&2
       return "$rc"

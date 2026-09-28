@@ -67,7 +67,9 @@ if [[ "$MODE" == "review" ]]; then
      bad=1
    fi
  done < <(find "$ROOT/scripts" -maxdepth 1 -type f -perm -u+x -print0 2>/dev/null)
- (( bad == 0 )) && printf "%s\n" "    SYNTAX    PASS"
+ if (( bad == 0 )); then
+   printf "%s\n" "    SYNTAX    PASS"
+ fi
 fi
 
 printf "%s\n" "05 NEXT"

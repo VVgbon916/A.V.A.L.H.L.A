@@ -1649,6 +1649,12 @@
         "mutation": false,
         "model_call": false,
         "model_call_scope": "default_mode_only",
+        "check_exit_semantics": {
+          "exit_0": "checks returned successfully",
+          "exit_8": "checks pending",
+          "exit_1_exact_empty": "accepted only for the CLI no-checks response",
+          "other_exit_1": "request failure; preserve as an error and do not emit none observed"
+        },
         "output": "01 WHERE / 02 FLOW / 03 AUTHORITY / 04 PROOF / 05 NEXT",
         "optional_synthesis": {
           "command": "ava-github-review --synthesize",
