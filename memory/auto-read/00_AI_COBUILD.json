@@ -1021,6 +1021,58 @@
         ],
         "architectural_rule": "FACT FIRST. ART SECOND. MODEL SEES != MODEL DECIDES. CROSS-AVAILABLE != CROSS-CONTAMINATED. Dawa decides."
       }
+    },
+    "devilash_sublime_updater_2026_09_27": {
+      "status": "EVIDENCE_CAPTURED",
+      "scope": "WEB_8X + REPO_2X",
+      "finding": "The canonical Sublime user-settings target is Packages/User/Preferences.sublime-settings; Sublime Text 4 Linux data defaults to ~/.config/sublime-text and can reuse an existing ST3 data directory; project and workspace files are separate concerns; explicit backups and checks are safer than blind overwrite.",
+      "web_8x": {
+        "PRIMARY": {
+          "source": "Sublime Text Settings",
+          "url": "https://www.sublimetext.com/docs/settings.html",
+          "finding": "User Preferences.sublime-settings is the normal persistent user settings surface."
+        },
+        "INDEPENDENT": {
+          "source": "Sublime Text Community Settings",
+          "url": "https://docs.sublimetext.io/guide/customization/settings",
+          "finding": "Packages/User takes precedence and is intended for personal settings."
+        },
+        "COUNTER": {
+          "source": "Sublime Text Forum - Change location settings save",
+          "url": "https://forum.sublimetext.com/t/change-location-settings-save/37151",
+          "finding": "XDG_CONFIG_HOME controls the Linux Sublime data directory."
+        },
+        "CURRENT": {
+          "source": "Sublime Text side-by-side data directory documentation",
+          "url": "https://www.sublimetext.com/docs/side_by_side.html",
+          "finding": "Current ST4 uses ~/.config/sublime-text when present, otherwise can reuse the ST3 data directory."
+        },
+        "STANDARD": {
+          "source": "Sublime Text Packages documentation",
+          "url": "https://www.sublimetext.com/docs/packages.html",
+          "finding": "The User package is a distinct package area with user-controlled files."
+        },
+        "IMPLEMENTER": {
+          "source": "SettingsUI package documentation",
+          "url": "https://packages.sublimetext.com/packages/SettingsUI",
+          "finding": "Current Linux deployments use ~/.config/sublime-text/Packages and expose raw Preferences.sublime-settings."
+        },
+        "OPERATIONAL": {
+          "source": "Sublime Text Forum - Settings Confusion",
+          "url": "https://forum.sublimetext.com/t/settings-confusion/77519",
+          "finding": "Current Sublime Text versions still resolve user settings through Packages/User/Preferences.sublime-settings."
+        },
+        "EDGE": {
+          "source": "Sublime Text Forum - Change location settings save",
+          "url": "https://forum.sublimetext.com/t/change-location-settings-save/37151",
+          "finding": "Customizing the data location through XDG_CONFIG_HOME is possible; an updater should not hardcode /home paths for Sublime data."
+        }
+      },
+      "repo_2x": {
+        "CURRENT_TREE": "config/sublime/Preferences.sublime-settings and config/sublime/Dawa_Avalhla.sublime-project are canonical repository sources; docs/DAWA_NOTEPAD.md defines the USER ONLY lane.",
+        "HISTORY_DIFF": "Recent CoBuilder work introduced the two-lane project but lacked a single explicit host updater door; this change closes that operational gap without creating a second source."
+      },
+      "boundary": "CROSS-AVAILABLE != CROSS-CONTAMINATED"
     }
   },
   "continuation": {
@@ -1139,7 +1191,8 @@
     "2026-09-27-dictionary-cross-check": "8 web cross-checks plus repository reference scans confirm the dictionary should use one stable concept ID, one preferred name, aliases/history, explicit semantic kind/scope, and at most one canonical artifact. Current repository already contains multiple overlapping reference/board filenames, so dictionary-first remaster is the correct gate.",
     "2026-09-27-remaster-branch": "Dictionary-driven remaster: semantic filenames, reference repair, FAST_VIEW, AVALHLA_SPINE, DEVELOPMENT, refreshed HANDOFF/SOURCE_MAP/README, and generated board cache de-duplication.",
     "2026-09-27-remaster-review-ready": "Active repository references use the canonical remaster names. Legacy filenames are retained only as migration history inside this Co-Builder record.",
-    "2026-09-27-remaster-main": "PR #1 squashed to main at 5a61028afb04856eb0af8b27b2410521885f4989. Dictionary-driven filenames, FAST_VIEW, SPINE, DEVELOPMENT, source map, handoff, configs, board command, and generated board cache path are now on main."
+    "2026-09-27-remaster-main": "PR #1 squashed to main at 5a61028afb04856eb0af8b27b2410521885f4989. Dictionary-driven filenames, FAST_VIEW, SPINE, DEVELOPMENT, source map, handoff, configs, board command, and generated board cache path are now on main.",
+    "2026-09-27-sublime-updater": "Added explicit scripts/ava-sublime-update host door for Sublime user settings and the Dawa_Notepad project; check/apply/project/all modes are explicit, backups occur before replacement, Dawa_Notepad remains USER ONLY, and XDG_CONFIG_HOME plus current Sublime data-directory behavior are respected."
   },
   "mind_dictionary": {
     "status": "CANONICAL_NAMING_DICTIONARY",
@@ -1697,6 +1750,31 @@
         ],
         "mutation": false,
         "model_call": false
+      },
+      "sublime_update": {
+        "canonical_local": "scripts/ava-sublime-update",
+        "purpose": "Explicit host-side Sublime settings and two-lane project updater.",
+        "sources": [
+          "config/sublime/Preferences.sublime-settings",
+          "config/sublime/Dawa_Avalhla.sublime-project",
+          "docs/DAWA_NOTEPAD.md"
+        ],
+        "modes": {
+          "check": "--check",
+          "apply": "--apply",
+          "project": "--project",
+          "all": "--all",
+          "paths": "--paths"
+        },
+        "mutation": "explicit only",
+        "mutation_scope": [
+          "Sublime Packages/User/Preferences.sublime-settings",
+          "Dawa_Notepad/Dawa_Avalhla.sublime-project"
+        ],
+        "backups": true,
+        "auto_read": false,
+        "model_call": false,
+        "github_mutation": false
       }
     },
     "authority": {
@@ -1948,6 +2026,25 @@
         "dawa_lane": "Dawa_Notepad = USER ONLY",
         "ava_lane": "memory/auto-read/ = AVALHLA AUTO-READ",
         "crossing": "Dawa <---- AvvA ----> Avalhla"
+      },
+      "updater": {
+        "canonical_local": "scripts/ava-sublime-update",
+        "user_settings_source": "config/sublime/Preferences.sublime-settings",
+        "user_settings_target": "$XDG_CONFIG_HOME/sublime-text/Packages/User/Preferences.sublime-settings",
+        "legacy_data_fallback": "$XDG_CONFIG_HOME/sublime-text-3",
+        "project_source": "config/sublime/Dawa_Avalhla.sublime-project",
+        "project_target": "$HOME/Dawa_Notepad/Dawa_Avalhla.sublime-project",
+        "modes": [
+          "--check",
+          "--apply",
+          "--project",
+          "--all",
+          "--paths"
+        ],
+        "mutation": "explicit only",
+        "backup_before_replace": true,
+        "dawa_notepad_auto_read": false,
+        "rule": "The updater writes editor configuration only; Dawa_Notepad remains USER ONLY and never becomes an Avalhla auto-read lane."
       }
     },
     "architecture_law": [

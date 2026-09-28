@@ -34,6 +34,9 @@ required=(
   "docs/CO_BUILDER_TOOLBELT.md"
   "memory/auto-read/00_AI_COBUILD.json"
   "config/sublime/Dawa_Avalhla.sublime-project"
+  "config/sublime/Preferences.sublime-settings"
+  "docs/DAWA_NOTEPAD.md"
+  "scripts/ava-sublime-update"
 )
 
 missing=0
@@ -71,6 +74,7 @@ printf "%s\n" "              USER ONLY / no implicit Avalhla auto-read"
 printf "%s\n" "    AVALHLA   memory/auto-read/"
 printf "%s\n" "              canonical Avalhla auto-read lane"
 printf "%s\n" "    EDITOR    showing both folders does not grant ingestion authority"
+printf "%s\n" "    UPDATE    scripts/ava-sublime-update (explicit host action)"
 
 printf "%s\n" "" "04 DEVILASH"
 printf "%s\n" "    QUESTION ASSUMPTIONS"

@@ -62,6 +62,30 @@ The two-lane Sublime project remains:
 
     Showing both folders in Sublime is editor visibility only.
 
+Explicit Sublime updater:
+
+    scripts/ava-sublime-update --check
+    scripts/ava-sublime-update --apply
+    scripts/ava-sublime-update --project
+    scripts/ava-sublime-update --all
+
+The updater writes only to Sublime user configuration and the explicit
+Dawa_Notepad project path. It never adds Dawa_Notepad to auto-read.
+Existing target files are backed up before replacement.
+
+## Sublime updater door
+
+scripts/ava-sublime-update
+
+The updater is a host-side editor configuration door, not an Avalhla memory
+reader. It resolves the current Sublime data directory through
+`XDG_CONFIG_HOME`, defaults to `~/.config/sublime-text`, and falls back to an
+existing `sublime-text-3` data directory when the ST4 directory is absent.
+
+`--apply` updates `Packages/User/Preferences.sublime-settings` from the
+canonical repository source. `--project` creates or updates the explicit
+`Dawa_Notepad/Dawa_Avalhla.sublime-project` copy. `--check` is read-only.
+
 ## Local resume door
 
 scripts/ava-resume

@@ -12,6 +12,7 @@ This project currently uses an `Unreleased` section while release/version naming
 - `COBUILDER MODE` as the active co-building state.
 - `COBUILDER // DEVILASH` as the adversarial verification method, not an agent identity.
 - `scripts/ava-cobuilder init` as a read-only local activation door.
+- `scripts/ava-sublime-update` as an explicit host-side updater for Sublime user settings and the Dawa_Notepad project.
 - Canonical CoBuilder activation order in `AGENTS.md`, including real-state, source, cross-check, verification, review, and Dawa human-gate stages.
 - Explicit two-lane editor boundary: Dawa_Notepad remains USER ONLY; Avalhla `memory/auto-read/` remains the canonical auto-read lane.
 - Static-contract coverage for the canonical CoBuilder activation door.
@@ -24,6 +25,7 @@ This project currently uses an `Unreleased` section while release/version naming
 - The Sublime two-folder workspace remains editor visibility only and does not grant runtime or model-ingestion authority.
 - Development section numbering is now consistent across the full document.
 - The three persona relation signatures now use ASCII arrows so their ASCII-only output rule is internally consistent.
+- The Sublime updater now owns the copy/update ritual instead of requiring ad-hoc manual path commands.
 
 ### Security
 
@@ -33,6 +35,7 @@ This project currently uses an `Unreleased` section while release/version naming
 ### Fixed
 
 - Restored `scripts/ava-ci-contract` to executable mode `100755`.
+- Added explicit backup-before-replace behavior to the Sublime updater.
 - Corrected duplicate section numbering in `docs/DEVELOPMENT.md`.
 - Corrected the ASCII-only relation signatures in the chat, code, and review Modelfiles.
 

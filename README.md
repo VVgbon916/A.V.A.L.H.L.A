@@ -81,7 +81,7 @@ Use scripts/ava-help for the current door inventory.
 
 Core doors:
 
-ava-cobuilder  ava-board  ava-reality  ava-mem  ava-context  ava-weave
+ava-cobuilder  ava-sublime-update  ava-board  ava-reality  ava-mem  ava-context  ava-weave
 ava-dream   ava-imagine  ava-search  ava-review
 ava-record  ava-safety   ava-verify
 

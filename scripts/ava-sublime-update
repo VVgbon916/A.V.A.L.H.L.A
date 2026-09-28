@@ -1,0 +1,224 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+SCRIPT_PATH="$(readlink -f -- "${BASH_SOURCE[0]}")"
+ROOT="$(cd -- "$(dirname -- "$SCRIPT_PATH")/.." && pwd -P)"
+PREF_SOURCE="$ROOT/config/sublime/Preferences.sublime-settings"
+PROJECT_SOURCE="$ROOT/config/sublime/Dawa_Avalhla.sublime-project"
+
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+ST_DATA="$XDG_CONFIG_HOME/sublime-text"
+if [[ ! -d "$ST_DATA" && -d "$XDG_CONFIG_HOME/sublime-text-3" ]]; then
+  ST_DATA="$XDG_CONFIG_HOME/sublime-text-3"
+fi
+
+USER_DIR="$ST_DATA/Packages/User"
+PREF_TARGET="$USER_DIR/Preferences.sublime-settings"
+DAWA_NOTEPAD_DIR="${DAWA_NOTEPAD_DIR:-$HOME/Dawa_Notepad}"
+PROJECT_TARGET="$DAWA_NOTEPAD_DIR/Dawa_Avalhla.sublime-project"
+BACKUP_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/avalhla/sublime-backups"
+
+usage() {
+  cat <<'EOF'
+usage: ava-sublime-update [--check] [--apply] [--project] [--all] [--paths]
+
+  --check   compare canonical Avalhla sources with current Sublime targets
+  --apply   install config/sublime/Preferences.sublime-settings
+  --project copy the two-lane project into Dawa_Notepad
+  --all     apply settings and sync the Dawa_Notepad project
+  --paths   print resolved source and target paths without changing anything
+
+Default: --check
+
+The Dawa_Notepad path is USER ONLY and is never an Avalhla auto-read lane.
+Project sync is explicit. Existing target files are backed up before replacement.
+EOF
+}
+
+die() {
+  printf 'ERROR: %s\n' "$*" >&2
+  exit 1
+}
+
+require_source() {
+  [[ -r "$PREF_SOURCE" ]] || die "missing source: $PREF_SOURCE"
+  [[ -r "$PROJECT_SOURCE" ]] || die "missing source: $PROJECT_SOURCE"
+  command -v python3 >/dev/null 2>&1 || die "python3 is required to validate JSON sources"
+  python3 -m json.tool "$PREF_SOURCE" >/dev/null
+  python3 -m json.tool "$PROJECT_SOURCE" >/dev/null
+}
+
+print_paths() {
+  printf '%s\n' '=== AVALHLA SUBLIME PATHS ==='
+  printf 'ROOT           %s\n' "$ROOT"
+  printf 'PREF_SOURCE    %s\n' "$PREF_SOURCE"
+  printf 'PREF_TARGET    %s\n' "$PREF_TARGET"
+  printf 'PROJECT_SOURCE %s\n' "$PROJECT_SOURCE"
+  printf 'DAWA_NOTEPAD   %s\n' "$DAWA_NOTEPAD_DIR"
+  printf 'PROJECT_TARGET %s\n' "$PROJECT_TARGET"
+  printf 'BACKUP_DIR     %s\n' "$BACKUP_DIR"
+}
+
+check_one() {
+  local label="$1"
+  local source="$2"
+  local target="$3"
+
+  if [[ ! -e "$target" ]]; then
+    printf '  [MISSING] %s\n' "$label"
+    printf '            %s\n' "$target"
+    return 1
+  fi
+
+  if cmp -s "$source" "$target"; then
+    printf '  [ MATCH ] %s\n' "$label"
+    return 0
+  fi
+
+  printf '  [ DRIFT ] %s\n' "$label"
+  diff -u "$target" "$source" | sed -n '1,120p' || true
+  return 1
+}
+
+backup_target() {
+  local target="$1"
+  local label="$2"
+  local stamp
+  stamp="$(date +%Y%m%d-%H%M%S)-$$"
+
+  mkdir -p "$BACKUP_DIR"
+  cp -p -- "$target" "$BACKUP_DIR/$label.$stamp.bak"
+  printf '  backup      %s\n' "$BACKUP_DIR/$label.$stamp.bak"
+}
+
+atomic_install() {
+  local source="$1"
+  local target="$2"
+  local parent tmp
+
+  parent="$(dirname -- "$target")"
+  mkdir -p "$parent"
+
+  tmp="$(mktemp "$parent/.avalhla-sync.XXXXXX")"
+  trap 'rm -f -- "$tmp"' RETURN
+  cp -- "$source" "$tmp"
+  chmod 0644 "$tmp"
+  mv -f -- "$tmp" "$target"
+  trap - RETURN
+}
+
+apply_preferences() {
+  require_source
+  printf '%s\n' '=== APPLY USER SETTINGS ==='
+
+  if [[ -e "$PREF_TARGET" ]]; then
+    if cmp -s "$PREF_SOURCE" "$PREF_TARGET"; then
+      printf '%s\n' '  already     Preferences.sublime-settings matches'
+      return 0
+    fi
+    backup_target "$PREF_TARGET" 'Preferences.sublime-settings'
+  fi
+
+  atomic_install "$PREF_SOURCE" "$PREF_TARGET"
+  printf '  installed   %s\n' "$PREF_TARGET"
+}
+
+sync_project() {
+  require_source
+  printf '%s\n' '=== SYNC DAWA NOTEPAD PROJECT ==='
+  mkdir -p "$DAWA_NOTEPAD_DIR"
+
+  if [[ -e "$PROJECT_TARGET" ]]; then
+    if cmp -s "$PROJECT_SOURCE" "$PROJECT_TARGET"; then
+      printf '%s\n' '  already     Dawa_Avalhla.sublime-project matches'
+      return 0
+    fi
+    backup_target "$PROJECT_TARGET" 'Dawa_Avalhla.sublime-project'
+  fi
+
+  atomic_install "$PROJECT_SOURCE" "$PROJECT_TARGET"
+  printf '  installed   %s\n' "$PROJECT_TARGET"
+  printf '  boundary    Dawa_Notepad remains USER ONLY\n'
+}
+
+check_all() {
+  local bad=0
+  require_source
+  print_paths
+  printf '\n%s\n' '=== CHECK ==='
+
+  check_one 'Preferences' "$PREF_SOURCE" "$PREF_TARGET" || bad=1
+  check_one 'Dawa project' "$PROJECT_SOURCE" "$PROJECT_TARGET" || bad=1
+
+  if (( bad == 0 )); then
+    printf '%s\n' 'CHECK PASS'
+  else
+    printf '%s\n' 'CHECK FAIL'
+    return 1
+  fi
+}
+
+ACTION_CHECK=1
+ACTION_APPLY=0
+ACTION_PROJECT=0
+ACTION_PATHS=0
+
+if [[ $# -eq 0 ]]; then
+  set -- --check
+fi
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --check)
+      ACTION_CHECK=1
+      ;;
+    --apply)
+      ACTION_CHECK=0
+      ACTION_APPLY=1
+      ;;
+    --project)
+      ACTION_CHECK=0
+      ACTION_PROJECT=1
+      ;;
+    --all)
+      ACTION_CHECK=0
+      ACTION_APPLY=1
+      ACTION_PROJECT=1
+      ;;
+    --paths)
+      ACTION_CHECK=0
+      ACTION_PATHS=1
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      usage >&2
+      exit 2
+      ;;
+  esac
+  shift
+done
+
+cd "$ROOT"
+
+if (( ACTION_PATHS == 1 )); then
+  print_paths
+  exit 0
+fi
+
+if (( ACTION_CHECK == 1 )); then
+  check_all
+  exit $?
+fi
+
+if (( ACTION_APPLY == 1 )); then
+  apply_preferences
+fi
+
+if (( ACTION_PROJECT == 1 )); then
+  sync_project
+fi
+
+printf '%s\n' 'DONE // explicit Sublime update only'

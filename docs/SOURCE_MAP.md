@@ -41,6 +41,8 @@
       human-readable file-boundary contract
   3.9 scripts/ava-cobuilder
       AI CoBuilder activation / init door
+  3.10 scripts/ava-sublime-update
+      explicit host updater for Sublime settings + Dawa user project
 
 04 / AVVA
   4.1 AvvA_ATLAS.md

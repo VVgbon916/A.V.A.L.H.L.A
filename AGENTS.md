@@ -85,6 +85,8 @@ The activation is procedural, not a new agent identity or authority role.
 
         Sublime showing both folders is editor visibility only.
         It does not grant runtime or model ingestion authority.
+        Sublime settings/project updates are explicit host actions.
+        Use scripts/ava-sublime-update; never auto-read Dawa_Notepad.
 
     05  GATE
         identify the owning phase

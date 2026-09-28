@@ -11,7 +11,7 @@ bad() { printf "  [FAIL] %s -- %s\n" "$1" "$2"; FAIL=$((FAIL + 1)); }
 printf "%s\n" "== avalhla static contract =="
 printf "root: %s\n\n" "$ROOT"
 printf "%s\n" "-- canonical files --"
-for f in docs/FAST_VIEW.md docs/AVALHLA_SPINE.md docs/PHASING.md docs/CO_BUILDER_TOOLBELT.md memory/auto-read/00_AI_COBUILD.json scripts/ava-cobuilder scripts/ava-resume scripts/ava-github-review scripts/ava-ci-contract AGENTS.md .github/workflows/avalhla-static-verify.yml; do
+for f in docs/FAST_VIEW.md docs/AVALHLA_SPINE.md docs/PHASING.md docs/CO_BUILDER_TOOLBELT.md docs/DAWA_NOTEPAD.md config/sublime/Dawa_Avalhla.sublime-project config/sublime/Preferences.sublime-settings memory/auto-read/00_AI_COBUILD.json scripts/ava-cobuilder scripts/ava-sublime-update scripts/ava-resume scripts/ava-github-review scripts/ava-ci-contract AGENTS.md .github/workflows/avalhla-static-verify.yml; do
   [[ -f "$f" ]] && ok "present $f" || bad "present $f" "missing"
 done
 
@@ -63,6 +63,8 @@ if grep -qF "DAWA" scripts/ava-weave && ! grep -qF "DAVVA" scripts/ava-weave; th
 if grep -qF "git diff HEAD --check" scripts/ava-resume; then ok "resume checks staged + unstaged diff"; else bad "resume checks staged + unstaged diff" "HEAD-scoped diff proof missing"; fi
 if grep -qF "AVA_ROOT does not match this repository" scripts/ava-resume; then ok "resume rejects redirected AVA_ROOT"; else bad "resume rejects redirected AVA_ROOT" "redirect guard missing"; fi
 if ! grep -qF "/var/home/VVgbon/Avalhla" scripts/ava-resume; then ok "resume derives repository root"; else bad "resume derives repository root" "hardcoded root remains"; fi
+if scripts/ava-sublime-update --paths >/dev/null 2>&1; then ok "Sublime updater resolves paths"; else bad "Sublime updater resolves paths" "path resolution failed"; fi
+if grep -qF "Dawa_Notepad" scripts/ava-sublime-update && grep -qF "memory/auto-read" docs/DAWA_NOTEPAD.md; then ok "Sublime lane boundary"; else bad "Sublime lane boundary" "user/read lane contract missing"; fi
 
 printf "%s\n" "" "== summary =="
 printf "  pass: %d\n  fail: %d\n" "$PASS" "$FAIL"

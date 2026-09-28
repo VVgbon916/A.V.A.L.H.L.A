@@ -62,13 +62,26 @@ The repository stores the machine-readable project template:
 
     config/sublime/Dawa_Avalhla.sublime-project
 
+The user lane may be absent on a fresh host. The repository does not create
+it implicitly. Use the explicit updater when Dawa wants to bootstrap or update
+the local project:
+
+    scripts/ava-sublime-update --project
+
+Check both Sublime targets without mutation:
+
+    scripts/ava-sublime-update --check
+
+Update the canonical user settings explicitly:
+
+    scripts/ava-sublime-update --apply
+
 The live user project should be copied into Dawa_Notepad so Sublime's
 user-specific workspace/session file stays outside the Avalhla repository.
 
-Use:
+The explicit updater also handles the copy and parent directory:
 
-    cp /var/home/VVgbon/Avalhla/config/sublime/Dawa_Avalhla.sublime-project \
-       /home/VVgbon/Dawa_Notepad/Dawa_Avalhla.sublime-project
+    scripts/ava-sublime-update --project
 
 Then open:
 
