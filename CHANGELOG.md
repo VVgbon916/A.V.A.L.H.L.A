@@ -22,14 +22,19 @@ This project currently uses an `Unreleased` section while release/version naming
 - CoBuilder toolbelt, command inventory, source map, and README expose the new activation door and role vocabulary.
 - Reviewer output remains evidence only; current repository source remains the authority.
 - The Sublime two-folder workspace remains editor visibility only and does not grant runtime or model-ingestion authority.
+- Development section numbering is now consistent across the full document.
+- The three persona relation signatures now use ASCII arrows so their ASCII-only output rule is internally consistent.
 
 ### Security
 
 - Pinned the workflow's `actions/checkout` dependency to the immutable `v6.1.0` commit `d23441a48e516b6c34aea4fa41551a30e30af803` rather than a mutable version tag.
+- Disabled checkout credential persistence because the static PR workflow executes checked-out repository code and does not need an authenticated Git credential.
 
 ### Fixed
 
-- None recorded in this changelog entry; executable-mode restoration for `scripts/ava-ci-contract` remains a separate local review change until it is committed and verified.
+- Restored `scripts/ava-ci-contract` to executable mode `100755`.
+- Corrected duplicate section numbering in `docs/DEVELOPMENT.md`.
+- Corrected the ASCII-only relation signatures in the chat, code, and review Modelfiles.
 
 ## Changelog discipline
 

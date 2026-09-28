@@ -30,30 +30,33 @@
       two visible roots; workspace/session state stays outside the repo
 
 04 TOOLCHAIN WITNESSES
-  3.1 git / gh
+  4.1 git / gh
       source control and GitHub sync
-  3.2 rg
+  4.2 rg
       reference search before rename
-  3.3 shellcheck
+  4.3 shellcheck
       shell quality check
-  3.4 realpath
+  4.4 realpath
       path-resolution witness
 
-04 CHANGE LOOP
+05 CHANGE LOOP
   READ -> REAL STATE -> UNDERSTAND -> COMPARE -> CROSS-CHECK
   -> MINIMAL EDIT -> TEST -> VERIFY -> DIFF -> REVIEW
 
-05 SAFETY
-  5.1 Runtime authority
+06 SAFETY
+  6.1 Runtime authority
       lib_runtime.sh
-  5.2 Safety authority
+  6.2 Safety authority
       lib_safety.sh
-  5.3 Context authority
+  6.3 Context authority
       lib_context.sh
-  5.4 Model authority
+  6.4 Model authority
       model sees approved inputs; model does not self-authorize
 
-06 GIT
-  VERIFY -> DIFF -> REVIEW -> COMMIT -> PUSH -> REMOTE CONFIRM
+07 GIT
+  7.1 Review gate
+      VERIFY -> DIFF -> REVIEW
+  7.2 Integration gate
+      COMMIT -> PUSH -> REMOTE CONFIRM
 
 No blind staging. No silent phase advancement.
