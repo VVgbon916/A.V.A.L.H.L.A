@@ -23,6 +23,10 @@ This project currently uses an `Unreleased` section while release/version naming
 - Reviewer output remains evidence only; current repository source remains the authority.
 - The Sublime two-folder workspace remains editor visibility only and does not grant runtime or model-ingestion authority.
 
+### Security
+
+- Pinned the workflow's `actions/checkout` dependency to the immutable `v6.1.0` commit `d23441a48e516b6c34aea4fa41551a30e30af803` rather than a mutable version tag.
+
 ### Fixed
 
 - None recorded in this changelog entry; executable-mode restoration for `scripts/ava-ci-contract` remains a separate local review change until it is committed and verified.
