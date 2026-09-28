@@ -38,6 +38,8 @@
       shell quality check
   4.4 realpath
       path-resolution witness
+  4.5 ava-sublime-update
+      explicit host-side Sublime settings + Dawa user project sync
 
 05 CHANGE LOOP
   READ -> REAL STATE -> UNDERSTAND -> COMPARE -> CROSS-CHECK

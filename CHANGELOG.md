@@ -36,6 +36,7 @@ This project currently uses an `Unreleased` section while release/version naming
 
 - Restored `scripts/ava-ci-contract` to executable mode `100755`.
 - Added explicit backup-before-replace behavior to the Sublime updater.
+- Added static enforcement for canonical executable-door mode `100755` and JSON validation for the tracked Sublime sources.
 - Corrected duplicate section numbering in `docs/DEVELOPMENT.md`.
 - Corrected the ASCII-only relation signatures in the chat, code, and review Modelfiles.
 

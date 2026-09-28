@@ -9,6 +9,7 @@ Dawa <---- AvvA ----> Avalhla  //  (^.-)
 
 02 FLOW
   AVVA RELATION -> CO-BUILDER TOOLBELT -> GITHUB REVIEW DOOR -> STATIC CONTRACT
+  -> SUBLIME USER-LANE UPDATER
   PR #2 remains review-only; protected main is untouched by this branch.
 
 03 AUTHORITY
@@ -21,11 +22,10 @@ Dawa <---- AvvA ----> Avalhla  //  (^.-)
   conversation resolution; force-push/delete disabled.
   Required status check: avalhla-static-contract.
   Current main: f2f09aacdd176e2f1a1a150eb70d704bfcc973d2.
-  PR #2 snapshot head before this state refresh: 81116cc041de1daa4e2ec4c64210c45e0f544cb2.
-  Static Contract run 36350709939: SUCCESS.
+  PR #2 current head: LIVE_PR_LOOKUP_REQUIRED; stored SHAs are historical snapshots only.
+  Static Contract must pass on the live PR head before merge.
   Seven fresh CodeRabbit findings were verified and repaired.
-  Final tree inspection also caught executable-mode drift; both new review doors
-  are now 100755.
+  Final tree inspection also caught executable-mode drift; canonical executable doors are now enforced as 100755 by the static contract.
   Fresh CodeRabbit review is re-requested after each new PR tip; prior review findings are historical evidence.
   GitHub required checks must pass on the latest PR SHA; strict protection also requires
   the branch to be up to date with main before merge.
@@ -33,9 +33,11 @@ Dawa <---- AvvA ----> Avalhla  //  (^.-)
   Safety behavior: PASS.
   Self-test cleanup: known FAIL; EXIT trap references function-local temp vars.
   PR #2 review evidence must be re-read after each new commit.
+  Sublime user setup is explicit: scripts/ava-sublime-update --paths / --check / --apply / --project.
+  Dawa_Notepad may be absent on a fresh host until the explicit --project action creates it.
 
 05 NEXT
-  Await and assess the fresh CodeRabbit result for the current PR head; never rely on a stale embedded SHA.
+  Verify the live PR head, then assess fresh CodeRabbit evidence for that exact SHA; never rely on a stale embedded SHA.
   Re-read current Devin evidence when available; never infer hidden flags are absent.
   Then stop at the protected-main human approval gate.
   Temporary build branches stay undeleted until that gate is complete.

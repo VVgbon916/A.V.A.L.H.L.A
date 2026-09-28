@@ -65,6 +65,18 @@ if grep -qF "AVA_ROOT does not match this repository" scripts/ava-resume; then o
 if ! grep -qF "/var/home/VVgbon/Avalhla" scripts/ava-resume; then ok "resume derives repository root"; else bad "resume derives repository root" "hardcoded root remains"; fi
 if scripts/ava-sublime-update --paths >/dev/null 2>&1; then ok "Sublime updater resolves paths"; else bad "Sublime updater resolves paths" "path resolution failed"; fi
 if grep -qF "Dawa_Notepad" scripts/ava-sublime-update && grep -qF "memory/auto-read" docs/DAWA_NOTEPAD.md; then ok "Sublime lane boundary"; else bad "Sublime lane boundary" "user/read lane contract missing"; fi
+printf "%s\n" "" "-- executable doors --"
+for f in scripts/ava-cobuilder scripts/ava-ci-contract scripts/ava-github-review scripts/ava-resume scripts/ava-sublime-update; do
+  if [[ "$(stat -c "%a" "$f" 2>/dev/null)" == "755" ]]; then
+    ok "mode 755 ${f#$ROOT/}"
+  else
+    bad "mode 755 ${f#$ROOT/}" "expected executable door mode 755"
+  fi
+done
+if python3 -m json.tool config/sublime/Preferences.sublime-settings >/dev/null; then ok "Sublime Preferences JSON parses"; else bad "Sublime Preferences JSON parses" "invalid JSON"; fi
+if python3 -m json.tool config/sublime/Dawa_Avalhla.sublime-project >/dev/null; then ok "Sublime project JSON parses"; else bad "Sublime project JSON parses" "invalid JSON"; fi
+if scripts/ava-sublime-update --paths >/dev/null 2>&1; then ok "Sublime updater resolves paths"; else bad "Sublime updater resolves paths" "path resolution failed"; fi
+if grep -qF "Dawa_Notepad" scripts/ava-sublime-update && grep -qF "memory/auto-read" docs/DAWA_NOTEPAD.md; then ok "Sublime lane boundary"; else bad "Sublime lane boundary" "user/read lane contract missing"; fi
 
 printf "%s\n" "" "== summary =="
 printf "  pass: %d\n  fail: %d\n" "$PASS" "$FAIL"
