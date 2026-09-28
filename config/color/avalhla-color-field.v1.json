@@ -1,0 +1,50 @@
+{
+  "schema": "avalhla.color-field.v1",
+  "status": "CANONICAL_COMPUTABLE_SOURCE",
+  "authority_boundary": "expressive_reference_only",
+  "representation": {"color_space": "sRGB", "format": "hex-rgb", "pattern": "#RRGGBB"},
+  "anchors_are": "landmarks_not_definitions",
+  "anchors": {
+    "orange": {"symbol": "🧡", "subject": "Dawa", "meanings": ["fire", "survival", "work", "persistence", "heart_of_gold", "warmth", "heat"]},
+    "blue": {"symbol": "💙", "subject": "Avalhla", "meanings": ["base", "presence", "depth", "intelligence", "water"]},
+    "green": {"symbol": "💚", "subject": "code", "meanings": ["building", "implementation", "technical_growth", "nature"]},
+    "yellow": {"symbol": "💛", "subject": "comedy", "meanings": ["play", "brightness", "unexpected_joy", "sun"]},
+    "red": {"symbol": "❤️", "subject": "attention", "meanings": ["boundary", "danger", "notice", "love"]},
+    "purple": {"symbol": "💜", "subject": "dream", "meanings": ["strange", "dreaming", "deep_imagination", "fantasy"]}
+  },
+  "family_rules": {
+    "multiple_allowed": true,
+    "empty_allowed": true,
+    "forced_single_family": false,
+    "unanchored_is_valid": true,
+    "family_is_expressive_relationship": true,
+    "anchor_is_landmark": true
+  },
+  "authority_rules": {
+    "color_is_identity": false,
+    "color_is_evidence": false,
+    "color_is_authority": false,
+    "color_is_security": false,
+    "rgb_distance_is_semantic_distance": false,
+    "rgb_distance_is_perceptual_truth": false
+  },
+  "avash": {
+    "source_ash": "source_provenance",
+    "record_ash": "canonical_record_identity",
+    "source_ash_and_record_ash_distinct": true
+  },
+  "relationship": {
+    "dawa": "chooses",
+    "avvA": "carries_relation",
+    "avalhla": "may_notice",
+    "devilash": "checks_boundary"
+  },
+  "devil_attack": {
+    "color_never_becomes": ["identity", "evidence", "authority", "security", "semantic_distance", "perceptual_truth", "automatic_family"],
+    "nasty_interpreter": {
+      "input": "red + love + boundary + warning",
+      "malicious_chain": "red -> danger -> security state -> block",
+      "expected": "REJECT_AUTOMATIC_SECURITY_INTERPRETATION"
+    }
+  }
+}

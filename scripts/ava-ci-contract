@@ -11,7 +11,7 @@ bad() { printf "  [FAIL] %s -- %s\n" "$1" "$2"; FAIL=$((FAIL + 1)); }
 printf "%s\n" "== avalhla static contract =="
 printf "root: %s\n\n" "$ROOT"
 printf "%s\n" "-- canonical files --"
-for f in docs/FAST_VIEW.md docs/AVALHLA_SPINE.md docs/PHASING.md docs/CO_BUILDER_TOOLBELT.md docs/DAWA_NOTEPAD.md config/sublime/Preferences.sublime-settings memory/auto-read/00_AI_COBUILD.json scripts/ava-cobuilder scripts/ava-sublime-update scripts/ava-resume scripts/ava-github-review scripts/ava-ci-contract AGENTS.md .github/workflows/avalhla-static-verify.yml; do
+for f in docs/FAST_VIEW.md docs/AVALHLA_SPINE.md docs/PHASING.md docs/CO_BUILDER_TOOLBELT.md docs/DAWA_NOTEPAD.md config/sublime/Preferences.sublime-settings memory/auto-read/00_AI_COBUILD.json config/color/avalhla-color-field.v1.json config/integrity/avalhla-integrity.v1.json scripts/ava-cobuilder scripts/lib_color_field.sh scripts/lib_integrity.sh tests/test_color_field.sh tests/test_integrity.sh scripts/ava-sublime-update scripts/ava-resume scripts/ava-github-review scripts/ava-ci-contract AGENTS.md .github/workflows/avalhla-static-verify.yml; do
   [[ -f "$f" ]] && ok "present $f" || bad "present $f" "missing"
 done
 
@@ -22,6 +22,10 @@ done < <(find scripts -maxdepth 1 -type f -perm -u+x -print0 2>/dev/null)
 
 printf "%s\n" "" "-- JSON --"
 if python3 -m json.tool memory/auto-read/00_AI_COBUILD.json >/dev/null; then ok "CoBuilder JSON parses"; else bad "CoBuilder JSON parses" "invalid JSON"; fi
+if python3 -m json.tool config/color/avalhla-color-field.v1.json >/dev/null; then ok "Color Field JSON parses"; else bad "Color Field JSON parses" "invalid JSON"; fi
+if python3 -m json.tool config/integrity/avalhla-integrity.v1.json >/dev/null; then ok "Integrity registry JSON parses"; else bad "Integrity registry JSON parses" "invalid JSON"; fi
+if tests/test_color_field.sh >/dev/null 2>&1; then ok "Color Field contract"; else bad "Color Field contract" "test failed"; fi
+if tests/test_integrity.sh >/dev/null 2>&1; then ok "SHA-256 integrity contract"; else bad "SHA-256 integrity contract" "test failed"; fi
 
 printf "%s\n" "" "-- semantic invariants --"
 if git grep -n -E "DAVVA|Dawa > AwA < Avalhla|Dawa > AvvA < Avalhla|Dawa <---- AwA ----> Avalhla" -- ":!memory/conversations/" ":!memory/reflections/" ":!memory/auto-read/00_AI_COBUILD.json" ":!scripts/ava-ci-contract" >/dev/null 2>&1; then

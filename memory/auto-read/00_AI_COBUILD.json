@@ -2208,5 +2208,20 @@
       "Dawa remains the final human authority for consequential repository actions."
     ],
     "configuration_rule": "Do not add undocumented CodeRabbit instruction/configuration syntax based on assumption; verify current official documentation first."
+  },
+  "canonical_color_field": {
+    "status": "POINTER_ONLY",
+    "source": "config/color/avalhla-color-field.v1.json",
+    "human_view": "docs/COLOR_BOOK.md",
+    "reader": "scripts/lib_color_field.sh",
+    "rule": "Only the canonical Color Field JSON defines computable color semantics. The CoBuilder auto-read lane does not duplicate its anchor definitions."
+  },
+  "integrity_spine": {
+    "status": "CANONICAL_CROSS_CUTTING_PRIMITIVE",
+    "primitive": "scripts/lib_integrity.sh",
+    "registry": "config/integrity/avalhla-integrity.v1.json",
+    "rule": "SHA-256 identifies and verifies exact content bytes; it does not create meaning, authority, permission, security classification, or semantic similarity.",
+    "scope": "ADDRESSABLE_IMPORTANT_OBJECT",
+    "provenance_rule": "When model preparation transforms source content, source and consumed-input digests remain distinct evidence."
   }
 }
