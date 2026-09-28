@@ -33,6 +33,10 @@
       reading + care order
   3.6 PROMPT_FRAME.txt
       reusable terminal cheat-sheet framing prompt
+  3.7 config/sublime/Dawa_Avalhla.sublime-project
+      two-lane editor template: Dawa user lane + Avalhla auto-read lane
+  3.8 docs/DAWA_NOTEPAD.md
+      human-readable file-boundary contract
 
 04 / AVVA
   4.1 AvvA_ATLAS.md

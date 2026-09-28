@@ -18,7 +18,18 @@
       Prefer existing Bazzite tooling and Distrobox.
       Do not use random sudo dnf/apt/pacman installs on the immutable host.
 
-03 TOOLCHAIN WITNESSES
+03 EDITOR / HUMAN LANE
+  3.1 Dawa_Notepad
+      /home/VVgbon/Dawa_Notepad
+      user-only authored material; not implicit Avalhla context
+  3.2 Avalhla auto-read
+      /var/home/VVgbon/Avalhla/memory/auto-read
+      canonical bounded read lane
+  3.3 Sublime template
+      config/sublime/Dawa_Avalhla.sublime-project
+      two visible roots; workspace/session state stays outside the repo
+
+04 TOOLCHAIN WITNESSES
   3.1 git / gh
       source control and GitHub sync
   3.2 rg

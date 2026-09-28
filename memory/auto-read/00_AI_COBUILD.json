@@ -1714,7 +1714,8 @@
     "branch": "change/avva-relational-signature-2026-09-27",
     "base_branch": "main",
     "base_sha": "f2f09aacdd176e2f1a1a150eb70d704bfcc973d2",
-    "head_sha": "3f6701ef688a693e68f9a7d9e751198f355107d9",
+    "head_sha_last_observed": "a75b1e79f8304b5c943cc2766c163aaef253d684",
+    "head_sha_authority": "LIVE_PR_LOOKUP_REQUIRED",
     "pr_state": "OPEN",
     "mergeable": true,
     "authority": {
@@ -1794,7 +1795,7 @@
       "81116cc041de1daa4e2ec4c64210c45e0f544cb2"
     ],
     "latest_persisted_detail": "Useful findings from this review/search pass are retained here and in docs/HANDOFF.md/docs/CO_BUILDER_TOOLBELT.md.",
-    "current_head_note": "Snapshot records the branch tip immediately before this state-refresh commit; future resume should read the live PR head first.",
+    "current_head_note": "Stored SHA is a last-observed snapshot only. Future resume MUST read the live PR head first; the stored SHA is never current authority.",
     "static_contract_evidence_boundary": {
       "rule": "The tracked CoBuilder evidence ledger may preserve literal forbidden/historical strings from reviewer findings. Those literals are evidence, not active repository semantics.",
       "active_scan_exclusion": "memory/auto-read/00_AI_COBUILD.json",
@@ -1842,6 +1843,47 @@
       "hard_rule": "Do not assume the local clone is current from memory; capture live Git state first."
     }
   },
+  "devil_cross_scope_2026_09_27": {
+    "status": "CANONICAL_RESEARCH_SCOPE",
+    "purpose": "Scale evidence by risk and keep web, repository, runtime, and crossing evidence distinct.",
+    "default_scope": "WEB_8X + REPO_2X + RUNTIME_1X + CROSS_1X",
+    "web_8x": {
+      "rule": "Eight evidence roles, not eight copies of one source or eight correlated mirrors.",
+      "roles": [
+        "PRIMARY: authoritative owner or maintainer source.",
+        "INDEPENDENT: separate origin that can confirm the claim.",
+        "COUNTER: disagreement, failure mode, issue tracker, or credible contrary evidence.",
+        "CURRENT: present version/date/platform state.",
+        "STANDARD: relevant standard, specification, or security guidance.",
+        "IMPLEMENTER: practical documentation or real implementation evidence from a distinct origin.",
+        "OPERATIONAL: observed real-world behavior, deployment, compatibility, or reproduction evidence.",
+        "EDGE: limits, exceptions, migration traps, or boundary conditions."
+      ],
+      "independence_law": "Repeated copies, mirrors, syndications, or summaries from one origin count as one source."
+    },
+    "repo_2x": {
+      "rule": "Use one GitHub repository and two complementary repository passes.",
+      "passes": [
+        "CURRENT_TREE: current branch/PR tree, active names, source, references, generated artifacts.",
+        "HISTORY_DIFF: base-to-head comparison, rename history, changed paths, prior semantic intent."
+      ],
+      "single_repo_law": "Do not multiply repository count for the same product; cross branches, commits, and history inside the canonical repository."
+    },
+    "runtime_1x": {
+      "rule": "For executable or safety-relevant decisions, exercise one bounded behavior path against the current tree.",
+      "required_when": [
+        "behavior is claimed",
+        "safety boundary is involved",
+        "integration or configuration can drift at runtime"
+      ]
+    },
+    "cross_1x": {
+      "rule": "Perform one explicit WEB_8X <-> REPO_2X (+ RUNTIME_1X when applicable) crossing.",
+      "output": "AGREEMENT / DRIFT / CONTRADICTION / INSUFFICIENT",
+      "authority": "The crossing is evidence comparison, not an authority source."
+    },
+    "adaptive_rule": "Skip non-applicable web roles for trivial deterministic facts; do not pad the count. Use the full scope for architecture, safety, external behavior, migration, and high-consequence changes."
+  },
   "workspace_boundaries_2026_09_27": {
     "status": "CANONICAL_TWO_LANE_EDITOR_BOUNDARY",
     "dawa_notepad": {
@@ -1862,12 +1904,24 @@
       "dawa_notepad_membership": false
     },
     "sublime_workspace": {
+      "canonical_project_template": "config/sublime/Dawa_Avalhla.sublime-project",
       "display_roots": [
         "/home/VVgbon/Dawa_Notepad",
-        "memory/auto-read/"
+        "/var/home/VVgbon/Avalhla/memory/auto-read/"
       ],
       "editor_visibility_note": "Showing both lanes in one Sublime project is an editor convenience only; it does not grant Avalhla runtime permission to read Dawa_Notepad.",
-      "project_file_role": "human/editor configuration, not Avalhla authority"
+      "project_file_role": "machine-readable editor configuration template, not Avalhla authority",
+      "live_workspace_rule": "Copy the project template into Dawa_Notepad before opening it so the Sublime .sublime-workspace remains outside the repository.",
+      "primary_language": {
+        "canonical": "AvvA",
+        "historical_only": "AwA",
+        "rule": "Use AvvA for current relation semantics. Preserve AwA only inside explicit historical evidence or migration history."
+      },
+      "human_language": {
+        "dawa_lane": "Dawa_Notepad = USER ONLY",
+        "ava_lane": "memory/auto-read/ = AVALHLA AUTO-READ",
+        "crossing": "Dawa <---- AvvA ----> Avalhla"
+      }
     },
     "architecture_law": [
       "One canonical Avalhla auto-read lane: memory/auto-read/.",

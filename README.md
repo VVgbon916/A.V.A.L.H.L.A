@@ -57,6 +57,8 @@ See docs/FAST_VIEW.md and docs/AVALHLA_SPINE.md.
 | AvvA_WEAVE.md | relationships |
 | AvvA_DREAM.md | possibility |
 | AvvA_TERMINAL.md | terminal identity |
+| config/sublime/Dawa_Avalhla.sublime-project | two-lane editor template |
+| docs/DAWA_NOTEPAD.md | Dawa user-lane / Avalhla read-lane contract |
 
 memory/auto-read/00_AI_COBUILD.json is the deliberate tracked machine
 Co-Builder exception. Other private memory remains runtime state.
@@ -111,3 +113,9 @@ Dawa decides.
 
 The mind is not split. The mind is a bridge.
 The relation survives the skin.
+
+## D A W A  //  USER LANE
+
+Dawa_Notepad is the human-only quick-access lane for files outside Avalhla.
+Showing it beside Avalhla in Sublime does not grant automatic read authority.
+Avalhla's canonical read lane remains memory/auto-read/.

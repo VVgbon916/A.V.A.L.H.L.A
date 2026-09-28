@@ -1,0 +1,68 @@
+{
+    "folders":
+    [
+        {
+            "name": "DAWA // USER ONLY",
+            "path": "/home/VVgbon/Dawa_Notepad",
+            "file_exclude_patterns":
+            [
+                "*.sublime-workspace"
+            ]
+        },
+        {
+            "name": "AVALHLA // AVVA AUTO-READ",
+            "path": "/var/home/VVgbon/Avalhla/memory/auto-read",
+            "file_exclude_patterns":
+            [
+                "*.sublime-workspace"
+            ]
+        }
+    ],
+    "settings":
+    {
+        "draw_centered": false,
+        "word_wrap": false,
+        "wrap_width": 80,
+        "wrap_width_style": "constant",
+        "rulers": [
+            [
+                10,
+                "dotted",
+                1
+            ],
+            [
+                20,
+                "dotted",
+                1
+            ],
+            [
+                40,
+                "stippled",
+                1
+            ],
+            [
+                60,
+                "dotted",
+                1
+            ],
+            [
+                80,
+                "stippled",
+                1
+            ],
+            [
+                90,
+                "dotted",
+                1
+            ],
+            [
+                100,
+                "solid",
+                2
+            ]
+        ],
+        "trim_trailing_white_space_on_save": false,
+        "show_encoding": true,
+        "show_line_endings": true
+    }
+}
