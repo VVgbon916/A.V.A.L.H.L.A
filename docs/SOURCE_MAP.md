@@ -3,6 +3,8 @@
 01 / CORE
   1.1 README.md
       first-contact entry
+  1.4 CHANGELOG.md
+      notable human-facing change history
   1.2 docs/FAST_VIEW.md
       standard fast-reading grammar
   1.3 docs/AVALHLA_SPINE.md

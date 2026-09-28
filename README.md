@@ -59,6 +59,7 @@ See docs/FAST_VIEW.md and docs/AVALHLA_SPINE.md.
 | AvvA_TERMINAL.md | terminal identity |
 | config/sublime/Dawa_Avalhla.sublime-project | two-lane editor template |
 | docs/DAWA_NOTEPAD.md | Dawa user-lane / Avalhla read-lane contract |
+| CHANGELOG.md | notable project change history |
 
 COBUILDER INIT -> COBUILDER MODE -> COBUILDER // DEVILASH
 
