@@ -84,7 +84,7 @@ raise SystemExit(0 if "." in paths and "../memory/auto-read" in paths else 1)
 PY
 then ok "Sublime project is two-lane"; else bad "Sublime project is two-lane" "expected relative Dawa + auto-read paths"; fi
 if grep -qF "Dawa_Notepad/private/" .gitignore; then ok "Dawa private escape hatch ignored"; else bad "Dawa private escape hatch ignored" "ignore rule missing"; fi
-if grep -qF "Dawa_Notepad/" docs/DAWA_NOTEPAD.md && ! grep -qF "Dawa_Notepad is NOT an implicit" docs/DAWA_NOTEPAD.md; then bad "Dawa lane boundary" "implicit-read warning missing"; else ok "Dawa lane boundary"; fi
+if grep -qF "Dawa_Notepad is NOT implicit Avalhla model input." docs/DAWA_NOTEPAD.md && grep -qF "memory/auto-read" docs/DAWA_NOTEPAD.md; then ok "Dawa lane boundary"; else bad "Dawa lane boundary" "implicit-read warning missing"; fi
 if scripts/ava-sublime-update --paths >/dev/null 2>&1; then ok "Sublime updater resolves paths"; else bad "Sublime updater resolves paths" "path resolution failed"; fi
 if grep -qF "Dawa_Notepad" scripts/ava-sublime-update && grep -qF "memory/auto-read" docs/DAWA_NOTEPAD.md; then ok "Sublime lane boundary"; else bad "Sublime lane boundary" "user/read lane contract missing"; fi
 
