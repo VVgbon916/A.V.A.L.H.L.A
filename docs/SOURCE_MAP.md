@@ -37,6 +37,8 @@
       two-lane editor template: Dawa user lane + Avalhla auto-read lane
   3.8 docs/DAWA_NOTEPAD.md
       human-readable file-boundary contract
+  3.9 scripts/ava-cobuilder
+      AI CoBuilder activation / init door
 
 04 / AVVA
   4.1 AvvA_ATLAS.md

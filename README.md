@@ -60,6 +60,8 @@ See docs/FAST_VIEW.md and docs/AVALHLA_SPINE.md.
 | config/sublime/Dawa_Avalhla.sublime-project | two-lane editor template |
 | docs/DAWA_NOTEPAD.md | Dawa user-lane / Avalhla read-lane contract |
 
+COBUILDER INIT -> COBUILDER MODE -> COBUILDER // DEVILASH
+
 memory/auto-read/00_AI_COBUILD.json is the deliberate tracked machine
 Co-Builder exception. Other private memory remains runtime state.
 
@@ -78,7 +80,7 @@ Use scripts/ava-help for the current door inventory.
 
 Core doors:
 
-ava-board  ava-reality  ava-mem  ava-context  ava-weave
+ava-cobuilder  ava-board  ava-reality  ava-mem  ava-context  ava-weave
 ava-dream   ava-imagine  ava-search  ava-review
 ava-record  ava-safety   ava-verify
 

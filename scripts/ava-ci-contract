@@ -11,7 +11,7 @@ bad() { printf "  [FAIL] %s -- %s\n" "$1" "$2"; FAIL=$((FAIL + 1)); }
 printf "%s\n" "== avalhla static contract =="
 printf "root: %s\n\n" "$ROOT"
 printf "%s\n" "-- canonical files --"
-for f in docs/FAST_VIEW.md docs/AVALHLA_SPINE.md docs/PHASING.md docs/CO_BUILDER_TOOLBELT.md memory/auto-read/00_AI_COBUILD.json scripts/ava-resume scripts/ava-github-review scripts/ava-ci-contract AGENTS.md .github/workflows/avalhla-static-verify.yml; do
+for f in docs/FAST_VIEW.md docs/AVALHLA_SPINE.md docs/PHASING.md docs/CO_BUILDER_TOOLBELT.md memory/auto-read/00_AI_COBUILD.json scripts/ava-cobuilder scripts/ava-resume scripts/ava-github-review scripts/ava-ci-contract AGENTS.md .github/workflows/avalhla-static-verify.yml; do
   [[ -f "$f" ]] && ok "present $f" || bad "present $f" "missing"
 done
 

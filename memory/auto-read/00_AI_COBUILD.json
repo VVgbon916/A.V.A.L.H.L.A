@@ -1072,7 +1072,10 @@
       ]
     },
     "style": {
-      "mode": "FAST_DEVILASH",
+      "activation": "COBUILDER INIT",
+      "operating_state": "COBUILDER MODE",
+      "verification_method": "COBUILDER // DEVILASH",
+      "method": "FAST_DEVILASH",
       "order": "commands > source > evidence > smallest safe edit",
       "avoid": [
         "giant speculative rewrites",
@@ -1593,6 +1596,24 @@
     "status": "BOUNDED_CO_BUILDER_TOOLBELT",
     "purpose": "Prevent resume, review, and research work from reopening the whole project context.",
     "doors": {
+      "cobuilder_init": {
+        "canonical_local": "scripts/ava-cobuilder init",
+        "activation": "COBUILDER INIT",
+        "operating_state": "COBUILDER MODE",
+        "verification_method": "COBUILDER // DEVILASH",
+        "method_alias": "FAST_DEVILASH",
+        "purpose": "Portable first-contact activation and evidence-first operating order for any AI joining Avalhla.",
+        "sources": [
+          "AGENTS.md",
+          "docs/FAST_VIEW.md",
+          "docs/PHASING.md",
+          "docs/CO_BUILDER_TOOLBELT.md",
+          "memory/auto-read/00_AI_COBUILD.json"
+        ],
+        "mutation": false,
+        "model_call": false,
+        "editor_boundary": "Sublime two-lane visibility does not grant runtime or model ingestion authority."
+      },
       "resume": {
         "canonical_local": "scripts/ava-resume",
         "sources": [

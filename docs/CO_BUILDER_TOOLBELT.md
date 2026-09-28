@@ -5,6 +5,63 @@
 Keep resume, review, and research work bounded so Avalhla does not have to
 rediscover the whole project from a giant prompt.
 
+## CoBuilder activation
+
+Canonical activation door:
+
+    scripts/ava-cobuilder init
+
+The activation vocabulary is:
+
+    COBUILDER INIT
+      enter / orient
+
+    COBUILDER MODE
+      active co-building state
+
+    COBUILDER // DEVILASH
+      adversarial verification method
+
+The init door is read-only and does not call a model, mutate memory, mutate
+GitHub state, or authorize consequential actions.
+
+Canonical first-contact order:
+
+    COBUILDER INIT
+       ->
+    READ
+       ->
+    REAL_STATE
+       ->
+    UNDERSTAND
+       ->
+    COMPARE
+       ->
+    RESEARCH
+       ->
+    CROSS_CHECK
+       ->
+    MINIMAL_EDIT
+       ->
+    TEST
+       ->
+    VERIFY
+       ->
+    REVIEW
+       ->
+    DAWA HUMAN GATE
+
+The two-lane Sublime project remains:
+
+    Dawa_Notepad
+      USER ONLY
+      outside implicit Avalhla auto-read
+
+    memory/auto-read/
+      canonical Avalhla auto-read lane
+
+    Showing both folders in Sublime is editor visibility only.
+
 ## Local resume door
 
 scripts/ava-resume
