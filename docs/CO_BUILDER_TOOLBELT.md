@@ -53,8 +53,9 @@ Canonical first-contact order:
 
 The two-lane Sublime project remains:
 
-    Dawa_Notepad
-      USER ONLY
+    Dawa_Notepad/
+      DAWA / SYNCABLE USER LANE
+      tracked repository section
       outside implicit Avalhla auto-read
 
     memory/auto-read/
@@ -66,12 +67,14 @@ Explicit Sublime updater:
 
     scripts/ava-sublime-update --check
     scripts/ava-sublime-update --apply
-    scripts/ava-sublime-update --project
-    scripts/ava-sublime-update --all
+    scripts/ava-sublime-update --paths
 
-The updater writes only to Sublime user configuration and the explicit
-Dawa_Notepad project path. It never adds Dawa_Notepad to auto-read.
-Existing target files are backed up before replacement.
+The updater changes only the local Sublime user settings target.
+Repository sync refreshes the tracked Dawa_Notepad project itself.
+
+Dawa_Notepad is not an auto-read lane.
+Tracked is not trusted.
+Tracked is not model input.
 
 ## Sublime updater door
 
@@ -83,8 +86,9 @@ reader. It resolves the current Sublime data directory through
 existing `sublime-text-3` data directory when the ST4 directory is absent.
 
 `--apply` updates `Packages/User/Preferences.sublime-settings` from the
-canonical repository source. `--project` creates or updates the explicit
-`Dawa_Notepad/Dawa_Avalhla.sublime-project` copy. `--check` is read-only.
+canonical repository source. `--check` verifies the global settings target
+and the repo-local two-lane project. The tracked project itself is refreshed
+by Git synchronization.
 
 ## Local resume door
 

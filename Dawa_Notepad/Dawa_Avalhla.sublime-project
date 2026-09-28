@@ -2,8 +2,8 @@
     "folders":
     [
         {
-            "name": "DAWA // USER ONLY",
-            "path": "/home/VVgbon/Dawa_Notepad",
+            "name": "DAWA // SYNCABLE USER LANE",
+            "path": ".",
             "file_exclude_patterns":
             [
                 "*.sublime-workspace"
@@ -11,7 +11,7 @@
         },
         {
             "name": "AVALHLA // AVVA AUTO-READ",
-            "path": "/var/home/VVgbon/Avalhla/memory/auto-read",
+            "path": "../memory/auto-read",
             "file_exclude_patterns":
             [
                 "*.sublime-workspace"

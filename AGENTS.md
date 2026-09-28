@@ -76,17 +76,24 @@ The activation is procedural, not a new agent identity or authority role.
         use concept_id = identity
 
     04  TWO-LANE EDITOR CHECK
-        /home/VVgbon/Dawa_Notepad
-          USER ONLY
+        Dawa_Notepad/
+          DAWA / SYNCABLE USER LANE
+          tracked repository section
           outside implicit Avalhla auto-read
 
         memory/auto-read/
           canonical Avalhla auto-read lane
 
+        Repository tracking does not grant model-ingestion authority.
         Sublime showing both folders is editor visibility only.
-        It does not grant runtime or model ingestion authority.
-        Sublime settings/project updates are explicit host actions.
-        Use scripts/ava-sublime-update; never auto-read Dawa_Notepad.
+        Sublime settings updates are explicit host actions.
+        Use scripts/ava-sublime-update for user settings.
+        Do not treat Dawa_Notepad as implicit model input.
+
+        PUBLIC REPO WARNING
+          tracked Dawa_Notepad content is publishable repository content.
+          Never store secrets, credentials, or private-only material there.
+          Use Dawa_Notepad/private/ for local-only material.
 
     05  GATE
         identify the owning phase
@@ -116,4 +123,4 @@ The activation is procedural, not a new agent identity or authority role.
         consequential changes remain Dawa's choice
 
 Do not create a competing CoBuilder master, auto-read lane, editor-authority
-path, or Devilash identity.
+path, Devilash identity, or second Dawa project artifact.

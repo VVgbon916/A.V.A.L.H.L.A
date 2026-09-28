@@ -20,14 +20,14 @@
 
 03 EDITOR / HUMAN LANE
   3.1 Dawa_Notepad
-      /home/VVgbon/Dawa_Notepad
-      user-only authored material; not implicit Avalhla context
+      /var/home/VVgbon/Avalhla/Dawa_Notepad
+      tracked/syncable Dawa lane; never implicit model input
   3.2 Avalhla auto-read
       /var/home/VVgbon/Avalhla/memory/auto-read
       canonical bounded read lane
-  3.3 Sublime template
-      config/sublime/Dawa_Avalhla.sublime-project
-      two visible roots; workspace/session state stays outside the repo
+  3.3 Sublime project
+      Dawa_Notepad/Dawa_Avalhla.sublime-project
+      relative two-lane project; workspace/session state stays ignored
 
 04 TOOLCHAIN WITNESSES
   4.1 git / gh

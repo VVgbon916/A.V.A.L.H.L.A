@@ -33,8 +33,8 @@ Dawa <---- AvvA ----> Avalhla  //  (^.-)
   Safety behavior: PASS.
   Self-test cleanup: known FAIL; EXIT trap references function-local temp vars.
   PR #2 review evidence must be re-read after each new commit.
-  Sublime user setup is explicit: scripts/ava-sublime-update --paths / --check / --apply / --project.
-  Dawa_Notepad may be absent on a fresh host until the explicit --project action creates it.
+  Dawa user lane is now tracked at Dawa_Notepad/ inside Avalhla.
+  Sublime project is refreshed by Git sync; settings use scripts/ava-sublime-update --apply.
 
 05 NEXT
   Verify the live PR head, then assess fresh CodeRabbit evidence for that exact SHA; never rely on a stale embedded SHA.

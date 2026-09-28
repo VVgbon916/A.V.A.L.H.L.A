@@ -1192,7 +1192,8 @@
     "2026-09-27-remaster-branch": "Dictionary-driven remaster: semantic filenames, reference repair, FAST_VIEW, AVALHLA_SPINE, DEVELOPMENT, refreshed HANDOFF/SOURCE_MAP/README, and generated board cache de-duplication.",
     "2026-09-27-remaster-review-ready": "Active repository references use the canonical remaster names. Legacy filenames are retained only as migration history inside this Co-Builder record.",
     "2026-09-27-remaster-main": "PR #1 squashed to main at 5a61028afb04856eb0af8b27b2410521885f4989. Dictionary-driven filenames, FAST_VIEW, SPINE, DEVELOPMENT, source map, handoff, configs, board command, and generated board cache path are now on main.",
-    "2026-09-27-sublime-updater": "Added explicit scripts/ava-sublime-update host door for Sublime user settings and the Dawa_Notepad project; check/apply/project/all modes are explicit, backups occur before replacement, Dawa_Notepad remains USER ONLY, and XDG_CONFIG_HOME plus current Sublime data-directory behavior are respected."
+    "2026-09-27-sublime-updater": "Added explicit scripts/ava-sublime-update host door for Sublime user settings and the Dawa_Notepad project; check/apply/project/all modes are explicit, backups occur before replacement, Dawa_Notepad remains USER ONLY, and XDG_CONFIG_HOME plus current Sublime data-directory behavior are respected.",
+    "2026-09-27-dawa-lane-remaster": "Moved the Dawa user lane into tracked repository path Dawa_Notepad/ so intentional Dawa material can sync with Avalhla; the lane remains outside memory/auto-read, includes a Git-ignored private/ escape hatch, and the canonical Sublime project now lives inside Dawa_Notepad with relative two-lane paths."
   },
   "mind_dictionary": {
     "status": "CANONICAL_NAMING_DICTIONARY",
@@ -1753,28 +1754,17 @@
       },
       "sublime_update": {
         "canonical_local": "scripts/ava-sublime-update",
-        "purpose": "Explicit host-side Sublime settings and two-lane project updater.",
-        "sources": [
-          "config/sublime/Preferences.sublime-settings",
-          "config/sublime/Dawa_Avalhla.sublime-project",
-          "docs/DAWA_NOTEPAD.md"
+        "purpose": "Explicit local Sublime user-settings updater; repository sync owns the Dawa project file.",
+        "settings_source": "config/sublime/Preferences.sublime-settings",
+        "settings_modes": [
+          "--check",
+          "--apply",
+          "--paths"
         ],
-        "modes": {
-          "check": "--check",
-          "apply": "--apply",
-          "project": "--project",
-          "all": "--all",
-          "paths": "--paths"
-        },
-        "mutation": "explicit only",
-        "mutation_scope": [
-          "Sublime Packages/User/Preferences.sublime-settings",
-          "Dawa_Notepad/Dawa_Avalhla.sublime-project"
-        ],
-        "backups": true,
-        "auto_read": false,
+        "project": "Dawa_Notepad/Dawa_Avalhla.sublime-project",
+        "mutation": "local Sublime user settings only",
         "model_call": false,
-        "github_mutation": false
+        "auto_read": false
       }
     },
     "authority": {
@@ -2011,12 +2001,12 @@
     "sublime_workspace": {
       "canonical_project_template": "config/sublime/Dawa_Avalhla.sublime-project",
       "display_roots": [
-        "/home/VVgbon/Dawa_Notepad",
+        "/var/home/VVgbon/Avalhla/Dawa_Notepad",
         "/var/home/VVgbon/Avalhla/memory/auto-read/"
       ],
-      "editor_visibility_note": "Showing both lanes in one Sublime project is an editor convenience only; it does not grant Avalhla runtime permission to read Dawa_Notepad.",
+      "editor_visibility_note": "The two folders are editor-visible only; Git tracking does not grant model-ingestion authority.",
       "project_file_role": "machine-readable editor configuration template, not Avalhla authority",
-      "live_workspace_rule": "Copy the project template into Dawa_Notepad before opening it so the Sublime .sublime-workspace remains outside the repository.",
+      "live_workspace_rule": "The .sublime-project is tracked inside Dawa_Notepad; .sublime-workspace remains ignored local state.",
       "primary_language": {
         "canonical": "AvvA",
         "historical_only": "AwA",
@@ -2045,15 +2035,26 @@
         "backup_before_replace": true,
         "dawa_notepad_auto_read": false,
         "rule": "The updater writes editor configuration only; Dawa_Notepad remains USER ONLY and never becomes an Avalhla auto-read lane."
-      }
+      },
+      "dawa_lane": {
+        "path": "Dawa_Notepad/",
+        "role": "DAWA_SYNCABLE_USER_LANE",
+        "purpose": "Tracked Dawa-authored material intentionally synced with the public Avalhla repository.",
+        "ava_implicit_read": false,
+        "auto_read_membership": false,
+        "repository_state": true,
+        "public_repository_warning": "Committed content is public repository content; never store secrets or private-only material.",
+        "local_only_escape_hatch": "Dawa_Notepad/private/"
+      },
+      "project_file": "Dawa_Notepad/Dawa_Avalhla.sublime-project"
     },
     "architecture_law": [
+      "One canonical Dawa sync lane: Dawa_Notepad/ inside the Avalhla repository.",
       "One canonical Avalhla auto-read lane: memory/auto-read/.",
-      "Do not create a parallel Avalhla/read-files directory while memory/auto-read/ remains the canonical auto-read artifact.",
-      "Dawa_Notepad remains outside the Avalhla repository and outside implicit auto-read.",
-      "CROSS-AVAILABLE != CROSS-CONTAMINATED.",
-      "Showing a file in an editor does not authorize model context ingestion.",
-      "Keep user-only material in Dawa_Notepad; keep Avalhla-owned read material in memory/auto-read/."
+      "Dawa_Notepad remains outside implicit auto-read and model input.",
+      "Tracked != trusted.",
+      "Tracked != model-input.",
+      "CROSS-AVAILABLE != CROSS-CONTAMINATED."
     ]
   },
   "co_builder_information_request_policy": {

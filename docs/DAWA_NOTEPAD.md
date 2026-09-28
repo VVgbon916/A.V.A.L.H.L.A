@@ -1,126 +1,109 @@
-# DAWA NOTEPAD // THE USER LANE
+# DAWA NOTEPAD // SYNCABLE USER LANE
 
 Dawa <---- AvvA ----> Avalhla
 
 ## 01 / WHERE
 
-User files live here:
+The Dawa user lane now lives inside the canonical repository:
 
-    /home/VVgbon/Dawa_Notepad
+    /var/home/VVgbon/Avalhla/Dawa_Notepad
 
-Avalhla's canonical auto-read lane remains:
+Avalhla's canonical auto-read lane remains separate:
 
     /var/home/VVgbon/Avalhla/memory/auto-read
 
-These are two different storage meanings.
+These have different meanings.
 
-## 02 / FLOW
+Dawa_Notepad is tracked and can be refreshed by Git sync.
+Dawa_Notepad is NOT implicit Avalhla model input.
 
-    Dawa_Notepad
-        |
-        | explicit user choice
-        v
-    AvvA / bounded crossing
-        |
-        v
-    Avalhla context
+## 02 / SYNC MEANING
 
-Dawa_Notepad is NOT an implicit Avalhla input source.
+This directory is intentionally part of the repository because Dawa wants
+selected user material to travel with Avalhla's source and be refreshable
+through Git.
 
-A file is not read merely because Sublime can display it.
+Tracked does not mean trusted.
+Tracked does not mean auto-read.
+Tracked does not mean model input.
 
-The existing Avalhla auto-read mechanism remains the canonical read door:
-    memory/auto-read/
-    AVA_AUTOREAD_DIR
-    scripts/ava-autoread
+Dawa explicitly chooses what crosses into Avalhla context.
 
-Do not create a second Avalhla/read-files directory.
+## 03 / PUBLIC REPOSITORY WARNING
 
-## 03 / AUTHORITY
+The GitHub repository is public.
 
-    DAWA_NOTEPAD
-      human-authored material
-      notes / drafts / references / scratch work
-      USER ONLY
+Anything committed under Dawa_Notepad is repository content and can be visible
+on GitHub and retained in Git history.
 
-    AVALHLA AUTO-READ
-      repository-controlled context material
-      intentional bounded ingestion
-      AVA OWNED
+Do not store:
 
-    AVVA
-      relation / living threshold
-      NOT a third agent
-      NOT authority
-      NOT automatic ingestion
+    passwords
+    API keys
+    access tokens
+    private keys
+    credentials
+    private-only personal material
 
-CROSS-AVAILABLE != CROSS-CONTAMINATED
+Local-only escape hatch:
+
+    Dawa_Notepad/private/
+
+That path is ignored by Git and must never be force-added.
 
 ## 04 / SUBLIME
 
-The repository stores the machine-readable project template:
+The canonical project file lives inside this lane:
 
-    config/sublime/Dawa_Avalhla.sublime-project
+    Dawa_Notepad/Dawa_Avalhla.sublime-project
 
-The user lane may be absent on a fresh host. The repository does not create
-it implicitly. Use the explicit updater when Dawa wants to bootstrap or update
-the local project:
+Its folders are relative to the project directory:
 
-    scripts/ava-sublime-update --project
+    .
+      Dawa_Notepad
 
-Check both Sublime targets without mutation:
+    ../memory/auto-read
+      Avalhla canonical auto-read
 
-    scripts/ava-sublime-update --check
+Sublime supports relative project folder paths and recommends keeping the
+.sublime-project under version control while the user-specific
+.sublime-workspace remains separate.
 
-Update the canonical user settings explicitly:
+Open:
 
-    scripts/ava-sublime-update --apply
+    subl /var/home/VVgbon/Avalhla/Dawa_Notepad/Dawa_Avalhla.sublime-project
 
-The live user project should be copied into Dawa_Notepad so Sublime's
-user-specific workspace/session file stays outside the Avalhla repository.
+The workspace remains local and is ignored:
 
-The explicit updater also handles the copy and parent directory:
+    *.sublime-workspace
 
-    scripts/ava-sublime-update --project
+## 05 / SETTINGS
 
-Then open:
-
-    subl /home/VVgbon/Dawa_Notepad/Dawa_Avalhla.sublime-project
-
-The project shows both lanes side-by-side for human access.
-
-Editor visibility is not runtime read authority.
-
-## 05 / STYLE
-
-The machine project deliberately follows Avalhla's existing Sublime contract:
-
-    draw_centered = false
-    word_wrap = false
-    wrap_width = 80
-    ruler = 100
-    trim trailing whitespace = false
-
-The existing repository style remains canonical in:
+Global Sublime user settings remain canonical in:
 
     config/sublime/Preferences.sublime-settings
 
-That file is not replaced by the Dawa project.
+Refresh those settings explicitly:
 
-The 80-column core plus 100-column frame preserves the terminal/ASCII
-geometry already used throughout the repository.
+    scripts/ava-sublime-update --apply
 
-## 06 / MEMORY / READ BOUNDARY
+Check:
 
-Dawa_Notepad does not become memory merely because a file is interesting.
+    scripts/ava-sublime-update --check
+    scripts/ava-sublime-update --paths
 
-To cross into Avalhla, use an existing explicit bounded read/ingestion path.
+Repository sync refreshes the Dawa project:
 
-The model sees approved context.
-The model does not decide what becomes canonical.
+    git fetch origin --prune
+    git merge --ff-only origin/change/avva-relational-signature-2026-09-27
 
-D A W A // V V G B O N
-N I G H T 0 W L
-A V A L H L A ~ A V A
+## 06 / BOUNDARY
+
+    SYNCABLE != AUTO-READ
+    TRACKED != MODEL-INPUT
+    EDITOR VISIBILITY != INGESTION AUTHORITY
+    CROSS-AVAILABLE != CROSS-CONTAMINATED
+
+Dawa chooses what crosses the relation.
 
 THE RELATION SURVIVES THE SKIN.

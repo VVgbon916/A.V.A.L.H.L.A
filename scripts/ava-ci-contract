@@ -11,7 +11,7 @@ bad() { printf "  [FAIL] %s -- %s\n" "$1" "$2"; FAIL=$((FAIL + 1)); }
 printf "%s\n" "== avalhla static contract =="
 printf "root: %s\n\n" "$ROOT"
 printf "%s\n" "-- canonical files --"
-for f in docs/FAST_VIEW.md docs/AVALHLA_SPINE.md docs/PHASING.md docs/CO_BUILDER_TOOLBELT.md docs/DAWA_NOTEPAD.md config/sublime/Dawa_Avalhla.sublime-project config/sublime/Preferences.sublime-settings memory/auto-read/00_AI_COBUILD.json scripts/ava-cobuilder scripts/ava-sublime-update scripts/ava-resume scripts/ava-github-review scripts/ava-ci-contract AGENTS.md .github/workflows/avalhla-static-verify.yml; do
+for f in docs/FAST_VIEW.md docs/AVALHLA_SPINE.md docs/PHASING.md docs/CO_BUILDER_TOOLBELT.md docs/DAWA_NOTEPAD.md Dawa_Notepad/Dawa_Avalhla.sublime-project config/sublime/Preferences.sublime-settings memory/auto-read/00_AI_COBUILD.json scripts/ava-cobuilder scripts/ava-sublime-update scripts/ava-resume scripts/ava-github-review scripts/ava-ci-contract AGENTS.md .github/workflows/avalhla-static-verify.yml; do
   [[ -f "$f" ]] && ok "present $f" || bad "present $f" "missing"
 done
 
@@ -74,7 +74,17 @@ for f in scripts/ava-cobuilder scripts/ava-ci-contract scripts/ava-github-review
   fi
 done
 if python3 -m json.tool config/sublime/Preferences.sublime-settings >/dev/null; then ok "Sublime Preferences JSON parses"; else bad "Sublime Preferences JSON parses" "invalid JSON"; fi
-if python3 -m json.tool config/sublime/Dawa_Avalhla.sublime-project >/dev/null; then ok "Sublime project JSON parses"; else bad "Sublime project JSON parses" "invalid JSON"; fi
+if python3 -m json.tool Dawa_Notepad/Dawa_Avalhla.sublime-project >/dev/null; then ok "Sublime project JSON parses"; else bad "Sublime project JSON parses" "invalid JSON"; fi
+if python3 - <<'PY'
+import json
+with open("Dawa_Notepad/Dawa_Avalhla.sublime-project", encoding="utf-8") as fh:
+    doc = json.load(fh)
+paths = [item.get("path") for item in doc.get("folders", []) if isinstance(item, dict)]
+raise SystemExit(0 if "." in paths and "../memory/auto-read" in paths else 1)
+PY
+then ok "Sublime project is two-lane"; else bad "Sublime project is two-lane" "expected relative Dawa + auto-read paths"; fi
+if grep -qF "Dawa_Notepad/private/" .gitignore; then ok "Dawa private escape hatch ignored"; else bad "Dawa private escape hatch ignored" "ignore rule missing"; fi
+if grep -qF "Dawa_Notepad/" docs/DAWA_NOTEPAD.md && ! grep -qF "Dawa_Notepad is NOT an implicit" docs/DAWA_NOTEPAD.md; then bad "Dawa lane boundary" "implicit-read warning missing"; else ok "Dawa lane boundary"; fi
 if scripts/ava-sublime-update --paths >/dev/null 2>&1; then ok "Sublime updater resolves paths"; else bad "Sublime updater resolves paths" "path resolution failed"; fi
 if grep -qF "Dawa_Notepad" scripts/ava-sublime-update && grep -qF "memory/auto-read" docs/DAWA_NOTEPAD.md; then ok "Sublime lane boundary"; else bad "Sublime lane boundary" "user/read lane contract missing"; fi
 

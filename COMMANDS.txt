@@ -23,7 +23,7 @@
   1.13 ava-verify    end-to-end verification
   1.14 ava-help      full current door map
   1.15 ava-cobuilder       AI CoBuilder Init / protocol
-  1.16 ava-sublime-update  explicit Sublime settings/project updater
+  1.16 ava-sublime-update  explicit Sublime settings updater / lane checker
 
 02 / AI
   2.1 ai-chat        persistent chat
