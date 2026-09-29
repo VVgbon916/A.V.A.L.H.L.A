@@ -78,3 +78,13 @@ ONE SPINE. MANY VIEWS.
 
   Filename = address.
   concept_id = identity.
+
+07 ARCHITECTURAL MASTER
+  docs/AVALHLA_ARCHITECTURAL_MASTER.md
+    = expanded human-readable architecture
+
+  config/avalhla-architecture-index.v1.json
+    = derived navigation pointer only; never an authority source
+
+  The SPINE remains the compact architectural view.
+  The MASTER is the expanded human-readable architecture.
