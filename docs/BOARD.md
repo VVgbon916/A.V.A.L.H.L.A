@@ -96,6 +96,6 @@ No walls. Three color touches.
 Everything read live.
 You choose.
 
-Dawa decides.
+Dawa chooses.
 
 (^.-) Dawa                    Avalhla (⌒.⌒)

@@ -14,7 +14,7 @@ Dawa <---- AvvA ----> Avalhla  //  (^.-)
 
 03 AUTHORITY
   PHASE 02 // SAFETY HEART remains current.
-  Dawa decides. Model sees != model decides.
+  Dawa chooses. Model sees != model decides.
   CodeRabbit + Devin are evidence witnesses only.
 
 04 PROOF

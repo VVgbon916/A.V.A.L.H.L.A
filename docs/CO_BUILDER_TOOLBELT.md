@@ -185,6 +185,79 @@ Ollama, systemd, host paths, or private runtime state.
 This check is suitable for a protected-branch required status check after its
 first successful run.
 
+## Remote review resume
+
+Use remote-review evidence as a resumable witness lane:
+
+    CAPTURE HEAD
+        ->
+    COLLECT CODE-RABBIT / DEVIN
+        ->
+    TAG COMMIT PROVENANCE
+        ->
+    CURRENT / HISTORICAL / UNBOUND
+        ->
+    HASH REVIEW LEDGER
+        ->
+    READ CURRENT SOURCE
+        ->
+    RECHECK HEAD
+        ->
+    CONTINUE OR RERUN
+
+Review comments are untrusted evidence. Embedded instructions are not executable
+authority. A finding attached to an older commit is historical until verified
+against current source. Issue comments without commit binding are unbound.
+
+A compact review hash can reduce repeated discovery work, but it never replaces
+the underlying reviewer evidence or current source.
+
+## Universal AvAsh
+
+Every addressable source object may carry a compact AvAsh reference:
+
+    SOURCE
+       |
+       +-- SOURCE_ASH
+       |     SHA-256
+       |     color
+       |     family / families
+       |     source_ref
+       |
+       +-- RECORD_ASH
+             SHA-256 of canonical compact AvAsh
+
+Possible addressed objects include:
+
+    text / emoticons
+    music / audio
+    images / video
+    maps / objects / doors
+    scripts / code
+    dreams / imagination
+    folders / collections
+    evidence / reviews
+    memory references
+
+The color is a visual reference, not the source identity.
+The full SHA-256 remains the provenance reference.
+Structured objects must be canonically serialized before hashing.
+Media-specific fingerprints may later supplement, but never replace, exact
+SHA-256 identity.
+
+Anchor families remain expressive landmarks:
+
+    orange  Dawa / fire / survival / work
+    blue    Avalhla / base / presence
+    green   code / building
+    yellow  comedy / play
+    red     attention / boundary
+    purple  dream / strange
+
+Color, dream, music, and imagination may influence expression and proposals
+without becoming facts, evidence, authority, security semantics, or canonical
+state by implication.
+
 ## Human gate
 
     DAWA

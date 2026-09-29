@@ -130,3 +130,5 @@ The activation is procedural, not a new agent identity or authority role.
 
 Do not create a competing CoBuilder master, auto-read lane, editor-authority
 path, Devilash identity, or second Dawa project artifact.
+
+Always use the openaiDeveloperDocs MCP server if you need to work with the OpenAI API, plugins, ChatGPT, Codex, or OpenAI product behavior; use current official OpenAI documentation rather than relying on memory.

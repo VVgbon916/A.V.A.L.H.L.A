@@ -11,7 +11,7 @@ bad() { printf "  [FAIL] %s -- %s\n" "$1" "$2"; FAIL=$((FAIL + 1)); }
 printf "%s\n" "== avalhla static contract =="
 printf "root: %s\n\n" "$ROOT"
 printf "%s\n" "-- canonical files --"
-for f in docs/FAST_VIEW.md docs/AVALHLA_SPINE.md docs/PHASING.md docs/CO_BUILDER_TOOLBELT.md docs/DAWA_NOTEPAD.md config/sublime/Preferences.sublime-settings memory/auto-read/00_AI_COBUILD.json scripts/ava-cobuilder scripts/ava-sublime-update scripts/ava-resume scripts/ava-github-review scripts/ava-ci-contract AGENTS.md .github/workflows/avalhla-static-verify.yml; do
+for f in docs/FAST_VIEW.md docs/AVALHLA_SPINE.md docs/PHASING.md docs/CO_BUILDER_TOOLBELT.md docs/DAWA_NOTEPAD.md config/sublime/Preferences.sublime-settings memory/auto-read/00_AI_COBUILD.json config/color/avalhla-color-field.v1.json config/integrity/avalhla-integrity.v1.json docs/COLOR_BOOK.md scripts/ava-cobuilder scripts/lib_color_field.sh scripts/lib_integrity.sh scripts/lib_action.py tests/test_color_field.sh tests/test_integrity.sh tests/test_action_proposal.py scripts/ava-sublime-update scripts/ava-resume scripts/ava-github-review scripts/ava-ci-contract AGENTS.md .github/workflows/avalhla-static-verify.yml; do
   [[ -f "$f" ]] && ok "present $f" || bad "present $f" "missing"
 done
 
@@ -22,6 +22,35 @@ done < <(find scripts -maxdepth 1 -type f -perm -u+x -print0 2>/dev/null)
 
 printf "%s\n" "" "-- JSON --"
 if python3 -m json.tool memory/auto-read/00_AI_COBUILD.json >/dev/null; then ok "CoBuilder JSON parses"; else bad "CoBuilder JSON parses" "invalid JSON"; fi
+if python3 -m json.tool config/color/avalhla-color-field.v1.json >/dev/null; then ok "Color Field JSON parses"; else bad "Color Field JSON parses" "invalid JSON"; fi
+if python3 -m json.tool config/integrity/avalhla-integrity.v1.json >/dev/null; then ok "Integrity registry JSON parses"; else bad "Integrity registry JSON parses" "invalid JSON"; fi
+if python3 - <<'PY'
+import json
+from pathlib import Path
+
+with Path("memory/auto-read/00_AI_COBUILD.json").open(encoding="utf-8") as fh:
+    auto_read = json.load(fh)
+
+pointer = auto_read.get("canonical_color_field", {})
+future = auto_read.get("devil_cross_scope_2026_09_27", {}).get("color_memory_future", {})
+assert pointer.get("status") == "POINTER_ONLY"
+assert pointer.get("source") == "config/color/avalhla-color-field.v1.json"
+assert set(pointer) == {"status", "source", "human_view", "reader", "rule"}
+assert future.get("canonical_source") == pointer["source"]
+assert "anchors" not in future and "representation" not in future
+PY
+then ok "Auto-read Color Field reference remains pointer-only"; else bad "Auto-read Color Field reference remains pointer-only" "duplicate or unresolved semantics"; fi
+
+printf "%s\n" "" "-- color and integrity contracts --"
+if tests/test_color_field.sh; then ok "Color Field contract"; else bad "Color Field contract" "test failed"; fi
+if tests/test_integrity.sh; then ok "SHA-256 integrity contract"; else bad "SHA-256 integrity contract" "test failed"; fi
+
+printf "%s\n" "" "-- action proposal contract --"
+if PYTHONDONTWRITEBYTECODE=1 python3 tests/test_action_proposal.py; then
+  ok "typed action proposal positive and negative cases"
+else
+  bad "typed action proposal positive and negative cases" "test suite failed"
+fi
 
 printf "%s\n" "" "-- semantic invariants --"
 if git grep -n -E "DAVVA|Dawa > AwA < Avalhla|Dawa > AvvA < Avalhla|Dawa <---- AwA ----> Avalhla" -- ":!memory/conversations/" ":!memory/reflections/" ":!memory/auto-read/00_AI_COBUILD.json" ":!scripts/ava-ci-contract" >/dev/null 2>&1; then

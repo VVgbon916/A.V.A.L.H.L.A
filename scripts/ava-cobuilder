@@ -36,6 +36,15 @@ required=(
   "config/sublime/Preferences.sublime-settings"
   "docs/DAWA_NOTEPAD.md"
   "scripts/ava-sublime-update"
+  "config/color/avalhla-color-field.v1.json"
+  "config/integrity/avalhla-integrity.v1.json"
+  "docs/COLOR_BOOK.md"
+  "scripts/lib_color_field.sh"
+  "scripts/lib_integrity.sh"
+  "tests/test_color_field.sh"
+  "tests/test_integrity.sh"
+  "scripts/lib_action.py"
+  "tests/test_action_proposal.py"
 )
 
 missing=0
@@ -84,7 +93,21 @@ printf "%s\n" "    ATTACK NEGATIVE PATH"
 printf "%s\n" "    KEEP SMALLEST SAFE CHANGE"
 printf "%s\n" "    STALE PROOF IS HISTORICAL"
 
-printf "%s\n" "" "05 SOURCES"
+printf "%s\n" "" "05 INTEGRITY"
+if [[ -f "config/color/avalhla-color-field.v1.json" && -f "config/integrity/avalhla-integrity.v1.json" && -f "scripts/lib_color_field.sh" && -f "scripts/lib_integrity.sh" && -x "tests/test_color_field.sh" && -x "tests/test_integrity.sh" ]]; then
+  printf "%s\n" "    PRIMITIVES  PRESENT"
+else
+  printf "%s\n" "    PRIMITIVES  MISSING"
+  missing=1
+fi
+if [[ -f "scripts/lib_action.py" && -f "tests/test_action_proposal.py" ]]; then
+  printf "%s\n" "    ACTION PROPOSAL  PRESENT (RUNTIME CALLER UNVERIFIED)"
+else
+  printf "%s\n" "    ACTION PROPOSAL  MISSING"
+  missing=1
+fi
+
+printf "%s\n" "" "06 SOURCES"
 if (( missing == 0 )); then
   printf "%s\n" "    REQUIRED  PASS"
 else

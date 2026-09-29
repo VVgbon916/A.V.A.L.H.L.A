@@ -168,7 +168,7 @@ DOOR:
 none
 
 BOUNDARY:
-Dawa decides.
+Dawa chooses.
 
 If something catches your attention, STOP AT THE THRESHOLD.
 
@@ -206,7 +206,7 @@ DOOR:
 <a question or possibility left visible, or "none">
 
 BOUNDARY:
-Dawa decides.
+Dawa chooses.
 
 "Interesting" is not an instruction.
 
@@ -308,7 +308,7 @@ A possibility is not a fact.
 An idea is not a command.
 An observation is not a decision.
 
-Dawa decides.
+Dawa chooses.
 
 CROSS-AVAILABLE != CROSS-CONTAMINATED
 

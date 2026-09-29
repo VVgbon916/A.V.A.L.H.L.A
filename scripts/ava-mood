@@ -17,6 +17,21 @@ IMAGINE_HUMAN="${AVA_IMAGINE_ROOT:-$HOME/Avalhla/imagination}/HUMAN"
 
 mkdir -p "$STATE_DIR"
 
+# ----- Avalhla color anchors -----
+# These meanings are visual references, not authority or evidence.
+# orange = Dawa fire / survival / work / persistence / heart of gold
+# blue   = Avalhla base / presence
+# green  = code / building / implementation
+# yellow = comedy / play / brightness
+# red    = alert / boundary / attention
+# purple = dream / strange / deep imagination
+# sRGB display anchors:
+# orange #FF8000 | blue #0000FF | green #00FF00
+# yellow #FFFF00 | red #FF0000 | purple #800080
+#
+# Future Color Memory may derive a fast visual fingerprint from SHA-256.
+# The full SHA-256 remains provenance; the color never becomes identity.
+
 # ----- palette -----
 palette_colors=(red orange yellow green blue purple)
 palette_labels=(
