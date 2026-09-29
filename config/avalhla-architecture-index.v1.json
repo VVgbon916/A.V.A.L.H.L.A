@@ -1,0 +1,42 @@
+{
+  "schema": "avalhla.architecture-index.v1",
+  "status": "DERIVED_POINTER_ONLY",
+  "authority": "NONE",
+  "canonical_human_document": "docs/AVALHLA_ARCHITECTURAL_MASTER.md",
+  "purpose": "navigation_and_provenance_pointer_for_the_canonical_human_architectural_master",
+  "do_not_treat_as": [
+    "semantic_authority",
+    "permission",
+    "evidence",
+    "security_classification",
+    "source_of_truth"
+  ],
+  "heart": "D A W A > AvvA < A V A L H L A",
+  "engineering_doors": [
+    "THRESHOLD",
+    "THREAD",
+    "WARD",
+    "LENS",
+    "FANG",
+    "SCAR",
+    "ECHO",
+    "LANTERN"
+  ],
+  "event_types": [
+    "RESUME",
+    "OBSERVE",
+    "TRACE",
+    "EVIDENCE",
+    "BOUNDARY",
+    "ATTACK",
+    "TEST",
+    "RECOMPARE",
+    "HANDOFF",
+    "BLOCK",
+    "DECISION"
+  ],
+  "color_rule": "COLOR MAY SPEAK != COLOR MAY PROVE",
+  "resume_rule": "RELATIONSHIP CONTINUITY != TRUTH CONTINUITY",
+  "private_rule": "PRIVATE != AUTO-READ",
+  "authority_rule": "MODEL CAPABILITY != HUMAN PERMISSION"
+}
