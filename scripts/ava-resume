@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+MODE="${1:-resume}"
+
+case "$MODE" in
+ resume|--resume) ;;
+ review|--review) ;;
+ -h|--help)
+   printf "%s\n" "usage: ava-resume [resume|review]" "resume  bounded project resume state (default)" "review  adds local diff and shell syntax evidence"
+   exit 0 ;;
+ *) printf "%s\n" "usage: ava-resume [resume|review]" >&2; exit 2 ;;
+esac
+
+SCRIPT_PATH="$(readlink -f -- "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(cd -- "$(dirname -- "$SCRIPT_PATH")" && pwd -P)"
+SCRIPT_ROOT="$(cd -- "$SCRIPT_DIR/.." && pwd -P)"
+
+if [[ -n "${AVA_ROOT:-}" ]]; then
+ ROOT="$(cd -- "$AVA_ROOT" 2>/dev/null && pwd -P || true)"
+ if [[ -z "$ROOT" || "$ROOT" != "$SCRIPT_ROOT" ]]; then
+   printf "ava-resume: AVA_ROOT does not match this repository (%s); refusing redirected proof.\n" "$SCRIPT_ROOT" >&2
+   exit 3
+ fi
+else
+ ROOT="$SCRIPT_ROOT"
+fi
+
+HANDOFF="$ROOT/docs/HANDOFF.md"
+FAST="$ROOT/docs/FAST_VIEW.md"
+cd "$ROOT"
+branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "?")"
+head_short="$(git rev-parse --short HEAD 2>/dev/null || echo "?")"
+dirty="$(git status --porcelain 2>/dev/null | wc -l | tr -d " ")"
+upstream="NO_UPSTREAM"
+if git rev-parse --verify "origin/$branch" >/dev/null 2>&1; then
+  upstream="ahead=$(git rev-list --count "origin/$branch..HEAD") behind=$(git rev-list --count "HEAD..origin/$branch")"
+fi
+phase="$(grep -m1 -E "PHASE [0-9]+" "$HANDOFF" 2>/dev/null | sed "s/^[[:space:]]*//" || true)"
+next="$(awk "/^05 NEXT/{flag=1;next} flag && NF{print; c++; if(c==4) exit}" "$HANDOFF" 2>/dev/null | sed "s/^[[:space:]]*//" | tr "\n" " " || true)"
+[[ -n "$phase" ]] || phase="PHASE UNKNOWN"
+[[ -n "$next" ]] || next="See docs/HANDOFF.md"
+
+printf "%s\n" "01 WHERE"
+printf "    ROOT      %s\n" "$ROOT"
+printf "    BRANCH    %s\n" "$branch"
+printf "    HEAD      %s\n" "$head_short"
+printf "    WORKTREE  %s dirty file(s)\n" "$dirty"
+
+printf "%s\n" "02 FLOW"
+printf "    %s\n" "$phase"
+printf "    %s\n" "$next"
+
+printf "%s\n" "03 AUTHORITY"
+printf "%s\n" "    DAWA      final human choice" "    MODEL     approved inputs only" "    SAFETY    deterministic boundary"
+
+printf "%s\n" "04 PROOF"
+printf "    GIT       %s\n" "$upstream"
+git diff HEAD --check >/dev/null 2>&1 && printf "%s\n" "    DIFF      PASS" || printf "%s\n" "    DIFF      FAIL"
+[[ -f "$HANDOFF" && -f "$FAST" ]] && printf "%s\n" "    SOURCES   HANDOFF + FAST_VIEW present" || printf "%s\n" "    SOURCES   INCOMPLETE"
+
+if [[ "$MODE" == "review" ]]; then
+ bad=0
+ while IFS= read -r -d "" f; do
+   if ! bash -n "$f" >/dev/null 2>&1; then
+     printf "    SYNTAX    FAIL %s\n" "${f#$ROOT/}"
+     bad=1
+   fi
+ done < <(find "$ROOT/scripts" -maxdepth 1 -type f -perm -u+x -print0 2>/dev/null)
+ if (( bad == 0 )); then
+   printf "%s\n" "    SYNTAX    PASS"
+ fi
+fi
+
+printf "%s\n" "05 NEXT"
+printf "    %s\n" "$next"

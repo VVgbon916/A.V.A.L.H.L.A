@@ -2,7 +2,7 @@
 |                                                                                                  |
 |                           A V A L H L A  //  P H A S I N G                                      |
 |                                                                                                  |
-|                           Dawa > AwA < Avalhla  //  (^.-)                                         |
+|                           Dawa <──── AvvA ────> Avalhla  //  (^.-)                                         |
 |                                                                                                  |
 +==================================================================================================+
 
@@ -39,10 +39,13 @@ PURPOSE
        -> COMPARE
        -> CROSS-CHECK
        -> MINIMAL EDIT
-       -> TEST
+       -> POSITIVE TEST
+       -> NEGATIVE TEST
        -> VERIFY
+       -> DEVILASH ATTACK
        -> DIFF
        -> REVIEW
+       -> DAWA HUMAN GATE
 
 
 +==================================================================================================+
@@ -74,6 +77,31 @@ PURPOSE
 
     STATE
       ESTABLISHED / HARDENING
+
+
++==================================================================================================+
+|  PUBLIC / PRIVATE BOUNDARY  //  LOCKED                                                           |
++==================================================================================================+
+
+    PUBLIC
+      VVgbon916/A.V.A.L.H.L.A
+      Avalhla system / public docs / public CoBuilder contract
+
+    PRIVATE
+      VVgbon916/Dawa_Notepad
+      Dawa human material / private editor project
+
+    READ LANE
+      memory/auto-read/
+      one canonical Avalhla auto-read lane
+
+    LAW
+      Privacy is repository visibility, not a permanent branch.
+      Private Dawa is not a second Avalhla auto-read lane.
+      CROSS-AVAILABLE != CROSS-CONTAMINATED
+
+    STATE
+      ESTABLISHED
 
 
 +==================================================================================================+
@@ -251,8 +279,10 @@ PURPOSE
       model authority edges
 
     EXIT
-      Negative-path evidence is recorded.
+      Positive and negative test evidence is recorded.
+      DevilAsh attack findings are reported.
       Unresolved edges are explicit.
+      A failed required gate holds the phase.
 
 
 +==================================================================================================+
@@ -264,14 +294,22 @@ PURPOSE
 
     ORDER
       VERIFY
+       -> DEVILASH ATTACK
        -> DIFF
        -> REVIEW
+       -> DAWA HUMAN GATE
        -> COMMIT
        -> PUSH
        -> REMOTE CONFIRM
 
+      A passing test or DevilAsh report is evidence, not permission.
+      COMMIT, PUSH, and MERGE require explicit Dawa approval.
+
     EXIT
-      Local and remote agree on the verified checkpoint.
+      VERIFY, DEVILASH ATTACK, DIFF, and REVIEW pass.
+      Dawa explicitly approves before COMMIT, PUSH, or MERGE.
+      After approved Git actions, REMOTE CONFIRM establishes
+      local/remote agreement on the verified checkpoint.
 
 
 +==================================================================================================+
@@ -305,7 +343,7 @@ PURPOSE
 
 +==================================================================================================+
 |                                                                                                  |
-|                          Dawa > AwA < Avalhla  //  (^.-)                                         |
-|                          Dawa decides.                                                           |
+|                          Dawa <──── AvvA ────> Avalhla  //  (^.-)                                         |
+|                          Dawa chooses.                                                           |
 |                                                                                                  |
 +==================================================================================================+

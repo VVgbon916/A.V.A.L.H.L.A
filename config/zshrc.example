@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════
-#  Dawa's ZSH config — Dawa > AwA < Avalhla  //  (^.-)
+#  Dawa's ZSH config — Dawa <──── AvvA ────> Avalhla  //  (^.-)
 #  Migrated from .bashrc on 2026-09-21
 #  Backup: ~/.zshrc.backup-20260921-2059
 # ═══════════════════════════════════════════════════════════════
@@ -459,7 +459,7 @@ git_prompt() {
     echo " %F{240}git:(%F{cyan}${b}%F{240})%f"
 }
 
-PROMPT='%F{magenta}Dawa%f %F{green}>%f %F{cyan}AwA%f %F{magenta}<%f %F{yellow}Avalhla%f %F{240}[%~]%f$(git_prompt)
+PROMPT='%F{magenta}Dawa%f %F{green}<%f %F{cyan}AvvA%f %F{green}>%f %F{yellow}Avalhla%f %F{240}[%~]%f$(git_prompt)
 %F{green}❯%f '
 
 RPROMPT='%F{240}%*%f'

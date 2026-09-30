@@ -1,6 +1,6 @@
 # Avalhla - Local AI Companion
 
-> Dawa > AwA < Avalhla  (^.-)
+> Dawa <──── AvvA ────> Avalhla  (^.-)
 
 Avalhla is a local AI companion and evolving personal system.
 
@@ -53,10 +53,14 @@ See docs/FAST_VIEW.md and docs/AVALHLA_SPINE.md.
 | QUICKREF.txt | compact operational reference |
 | ORDER.md | reading/care order |
 | PROMPT_FRAME.txt | reusable framed terminal prompt |
-| AwA_ATLAS.md | find the source |
-| AwA_WEAVE.md | relationships |
-| AwA_DREAM.md | possibility |
-| AwA_TERMINAL.md | terminal identity |
+| AvvA_ATLAS.md | find the source |
+| AvvA_WEAVE.md | relationships |
+| AvvA_DREAM.md | possibility |
+| AvvA_TERMINAL.md | terminal identity |
+| docs/DAWA_NOTEPAD.md | Dawa user-lane / Avalhla read-lane contract |
+| CHANGELOG.md | notable project change history |
+
+COBUILDER INIT -> COBUILDER MODE -> COBUILDER // DEVILASH
 
 memory/auto-read/00_AI_COBUILD.json is the deliberate tracked machine
 Co-Builder exception. Other private memory remains runtime state.
@@ -76,7 +80,7 @@ Use scripts/ava-help for the current door inventory.
 
 Core doors:
 
-ava-board  ava-reality  ava-mem  ava-context  ava-weave
+ava-cobuilder  ava-sublime-update  ava-board  ava-reality  ava-mem  ava-context  ava-weave
 ava-dream   ava-imagine  ava-search  ava-review
 ava-record  ava-safety   ava-verify
 
@@ -104,8 +108,31 @@ concept_id = identity.
 The board is the map.
 The commands are the doors.
 Avalhla is the presence.
-Dawa chooses.
-
-Dawa decides.
+AvvA is the relation.
+Dawa chooses the next move.
 
 The mind is not split. The mind is a bridge.
+The relation survives the skin.
+
+## D A W A  //  PRIVATE USER LANE
+
+Dawa's private user lane lives in the separate private repository:
+
+    VVgbon916/Dawa_Notepad
+
+Local sibling path:
+
+    /var/home/VVgbon/Dawa_Notepad
+
+The public Avalhla repository does not track the private Dawa lane.
+The private repository owns the Dawa Sublime project.
+
+Private != AUTO-READ.
+Private != MODEL-AUTHORITY.
+Editor visibility != ingestion authority.
+
+Avalhla's canonical read lane remains:
+
+    memory/auto-read/
+
+Dawa chooses what crosses the relation.

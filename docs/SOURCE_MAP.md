@@ -3,6 +3,8 @@
 01 / CORE
   1.1 README.md
       first-contact entry
+  1.4 CHANGELOG.md
+      notable human-facing change history
   1.2 docs/FAST_VIEW.md
       standard fast-reading grammar
   1.3 docs/AVALHLA_SPINE.md
@@ -33,15 +35,21 @@
       reading + care order
   3.6 PROMPT_FRAME.txt
       reusable terminal cheat-sheet framing prompt
+  3.7 docs/DAWA_NOTEPAD.md
+      human-readable public/private Dawa boundary contract
+  3.8 scripts/ava-cobuilder
+      AI CoBuilder activation / init door
+  3.9 scripts/ava-sublime-update
+      explicit host updater for Sublime user settings only
 
-04 / AWA
-  4.1 AwA_ATLAS.md
+04 / AVVA
+  4.1 AvvA_ATLAS.md
       find the source
-  4.2 AwA_WEAVE.md
+  4.2 AvvA_WEAVE.md
       relationships
-  4.3 AwA_DREAM.md
+  4.3 AvvA_DREAM.md
       possibility
-  4.4 AwA_TERMINAL.md
+  4.4 AvvA_TERMINAL.md
       terminal identity
 
 05 / MACHINE

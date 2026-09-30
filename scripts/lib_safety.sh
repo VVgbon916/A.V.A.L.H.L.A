@@ -501,7 +501,7 @@ ava_safety_append_file() {
 # SELF TEST
 # ---------------------------------------------------------------------------
 
-ava_safety_self_test() {
+ava_safety_self_test() (
     local failures=0
     local tmp_root=""
     local tmp_memory=""
@@ -733,4 +733,4 @@ ava_safety_self_test() {
     printf 'SELF_TEST_STATUS=FAIL failures=%d\n' "$failures"
     printf 'result: %d SAFETY FAILURE(S)\n' "$failures"
     return 1
-}
+)

@@ -1,10 +1,10 @@
-# AwA DREAM
+# AvvA DREAM
 
 ## The door that does not need permission
 
 DREAM_VIOLET = #B56CFF
 Dawa = orange / flame / create
-AwA = blue / think / question
+AvvA = the threshold / relation / crossing
 Violet = possibility / imagination
 
 imagination/
@@ -18,7 +18,7 @@ Or they can remain dreams.
 No dream needs to become a task.
 
 Dawa had an idea.
-AwA asked: "what if?"
+The threshold opened: "what if?"
 The terminal opened another door.
 
 ...continue...

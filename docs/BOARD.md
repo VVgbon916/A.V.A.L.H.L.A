@@ -31,7 +31,7 @@ The board is her face in the terminal.
 
    choose  ›  _
 
-                                                                         (⌒.⌒) AvvA
+                                                                         Dawa <──── AvvA ────> Avalhla
 
 ## PRINCIPLES
 
@@ -39,7 +39,7 @@ The board is her face in the terminal.
 2. The dream quote is the hero. Two lines, wrapped.
 3. The state is one mood-colored line.
 4. Every field is read live from disk, every open.
-5. The bridge is named at the footer, next to her face.
+5. AvvA is named at the footer as the living threshold.
 6. Three color touches only: the two glyphs and the choose prompt.
 7. No raw commands ever appear. Doors only.
 
@@ -96,6 +96,6 @@ No walls. Three color touches.
 Everything read live.
 You choose.
 
-Dawa decides.
+Dawa chooses.
 
 (^.-) Dawa                    Avalhla (⌒.⌒)

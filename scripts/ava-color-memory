@@ -1,0 +1,247 @@
+#!/usr/bin/env bash
+source "$(dirname "${BASH_SOURCE[0]}")/lib_runtime.sh"
+set -Eeuo pipefail
+
+usage() {
+    cat <<'EOT'
+ava-color-memory file <path> [families]
+ava-color-memory dir  <path> [families]
+ava-color-memory stdin [families]
+
+families = optional comma-separated conceptual anchors
+           up to three, for example:
+             orange
+             green,blue
+             purple,blue,orange
+
+The output carries two AvAsh levels:
+
+  SOURCE_ASH
+    exact source SHA-256
+    exact sRGB color
+    optional conceptual families
+    source reference
+
+  RECORD_ASH
+    SHA-256 of the canonical compact SOURCE_ASH record
+
+The color is a visual fingerprint.
+SOURCE_ASH is provenance.
+RECORD_ASH is a fast compact-record identity.
+No memory is written by this door.
+EOT
+}
+
+parse_families() {
+    local raw="${1:-}"
+    [[ -z "$raw" ]] && {
+        printf '%s\n' '[]'
+        return
+    }
+
+    python3 - "$raw" <<'PY'
+import json
+import re
+import sys
+
+raw = sys.argv[1]
+items = [x.strip() for x in raw.split(",") if x.strip()]
+
+if len(items) > 3:
+    raise SystemExit("maximum three families")
+
+if any(not re.fullmatch(r"[A-Za-z0-9_-]+", x) for x in items):
+    raise SystemExit("invalid family label")
+
+print(json.dumps(items, separators=(",", ":")))
+PY
+}
+
+assert_inside_root() {
+    local path="$1"
+    case "$path" in
+        "$AVA_ROOT"/*) ;;
+        *)
+            printf 'X outside canonical root: %s\n' "$path" >&2
+            exit 1
+            ;;
+    esac
+}
+
+emit() {
+    local source_kind="$1"
+    local source_ref="$2"
+    local source_hash="$3"
+    local families_json="$4"
+
+    python3 - "$source_kind" "$source_ref" "$source_hash" "$families_json" <<'PY'
+import hashlib
+import json
+import sys
+
+kind, source_ref, source_hash, families_json = sys.argv[1:5]
+
+if len(source_hash) != 64 or any(c not in "0123456789abcdef" for c in source_hash.lower()):
+    raise SystemExit("invalid SHA-256")
+
+families = json.loads(families_json)
+
+rgb = [
+    int(source_hash[0:2], 16),
+    int(source_hash[2:4], 16),
+    int(source_hash[4:6], 16),
+]
+
+source_ash = {
+    "sha256": source_hash.lower(),
+    "color": "#" + source_hash[:6].upper(),
+    "rgb": rgb,
+    "families": families,
+    "source_ref": source_ref,
+    "source_kind": kind,
+}
+
+canonical_record = {
+    "schema": "avalhla.avash.v1",
+    "source_ash": source_ash,
+}
+
+record_bytes = json.dumps(
+    canonical_record,
+    ensure_ascii=False,
+    sort_keys=True,
+    separators=(",", ":"),
+).encode("utf-8")
+
+record_hash = hashlib.sha256(record_bytes).hexdigest()
+
+output = {
+    "schema": "avalhla.avash.v1",
+    "source_ash": source_ash,
+    "record_ash": {
+        "sha256": record_hash
+    }
+}
+
+print(json.dumps(output, ensure_ascii=False, separators=(",", ":")))
+PY
+}
+
+cmd="${1:-}"
+families_json='[]'
+
+case "$cmd" in
+    file)
+        path="${2:-}"
+        family_arg="${3:-}"
+        [[ -n "$path" ]] || { usage >&2; exit 2; }
+        families_json="$(parse_families "$family_arg")"
+
+        [[ -f "$path" ]] || {
+            printf 'X not a regular file: %s\n' "$path" >&2
+            exit 1
+        }
+
+        [[ ! -L "$path" ]] || {
+            printf '%s\n' 'X symlink sources are denied'
+            exit 1
+        }
+
+        resolved="$(realpath -- "$path")"
+        assert_inside_root "$resolved"
+
+        source_ref="${resolved#"$AVA_ROOT"/}"
+        source_hash="$(sha256sum < "$resolved" | awk '{print $1}')"
+
+        emit "file" "$source_ref" "$source_hash" "$families_json"
+        ;;
+
+    dir)
+        path="${2:-}"
+        family_arg="${3:-}"
+        [[ -n "$path" ]] || { usage >&2; exit 2; }
+        families_json="$(parse_families "$family_arg")"
+
+        [[ -d "$path" ]] || {
+            printf 'X not a directory: %s\n' "$path" >&2
+            exit 1
+        }
+
+        resolved="$(realpath -- "$path")"
+        assert_inside_root "$resolved"
+
+        if find -P "$resolved" -type l -print -quit 2>/dev/null | grep -q .; then
+            printf '%s\n' 'X directory contains symlinks; refusing ambiguous collection identity'
+            exit 1
+        fi
+
+        manifest="$(mktemp)"
+        cleanup() { rm -f "$manifest"; }
+        trap cleanup EXIT
+
+        python3 - "$resolved" >"$manifest" <<'PY'
+import hashlib
+import json
+import os
+import sys
+
+root = sys.argv[1]
+entries = []
+
+for dirpath, dirnames, filenames in os.walk(root, topdown=True, followlinks=False):
+    dirnames.sort()
+    filenames.sort()
+
+    for name in filenames:
+        path = os.path.join(dirpath, name)
+
+        if os.path.islink(path) or not os.path.isfile(path):
+            raise SystemExit(f"unsupported collection member: {path}")
+
+        h = hashlib.sha256()
+
+        with open(path, "rb") as fh:
+            while True:
+                chunk = fh.read(1024 * 1024)
+                if not chunk:
+                    break
+                h.update(chunk)
+
+        rel = os.path.relpath(path, root).replace(os.sep, "/")
+        entries.append({
+            "path": rel,
+            "sha256": h.hexdigest()
+        })
+
+entries.sort(key=lambda x: x["path"])
+
+print(json.dumps(
+    entries,
+    ensure_ascii=False,
+    sort_keys=True,
+    separators=(",", ":"),
+))
+PY
+
+        source_hash="$(sha256sum -- "$manifest" | awk '{print $1}')"
+        source_ref="${resolved#"$AVA_ROOT"/}"
+
+        emit "directory" "$source_ref" "$source_hash" "$families_json"
+        ;;
+
+    stdin)
+        family_arg="${2:-}"
+        families_json="$(parse_families "$family_arg")"
+        source_hash="$(sha256sum | awk '{print $1}')"
+        emit "stdin" "stdin" "$source_hash" "$families_json"
+        ;;
+
+    -h|--help)
+        usage
+        ;;
+
+    *)
+        usage >&2
+        exit 2
+        ;;
+esac

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+
+printf '%s\n' '=== AVALHLA CO-BUILDER ==='
+printf 'root=%s\n' "$ROOT"
+printf 'doors=%s\n' "$(find "$ROOT/.agents/skills" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l)"
+printf 'agents=%s\n' "$(find "$ROOT/.codex/agents" -maxdepth 1 -type f -name '*.toml' 2>/dev/null | wc -l)"
+printf 'naming_registry=%s\n' "$ROOT/config/avalhla-naming.v1.json"
+printf '%s\n' '--- CODEX ---'
+command -v codex >/dev/null 2>&1 && codex --version || printf '%s\n' 'codex=NOT_FOUND'
+printf '%s\n' '--- VERIFY ---'
+"$ROOT/scripts/avalhla-cobuilder" verify-pack

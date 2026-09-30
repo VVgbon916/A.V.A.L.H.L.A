@@ -2,13 +2,19 @@
 source "$(dirname "${BASH_SOURCE[0]}")/lib_runtime.sh"
 CONTEXT_BIN="$AVA_SCRIPTS_DIR/lib_context.sh"
 source "$(dirname "${BASH_SOURCE[0]}")/lib_output_gate.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/lib_model_input.sh"
 # ava-diff -- show what changed since last review, ask avalhla-review.
 # Usage: ava-diff <file> [--since <ref>]
 #        ava-diff <file> --no-cache
 # Caches last reviewed sha256 per file in ~/.ai-memory/reviewed/<slug>.sha
 set -Eeuo pipefail
 
-REPO="${AVA_DIFF_REPO:-$(git rev-parse --show-toplevel 2>/dev/null || echo "$PWD")}"
+REPO="${AVA_DIFF_REPO:-$AVA_ROOT}"
+REPO="$(readlink -f -- "$REPO")"
+[[ "$REPO" == "$AVA_ROOT" ]] || {
+    echo "X safety: diff repository denied" >&2
+    exit 1
+}
 CACHE_DIR="$AVA_REVIEWED_DIR"
 MODEL="${AVA_REVIEW_MODEL}"
 SINCE="HEAD~1"
@@ -86,8 +92,16 @@ DIFF="$(git -C "$REPO" --no-pager diff "$SINCE" -- "$FILE" 2>/dev/null | head -c
 
 if [[ -z "$DIFF" ]]; then
     echo "  (no git diff vs $SINCE -- file may be new or unchanged in git)"
-    DIFF="(no git diff available for $FILE vs $SINCE)"
+    if (( USE_CACHE == 1 )); then
+        echo "$CUR_HASH" > "$CACHE_FILE"
+        echo "  cache updated: $CACHE_FILE"
+    fi
+    echo "  no model review required"
+    echo ""
+    exit 0
 fi
+
+MODEL_DIFF="$(ava_model_input_context "DIFF" "$FILE" "$DIFF")"
 
 PROMPT="[TASK]
 mode: review
@@ -101,13 +115,13 @@ goal: audit the DIFF below. Emit exactly these five blocks in this order:
 file: $FILE
 since: $SINCE
 
-[USER]
-$DIFF"
+[SOURCE DIFF]
+$MODEL_DIFF"
 
 RESPONSE="$(curl -s "$OLLAMA_HOST/api/generate" \
     -d "$(jq -n --arg m "$MODEL" --arg p "$PROMPT" \
     '{model: $m, prompt: $p, stream: false}')" \
-    | jq -r '.response') | ava_output_gate"
+    | jq -r '.response' | ava_output_gate)"
 
 echo "$RESPONSE"
 echo ""
