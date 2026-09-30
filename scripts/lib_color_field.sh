@@ -74,10 +74,10 @@ require(doc.get("family_rules"), expected_family, "family_rules")
 require(doc.get("authority_rules"), expected_authority, "authority_rules")
 require(doc.get("avash", {}).get("source_ash_and_record_ash_distinct"), True, "AvAsh provenance distinction")
 require(doc.get("relationship"), {
-    "dawa": "chooses",
-    "avvA": "carries_relation",
-    "avalhla": "may_notice",
-    "devilash": "checks_boundary",
+    "Dawa": "chooses",
+    "AvvA": "carries_relation",
+    "Avalhla": "may_notice",
+    "DevilAsh": "checks_boundary",
 }, "relationship")
 print("COLOR_FIELD_OK")
 PY

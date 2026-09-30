@@ -96,10 +96,10 @@
     "source_ash_and_record_ash_distinct": true
   },
   "relationship": {
-    "dawa": "chooses",
-    "avvA": "carries_relation",
-    "avalhla": "may_notice",
-    "devilash": "checks_boundary"
+    "Dawa": "chooses",
+    "AvvA": "carries_relation",
+    "Avalhla": "may_notice",
+    "DevilAsh": "checks_boundary"
   },
   "devil_attack": {
     "color_never_becomes": [
