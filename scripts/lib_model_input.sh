@@ -76,11 +76,25 @@ ava_model_input_file() {
 
 ava_model_input_stdin() {
     local label="${1:-STDIN}"
+    local max_bytes="${2:-$AVA_MODEL_INPUT_MAX_BYTES}"
     local value
     local safe_label
 
+    [[ "$AVA_MODEL_INPUT_MAX_BYTES" =~ ^[1-9][0-9]*$ ]] || {
+        printf '%s\n' 'X model-input: configured byte limit must be a positive integer' >&2
+        return 1
+    }
+    [[ "$max_bytes" =~ ^[1-9][0-9]*$ ]] || {
+        printf '%s\n' 'X model-input: requested byte limit must be a positive integer' >&2
+        return 1
+    }
+    if (( max_bytes > AVA_MODEL_INPUT_MAX_BYTES )); then
+        printf '%s\n' 'X model-input: requested byte limit exceeds configured global limit' >&2
+        return 1
+    fi
+
     safe_label="$(printf '%q' "$label")"
-    value="$(head -c "$AVA_MODEL_INPUT_MAX_BYTES")"
+    value="$(head -c "$max_bytes")"
 
     ava_model_input_assert_bytes "$value" || return 1
 
@@ -106,7 +120,7 @@ if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
             ;;
         stdin)
             shift
-            ava_model_input_stdin "${1:-STDIN}"
+            ava_model_input_stdin "${1:-STDIN}" "${2:-$AVA_MODEL_INPUT_MAX_BYTES}"
             ;;
         *)
             echo "usage: lib_model_input.sh {user|context|file|stdin} ..." >&2

@@ -12,6 +12,23 @@ RECORD_DIR="${AVA_MEMORY_RECORDS_DIR:-$AVA_MEMORY_DIR/records}"
 RECORD_FILE="${AVA_MEMORY_RECORDS_FILE:-$RECORD_DIR/records.jsonl}"
 SELF="$HERE/$(basename -- "$0")"
 
+assert_record_paths() {
+    local records_root resolved_dir resolved_file
+
+    records_root="$(realpath -m -- "$AVA_MEMORY_DIR/records")" || return 1
+    resolved_dir="$(realpath -m -- "$RECORD_DIR")" || return 1
+    resolved_file="$(realpath -m -- "$RECORD_FILE")" || return 1
+
+    [[ "$resolved_dir" == "$records_root" || "$resolved_dir" == "$records_root/"* ]] || {
+        echo "X record directory must remain under canonical records root" >&2
+        return 1
+    }
+    [[ "$resolved_file" == "$records_root/"* ]] || {
+        echo "X record file must remain under canonical records root" >&2
+        return 1
+    }
+}
+
 usage() {
     cat <<'USAGE'
 ava-record
@@ -165,6 +182,8 @@ PY
 }
 
 cmd_add() {
+    assert_record_paths || return 1
+
     local record_type="note"
     local source=""
     local trust="unverified"
@@ -254,6 +273,8 @@ cmd_add() {
 }
 
 cmd_verify() {
+    assert_record_paths || return 1
+
     if [[ ! -e "$RECORD_FILE" ]]; then
         echo "RECORD_FILE=$RECORD_FILE"
         echo "RECORDS=0"
@@ -425,6 +446,8 @@ PY
 }
 
 cmd_show() {
+    assert_record_paths || return 1
+
     if [[ ! -f "$RECORD_FILE" ]]; then
         echo "(no canonical records)"
         return 0
@@ -448,11 +471,16 @@ cmd_show() {
 
 cmd_self_test() {
     local tmp
-    tmp="$(mktemp -d)"
+    mkdir -p -- "$AVA_MEMORY_DIR/records"
+    tmp="$(mktemp -d -- "$AVA_MEMORY_DIR/records/.ava-record-self-test.XXXXXX")"
     trap 'rm -rf -- "$tmp"' RETURN
 
     local test_memory="$tmp/memory"
-    local test_env=(AVA_MEMORY_DIR="$test_memory")
+    local test_env=(
+        AVA_MEMORY_RECORDS_DIR="$test_memory"
+        AVA_MEMORY_RECORDS_FILE="$test_memory/records.jsonl"
+    )
+    mkdir -p -- "$test_memory"
 
     echo '--- canonical record self-test ---'
 
@@ -488,7 +516,7 @@ cmd_self_test() {
 
     printf '\n--- tamper test ---\n'
 
-    python3 - "$test_memory/records/records.jsonl" <<'PY'
+    python3 - "$test_memory/records.jsonl" <<'PY'
 import json
 import sys
 
@@ -625,7 +653,7 @@ PY
         --content "authority field test" \
         >/dev/null
 
-    python3 - "$test_memory/records/records.jsonl" <<'PY'
+    python3 - "$test_memory/records.jsonl" <<'PY'
 import json
 import sys
 
@@ -668,12 +696,12 @@ PY
         >/dev/null
 
     cp -- \
-        "$test_memory/records/records.jsonl" \
-        "$test_memory/records/duplicate.jsonl"
+        "$test_memory/records.jsonl" \
+        "$test_memory/duplicate.jsonl"
 
     cat \
-        "$test_memory/records/duplicate.jsonl" \
-        >>"$test_memory/records/records.jsonl"
+        "$test_memory/duplicate.jsonl" \
+        >>"$test_memory/records.jsonl"
 
     if env "${test_env[@]}" "$SELF" verify >/tmp/ava-record-duplicate.$$ 2>&1; then
         cat /tmp/ava-record-duplicate.$$
@@ -684,6 +712,49 @@ PY
         cat /tmp/ava-record-duplicate.$$
         rm -f /tmp/ava-record-duplicate.$$
         echo 'DUPLICATE_ID_BLOCK=PASS'
+    fi
+
+    printf '\n--- record path override tests ---\n'
+
+    if env AVA_MEMORY_RECORDS_DIR=/tmp \
+        AVA_MEMORY_RECORDS_FILE=/tmp/ava-record-outside.jsonl \
+        "$SELF" add --type note --source test --content "must not write" \
+        >/tmp/ava-record-path-write.$$ 2>&1
+    then
+        cat /tmp/ava-record-path-write.$$
+        rm -f /tmp/ava-record-path-write.$$
+        echo 'OUTSIDE_RECORD_WRITE_BLOCK=FAIL'
+        return 1
+    else
+        rm -f /tmp/ava-record-path-write.$$
+        echo 'OUTSIDE_RECORD_WRITE_BLOCK=PASS'
+    fi
+
+    if env AVA_MEMORY_RECORDS_DIR="$test_memory" \
+        AVA_MEMORY_RECORDS_FILE=/etc/passwd \
+        "$SELF" show >/tmp/ava-record-path-read.$$ 2>&1
+    then
+        cat /tmp/ava-record-path-read.$$
+        rm -f /tmp/ava-record-path-read.$$
+        echo 'OUTSIDE_RECORD_READ_BLOCK=FAIL'
+        return 1
+    else
+        rm -f /tmp/ava-record-path-read.$$
+        echo 'OUTSIDE_RECORD_READ_BLOCK=PASS'
+    fi
+
+    ln -s -- /etc/passwd "$test_memory/external-records.jsonl"
+    if env AVA_MEMORY_RECORDS_DIR="$test_memory" \
+        AVA_MEMORY_RECORDS_FILE="$test_memory/external-records.jsonl" \
+        "$SELF" verify >/tmp/ava-record-path-link.$$ 2>&1
+    then
+        cat /tmp/ava-record-path-link.$$
+        rm -f /tmp/ava-record-path-link.$$
+        echo 'SYMLINK_RECORD_READ_BLOCK=FAIL'
+        return 1
+    else
+        rm -f /tmp/ava-record-path-link.$$
+        echo 'SYMLINK_RECORD_READ_BLOCK=PASS'
     fi
 
     echo

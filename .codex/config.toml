@@ -1,0 +1,35 @@
+# Candidate project-scoped Codex configuration for Avalhla.
+# Review against the locally installed Codex version before activation.
+
+model_reasoning_effort = "high"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "live"
+
+[agents]
+enabled = true
+max_concurrent_threads_per_session = 5
+default_subagent_reasoning_effort = "high"
+
+[sandbox_workspace_write]
+network_access = true
+
+[agents.witness]
+description = "Read-only truth-finder for Avalhla forensic and historical investigation."
+config_file = "./agents/witness.toml"
+
+[agents.vex]
+description = "Adversarial challenge agent. Attack assumptions and invariants without making unrelated production changes."
+config_file = "./agents/vex.toml"
+
+[agents.forge]
+description = "Implementation agent. Make the smallest justified local change after evidence is established."
+config_file = "./agents/forge.toml"
+
+[agents.echo]
+description = "Regression agent. Compare before and after behavior and prove what changed."
+config_file = "./agents/echo.toml"
+
+[agents.lux]
+description = "Read-only final reviewer. Challenge conclusions, proof gaps, and boundary violations."
+config_file = "./agents/lux.toml"

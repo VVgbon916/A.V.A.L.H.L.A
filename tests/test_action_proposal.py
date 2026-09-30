@@ -218,6 +218,16 @@ class ActionProposalTests(unittest.TestCase):
         self.assertEqual(verify.returncode, 0, verify.stderr)
         self.assertIn("VERIFY=PASS", verify.stdout)
 
+        canonical_records = repo / "memory/records/records.jsonl"
+        records_before_self_test = canonical_records.read_bytes()
+        self_test = subprocess.run(
+            [str(scripts / "ava-record"), "self-test"],
+            cwd=repo, check=False, text=True, capture_output=True,
+        )
+        self.assertEqual(self_test.returncode, 0, self_test.stderr + self_test.stdout)
+        self.assertIn("CANONICAL_RECORD_SELF_TEST=PASS", self_test.stdout)
+        self.assertEqual(canonical_records.read_bytes(), records_before_self_test)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

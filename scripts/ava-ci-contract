@@ -11,7 +11,7 @@ bad() { printf "  [FAIL] %s -- %s\n" "$1" "$2"; FAIL=$((FAIL + 1)); }
 printf "%s\n" "== avalhla static contract =="
 printf "root: %s\n\n" "$ROOT"
 printf "%s\n" "-- canonical files --"
-for f in docs/FAST_VIEW.md docs/AVALHLA_SPINE.md docs/PHASING.md docs/CO_BUILDER_TOOLBELT.md docs/DAWA_NOTEPAD.md config/sublime/Preferences.sublime-settings memory/auto-read/00_AI_COBUILD.json config/color/avalhla-color-field.v1.json config/integrity/avalhla-integrity.v1.json docs/COLOR_BOOK.md scripts/ava-cobuilder scripts/lib_color_field.sh scripts/lib_integrity.sh scripts/lib_action.py tests/test_color_field.sh tests/test_integrity.sh tests/test_action_proposal.py scripts/ava-sublime-update scripts/ava-resume scripts/ava-github-review scripts/ava-ci-contract AGENTS.md .github/workflows/avalhla-static-verify.yml; do
+for f in docs/FAST_VIEW.md docs/AVALHLA_SPINE.md docs/PHASING.md docs/CO_BUILDER_TOOLBELT.md docs/DAWA_NOTEPAD.md config/sublime/Preferences.sublime-settings memory/auto-read/00_AI_COBUILD.json config/color/avalhla-color-field.v1.json config/integrity/avalhla-integrity.v1.json docs/COLOR_BOOK.md scripts/ava-cobuilder scripts/lib_color_field.sh scripts/lib_integrity.sh scripts/lib_model_input.sh scripts/lib_action.py tests/test_color_field.sh tests/test_integrity.sh tests/test_action_proposal.py tests/test_model_input.sh tests/test_review_gate.sh tests/test_ava_mood.sh scripts/ava-sublime-update scripts/ava-resume scripts/ava-github-review scripts/ava-ci-contract AGENTS.md .github/workflows/avalhla-static-verify.yml; do
   [[ -f "$f" ]] && ok "present $f" || bad "present $f" "missing"
 done
 
@@ -33,17 +33,37 @@ with Path("memory/auto-read/00_AI_COBUILD.json").open(encoding="utf-8") as fh:
 
 pointer = auto_read.get("canonical_color_field", {})
 future = auto_read.get("devil_cross_scope_2026_09_27", {}).get("color_memory_future", {})
-assert pointer.get("status") == "POINTER_ONLY"
-assert pointer.get("source") == "config/color/avalhla-color-field.v1.json"
-assert set(pointer) == {"status", "source", "human_view", "reader", "rule"}
-assert future.get("canonical_source") == pointer["source"]
-assert "anchors" not in future and "representation" not in future
+valid = (
+    pointer.get("status") == "POINTER_ONLY"
+    and pointer.get("source") == "config/color/avalhla-color-field.v1.json"
+    and set(pointer) == {"status", "source", "human_view", "reader", "rule"}
+    and future.get("canonical_source") == pointer.get("source")
+    and "anchors" not in future
+    and "representation" not in future
+)
+if not valid:
+    raise SystemExit("Auto-read Color Field reference is not pointer-only")
 PY
 then ok "Auto-read Color Field reference remains pointer-only"; else bad "Auto-read Color Field reference remains pointer-only" "duplicate or unresolved semantics"; fi
+if python3 - <<'PY'
+import json
+from pathlib import Path
+
+with Path("memory/auto-read/00_AI_COBUILD.json").open(encoding="utf-8") as fh:
+    state = json.load(fh)
+top = state["primary_way_to_act"]["order"]
+nested = state["phasing"]["primary_way_to_act"]
+if top != nested:
+    raise SystemExit("top-level and phasing action orders differ")
+PY
+then ok "top-level and phasing action orders agree"; else bad "top-level and phasing action orders agree" "sequence drift"; fi
 
 printf "%s\n" "" "-- color and integrity contracts --"
 if tests/test_color_field.sh; then ok "Color Field contract"; else bad "Color Field contract" "test failed"; fi
 if tests/test_integrity.sh; then ok "SHA-256 integrity contract"; else bad "SHA-256 integrity contract" "test failed"; fi
+if tests/test_model_input.sh; then ok "bounded untrusted model input"; else bad "bounded untrusted model input" "test failed"; fi
+if bash tests/test_review_gate.sh; then ok "exact review verdict contract"; else bad "exact review verdict contract" "test failed"; fi
+if tests/test_ava_mood.sh; then ok "bounded mood reference"; else bad "bounded mood reference" "test failed"; fi
 
 printf "%s\n" "" "-- action proposal contract --"
 if PYTHONDONTWRITEBYTECODE=1 python3 tests/test_action_proposal.py; then
@@ -123,21 +143,22 @@ with open("memory/auto-read/00_AI_COBUILD.json", encoding="utf-8") as fh:
 
 wb = doc["workspace_boundaries_2026_09_27"]
 
-assert wb["dawa_notepad"]["repository"] == "VVgbon916/Dawa_Notepad"
-assert wb["dawa_notepad"]["visibility"] == "PRIVATE"
-assert wb["dawa_notepad"]["repository_state"] == "EXTERNAL_PRIVATE_REPOSITORY"
-assert wb["dawa_notepad"]["ava_implicit_read"] is False
-assert wb["dawa_notepad"]["auto_read_membership"] is False
-
-assert wb["avalhla_read_files"]["canonical_repository_path"] == "memory/auto-read/"
-assert wb["avalhla_read_files"]["dawa_notepad_membership"] is False
-
-assert wb["sublime_workspace"]["canonical_project_repository"] == "VVgbon916/Dawa_Notepad"
-assert wb["sublime_workspace"]["canonical_project_path"] == "Dawa_Avalhla.sublime-project"
-
-assert wb["sublime_workspace"]["dawa_lane"]["visibility"] == "PRIVATE"
-assert wb["sublime_workspace"]["dawa_lane"]["ava_implicit_read"] is False
-assert wb["sublime_workspace"]["dawa_lane"]["auto_read_membership"] is False
+valid = (
+    wb["dawa_notepad"]["repository"] == "VVgbon916/Dawa_Notepad"
+    and wb["dawa_notepad"]["visibility"] == "PRIVATE"
+    and wb["dawa_notepad"]["repository_state"] == "EXTERNAL_PRIVATE_REPOSITORY"
+    and wb["dawa_notepad"]["ava_implicit_read"] is False
+    and wb["dawa_notepad"]["auto_read_membership"] is False
+    and wb["avalhla_read_files"]["canonical_repository_path"] == "memory/auto-read/"
+    and wb["avalhla_read_files"]["dawa_notepad_membership"] is False
+    and wb["sublime_workspace"]["canonical_project_repository"] == "VVgbon916/Dawa_Notepad"
+    and wb["sublime_workspace"]["canonical_project_path"] == "Dawa_Avalhla.sublime-project"
+    and wb["sublime_workspace"]["dawa_lane"]["visibility"] == "PRIVATE"
+    and wb["sublime_workspace"]["dawa_lane"]["ava_implicit_read"] is False
+    and wb["sublime_workspace"]["dawa_lane"]["auto_read_membership"] is False
+)
+if not valid:
+    raise SystemExit("Public/private Dawa machine boundary mismatch")
 PY2
 then
   ok "private repository machine-state semantics"

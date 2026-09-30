@@ -24,7 +24,7 @@ ava_integrity_sha256_file() {
         return 1
     }
 
-    sha256sum -- "$file" | awk '{print $1}'
+    sha256sum < "$file" | awk '{print $1}'
 }
 
 ava_integrity_sha256_bytes() {

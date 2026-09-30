@@ -73,6 +73,16 @@ else
     ok 'missing file is rejected'
 fi
 
+WEIRD_FILE="$TMP/backslash\\and
+newline.txt"
+printf 'unusual filename bytes\n' > "$WEIRD_FILE"
+WEIRD_HASH="$(ava_integrity_sha256_file "$WEIRD_FILE")"
+if ava_integrity_verify_file "$WEIRD_FILE" "$WEIRD_HASH"; then
+    ok 'backslash/newline filename verifies unchanged content'
+else
+    bad 'backslash/newline filename verifies unchanged content' 'filename escaping corrupted digest parsing'
+fi
+
 printf '\n== integrity summary ==\n'
 printf '  pass: %d\n  fail: %d\n' "$PASS" "$FAIL"
 

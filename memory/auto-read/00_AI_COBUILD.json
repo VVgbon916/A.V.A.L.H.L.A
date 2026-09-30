@@ -632,10 +632,13 @@
       "COMPARE",
       "CROSS_CHECK",
       "MINIMAL_EDIT",
-      "TEST",
+      "POSITIVE_TEST",
+      "NEGATIVE_TEST",
       "VERIFY",
+      "DEVILASH_ATTACK",
       "DIFF",
-      "REVIEW"
+      "REVIEW",
+      "DAWA_HUMAN_GATE"
     ]
   },
   "forensic_recon_2026_09_26": {

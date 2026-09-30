@@ -129,6 +129,12 @@ none
 VERDICT
 not-a-verdict'
 
+check_fail "verdict with extra prose" 'BUGS: none
+SECURITY: none
+PERF: none
+STYLE: none
+VERDICT: fix-first -- review conclusion'
+
 check_fail "content after verdict" 'BUGS
 none
 SECURITY

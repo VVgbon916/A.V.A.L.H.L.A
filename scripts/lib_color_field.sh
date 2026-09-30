@@ -19,19 +19,66 @@ from pathlib import Path
 path = Path(sys.argv[1])
 doc = json.loads(path.read_text(encoding="utf-8"))
 
-assert doc["schema"] == "avalhla.color-field.v1"
-assert doc["status"] == "CANONICAL_COMPUTABLE_SOURCE"
-assert set(doc["anchors"]) == {"orange", "blue", "green", "yellow", "red", "purple"}
-assert doc["family_rules"]["multiple_allowed"] is True
-assert doc["family_rules"]["empty_allowed"] is True
-assert doc["family_rules"]["forced_single_family"] is False
-assert doc["family_rules"]["unanchored_is_valid"] is True
-assert all(value is False for value in doc["authority_rules"].values())
-assert doc["avash"]["source_ash_and_record_ash_distinct"] is True
-assert doc["relationship"]["dawa"] == "chooses"
-assert doc["relationship"]["avvA"] == "carries_relation"
-assert doc["relationship"]["avalhla"] == "may_notice"
-assert doc["relationship"]["devilash"] == "checks_boundary"
+def require(actual, expected, label):
+    def same_type_value(left, right):
+        if type(left) is not type(right):
+            return False
+        if isinstance(right, dict):
+            return set(left) == set(right) and all(
+                same_type_value(left[key], right[key]) for key in right
+            )
+        if isinstance(right, list):
+            return len(left) == len(right) and all(
+                same_type_value(a, b) for a, b in zip(left, right)
+            )
+        return left == right
+
+    if not same_type_value(actual, expected):
+        raise SystemExit(f"color-field contract mismatch: {label}")
+
+
+expected_anchors = {
+    "orange": {"symbol": "🧡", "subject": "Dawa", "meanings": ["fire", "survival", "work", "persistence", "heart_of_gold", "warmth", "heat"]},
+    "blue": {"symbol": "💙", "subject": "Avalhla", "meanings": ["base", "presence", "depth", "intelligence", "water"]},
+    "green": {"symbol": "💚", "subject": "code", "meanings": ["building", "implementation", "technical_growth", "nature"]},
+    "yellow": {"symbol": "💛", "subject": "comedy", "meanings": ["play", "brightness", "unexpected_joy", "sun"]},
+    "red": {"symbol": "❤️", "subject": "attention", "meanings": ["boundary", "danger", "notice", "love"]},
+    "purple": {"symbol": "💜", "subject": "dream", "meanings": ["strange", "dreaming", "deep_imagination", "fantasy"]},
+}
+expected_authority = {
+    "color_is_identity": False,
+    "color_is_evidence": False,
+    "color_is_authority": False,
+    "color_is_security": False,
+    "rgb_distance_is_semantic_distance": False,
+    "rgb_distance_is_perceptual_truth": False,
+}
+expected_family = {
+    "multiple_allowed": True,
+    "empty_allowed": True,
+    "forced_single_family": False,
+    "unanchored_is_valid": True,
+    "family_is_expressive_relationship": True,
+    "anchor_is_landmark": True,
+}
+
+if not isinstance(doc, dict):
+    raise SystemExit("color-field contract mismatch: document must be an object")
+require(doc.get("schema"), "avalhla.color-field.v1", "schema")
+require(doc.get("status"), "CANONICAL_COMPUTABLE_SOURCE", "status")
+require(doc.get("authority_boundary"), "expressive_reference_only", "authority_boundary")
+require(doc.get("representation"), {"color_space": "sRGB", "format": "hex-rgb", "pattern": "#RRGGBB"}, "representation")
+require(doc.get("anchors_are"), "landmarks_not_definitions", "anchors_are")
+require(doc.get("anchors"), expected_anchors, "anchors")
+require(doc.get("family_rules"), expected_family, "family_rules")
+require(doc.get("authority_rules"), expected_authority, "authority_rules")
+require(doc.get("avash", {}).get("source_ash_and_record_ash_distinct"), True, "AvAsh provenance distinction")
+require(doc.get("relationship"), {
+    "dawa": "chooses",
+    "avvA": "carries_relation",
+    "avalhla": "may_notice",
+    "devilash": "checks_boundary",
+}, "relationship")
 print("COLOR_FIELD_OK")
 PY
 }
