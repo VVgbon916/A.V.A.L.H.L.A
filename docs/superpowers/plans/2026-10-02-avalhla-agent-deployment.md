@@ -124,7 +124,7 @@ Commit only Claude deployment files and their tests.
 
 - [ ] **Step 1: Add failing Codex deployment tests**
 
-Assert TRACE/VALHLA/LUX are read-only, FORGE/MIRROR are workspace-write, stale `config_file` registrations are absent, WITNESS/ECHO identify themselves as compatibility aliases, `.codex/agents/vex.toml` is absent, VEX remains the Claude ADVERSARIAL lane, and `Dawa decides.` is absent from active agent prompts.
+Assert TRACE/VALHLA/LUX are read-only, FORGE/MIRROR are workspace-write, duplicate per-role `config_file` registrations for canonical project agents are absent, WITNESS/ECHO identify themselves as compatibility aliases, `.codex/agents/vex.toml` is absent, VEX remains the Claude ADVERSARIAL lane, and `Dawa decides.` is absent from active agent prompts.
 
 - [ ] **Step 2: Prove RED**
 
@@ -133,7 +133,7 @@ Expected: FAIL against the current WITNESS/VEX/ECHO deployment.
 
 - [ ] **Step 3: Implement current Codex agent files**
 
-Preserve global `approval_policy = "on-request"` and workspace sandbox defaults. Remove obsolete Codex VEX registration/file only after current discovery semantics are verified. Do not add MCP credentials. Keep `firecrawl` and `openaiDeveloperDocs` as existing evidence sources; canonical role prompts classify external output as evidence rather than authority.
+Preserve global `approval_policy = "on-request"` and workspace sandbox defaults. Current Codex supports both standalone project agents and explicit `[agents.<name>].config_file` declarations; Avalhla uses standalone `.codex/agents/*.toml` as the single canonical role artifact rather than duplicating both mechanisms. Remove old Codex VEX ownership after discovery semantics are verified. Do not add MCP credentials. Keep `firecrawl` and `openaiDeveloperDocs` as existing evidence sources; canonical role prompts classify external output as evidence rather than authority.
 
 - [ ] **Step 4: Prove GREEN and inspect live discovery**
 
