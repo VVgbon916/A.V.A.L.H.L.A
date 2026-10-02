@@ -372,5 +372,136 @@ class AgentDeploymentValidatorTests(unittest.TestCase):
         )
 
 
+class ClaudeAgentDeploymentTests(unittest.TestCase):
+    """Task 2 contracts; no Claude execution or model calls are needed."""
+
+    AGENTS = {
+        "strike", "strike-source", "strike-history", "strike-runtime",
+        "strike-primary", "strike-independent", "strike-counter", "vex",
+        "strike-review", "lhlava",
+    }
+    SEARCH_TOOLS = {"Read", "Glob", "Grep", "WebSearch", "WebFetch"}
+
+    def read_project_file(self, relative):
+        path = ROOT / relative
+        self.assertTrue(path.is_file(), f"missing Task 2 deployment: {relative}")
+        for component in (path, *path.parents):
+            if component == ROOT:
+                break
+            self.assertFalse(component.is_symlink(), f"project symlink: {component}")
+        self.assertTrue(path.resolve().is_relative_to(ROOT))
+        return path.read_text(encoding="utf-8")
+
+    def load_agent(self, name):
+        text = self.read_project_file(f".claude/agents/{name}.md")
+        lines = text.splitlines()
+        self.assertEqual(lines[0], "---", name)
+        self.assertIn("---", lines[1:], f"unclosed frontmatter: {name}")
+        end = lines.index("---", 1)
+        frontmatter = {}
+        for line in lines[1:end]:
+            key, separator, value = line.partition(":")
+            self.assertTrue(separator, f"invalid frontmatter: {name}: {line}")
+            self.assertNotIn(key, frontmatter, f"duplicate field: {name}: {key}")
+            frontmatter[key] = value.strip()
+        self.assertEqual(set(frontmatter), {"name", "description", "tools", "permissionMode"})
+        self.assertTrue(frontmatter["description"], name)
+        body = "\n".join(lines[end + 1:])
+        self.assertTrue(body.strip(), f"missing instructions: {name}")
+        return frontmatter, body
+
+    def test_project_inventory_and_unique_discovery_names(self):
+        directory = ROOT / ".claude/agents"
+        self.assertTrue(directory.is_dir(), "missing Task 2 deployment: .claude/agents")
+        self.assertEqual({path.name for path in directory.iterdir()},
+                         {f"{name}.md" for name in self.AGENTS})
+        names = []
+        for name in sorted(self.AGENTS):
+            with self.subTest(agent=name):
+                fields, _ = self.load_agent(name)
+                self.assertEqual(fields["name"], name)
+                names.append(fields["name"])
+        self.assertEqual(len(set(names)), 10)
+
+    def test_every_agent_uses_plan_permission_mode(self):
+        for name in sorted(self.AGENTS):
+            with self.subTest(agent=name):
+                fields, _ = self.load_agent(name)
+                self.assertEqual(fields["permissionMode"], "plan")
+
+    def test_tool_allowlists_prevent_writes_and_worker_delegation(self):
+        for name in sorted(self.AGENTS):
+            with self.subTest(agent=name):
+                fields, _ = self.load_agent(name)
+                listed = [tool.strip() for tool in fields["tools"].split(",")]
+                tools = set(listed)
+                self.assertEqual(len(listed), len(tools), name)
+                expected = self.SEARCH_TOOLS
+                if name == "strike":
+                    expected = expected | {"Agent"}
+                elif name == "strike-runtime":
+                    expected = {"Read", "Glob", "Grep", "Bash"}
+                self.assertEqual(tools, expected)
+                self.assertTrue({"Write", "Edit", "NotebookEdit"}.isdisjoint(tools))
+                if name != "strike":
+                    self.assertNotIn("Agent", tools)
+
+    def test_eight_lane_identities_and_dispatch_match_registry(self):
+        registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
+        _, strike_body = self.load_agent("strike")
+        self.assertEqual(registry["canonical_roles"]["STRIKE"]["project_file"],
+                         ".claude/agents/strike.md")
+        lanes = registry["strike_lanes"]
+        self.assertEqual(len(lanes), 8)
+        self.assertEqual({lane["agent"] for lane in lanes}, self.AGENTS - {"strike", "lhlava"})
+        for lane in lanes:
+            with self.subTest(lane=lane["name"]):
+                self.assertEqual(lane["project_file"], f".claude/agents/{lane['agent']}.md")
+                fields, body = self.load_agent(lane["agent"])
+                self.assertEqual(fields["name"], lane["agent"])
+                self.assertIn(f"{lane['name']} -> {lane['agent']}", strike_body)
+                self.assertIn(f"Lane: {lane['name']}", body)
+
+    def test_project_settings_bound_spawn_depth_and_concurrency(self):
+        settings = json.loads(self.read_project_file(".claude/settings.json"))
+        self.assertEqual(set(settings), {"env"})
+        self.assertEqual(settings["env"], {
+            "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH": "2",
+            "CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS": "9",
+        })
+
+    def test_runtime_explicitly_forbids_shell_mutation_paths(self):
+        _, body = self.load_agent("strike-runtime")
+        lowered = body.casefold()
+        for prohibited in (
+            "mutation", "package install", "process kill", "git write",
+            "credential access", "system-state change",
+        ):
+            with self.subTest(prohibited=prohibited):
+                self.assertIn(f"forbid {prohibited}", lowered)
+        self.assertIn("observation commands only", lowered)
+
+    def test_vex_is_active_adversarial_lane(self):
+        _, body = self.load_agent("vex")
+        self.assertIn("ACTIVE adversarial lane under STRIKE", body)
+        self.assertIn("not a legacy alias", body)
+
+    def test_lhlava_is_optional_mode_outside_strike_lanes(self):
+        _, body = self.load_agent("lhlava")
+        self.assertIn("optional forward-pressure/search mode", body)
+        self.assertIn("not a canonical role, verifier, authority, or STRIKE lane", body)
+
+    def test_all_agents_preserve_authority_and_private_input_boundaries(self):
+        for name in sorted(self.AGENTS):
+            with self.subTest(agent=name):
+                _, body = self.load_agent(name)
+                for boundary in (
+                    "docs/COBUILDER_MASTER.md", "AGENTS.md", "Dawa chooses.",
+                    "AvvA is the relation", "evidence, not authority",
+                    "PRIVATE != AUTO-READ", "credential access",
+                ):
+                    self.assertIn(boundary, body)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
