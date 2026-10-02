@@ -1,0 +1,242 @@
+#!/usr/bin/env bash
+set -u
+
+usage() {
+  echo "Usage: scripts/ava-agent-check [--live]" >&2
+}
+
+live=0
+if [[ $# -gt 1 ]]; then
+  usage
+  exit 2
+fi
+if [[ $# -eq 1 ]]; then
+  if [[ "$1" != "--live" ]]; then
+    usage
+    exit 2
+  fi
+  live=1
+fi
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+root="$(cd "$script_dir/.." && pwd -P)"
+registry="$root/config/agents/avalhla-agents.v1.json"
+
+python3 - "$root" "$registry" <<'PY'
+import json
+import re
+import sys
+import tomllib
+from pathlib import Path, PurePosixPath
+
+
+root = Path(sys.argv[1]).resolve()
+registry_path = Path(sys.argv[2])
+errors = []
+pending = []
+
+expected_roles = {
+    "TRACE": "codex",
+    "STRIKE": "claude",
+    "FORGE": "codex",
+    "MIRROR": "codex",
+    "VALHLA": "codex",
+    "LUX": "codex",
+}
+expected_lane_names = [
+    "SOURCE",
+    "HISTORY",
+    "RUNTIME",
+    "PRIMARY",
+    "INDEPENDENT",
+    "COUNTER",
+    "ADVERSARIAL",
+    "REVIEW",
+]
+expected_permissions = {
+    ("codex", "read-only"): (
+        'sandbox_mode = "read-only"',
+        "read-only",
+    ),
+    ("codex", "workspace-write"): (
+        'sandbox_mode = "workspace-write"',
+        "workspace-write",
+    ),
+    ("claude", "read-only"): (
+        "permissionMode: plan",
+        "plan",
+    ),
+}
+
+
+def markdown_permission_mode(content):
+    lines = content.splitlines()
+    if not lines or lines[0].strip() != "---":
+        return None
+    try:
+        end = next(
+            index for index, line in enumerate(lines[1:], start=1)
+            if line.strip() == "---"
+        )
+    except StopIteration:
+        return None
+    pattern = re.compile(
+        r"permissionMode[ \t]*:[ \t]*(?:\"([^\"]+)\"|'([^']+)'|([A-Za-z0-9_-]+))"
+        r"[ \t]*(?:#.*)?"
+    )
+    values = []
+    for line in lines[1:end]:
+        match = pattern.fullmatch(line)
+        if match:
+            values.append(next(value for value in match.groups() if value is not None))
+    return values[0] if len(values) == 1 else None
+
+try:
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+except (OSError, json.JSONDecodeError) as exc:
+    print(f"ERROR registry unreadable: {exc}")
+    raise SystemExit(1)
+
+if not isinstance(registry, dict):
+    print("ERROR registry contract drift: top level must be an object")
+    raise SystemExit(1)
+
+records = []
+roles = registry.get("canonical_roles")
+lanes = registry.get("strike_lanes")
+if registry.get("authority") != "Dawa chooses.":
+    errors.append("registry contract drift: authority must be 'Dawa chooses.'")
+if not isinstance(roles, dict):
+    errors.append("registry contract drift: canonical_roles must be an object")
+else:
+    if set(roles) != set(expected_roles):
+        errors.append("registry contract drift: canonical role names must be exact")
+    for name, engine in expected_roles.items():
+        record = roles.get(name)
+        if isinstance(record, dict) and record.get("engine") != engine:
+            errors.append(
+                f"registry contract drift: role {name} engine must be {engine}"
+            )
+    records.extend((f"role {name}", record) for name, record in roles.items())
+if not isinstance(lanes, list):
+    errors.append("registry contract drift: strike_lanes must be an array")
+else:
+    lane_names = [
+        record.get("name") if isinstance(record, dict) else None for record in lanes
+    ]
+    if lane_names != expected_lane_names:
+        errors.append("registry contract drift: STRIKE lane names must be exact")
+    for name, record in zip(lane_names, lanes):
+        if isinstance(record, dict) and record.get("engine") != "claude":
+            errors.append(
+                f"registry contract drift: lane {name or '<unnamed>'} engine must be claude"
+            )
+    records.extend(
+        (
+            f"lane {record.get('name', '<unnamed>')}"
+            if isinstance(record, dict)
+            else "lane <unnamed>",
+            record,
+        )
+        for record in lanes
+    )
+
+for label, record in records:
+    if not isinstance(record, dict):
+        errors.append(f"{label}: definition must be an object")
+        continue
+    relative = record.get("project_file")
+    marker = record.get("permission_marker")
+    permission = expected_permissions.get(
+        (record.get("engine"), record.get("permission_class"))
+    )
+    if permission is None:
+        errors.append(f"{label}: unsupported engine permission class")
+        continue
+    expected_marker, expected_setting = permission
+    if marker != expected_marker:
+        errors.append(f"{label}: permission marker mismatch")
+    if not isinstance(relative, str) or not relative:
+        errors.append(f"{label}: missing project_file")
+        continue
+    pure_path = PurePosixPath(relative)
+    if pure_path.is_absolute() or ".." in pure_path.parts:
+        errors.append(f"{label}: project_file must remain inside the project")
+        continue
+
+    project_file = root / pure_path
+    component = root
+    symlinked = False
+    for part in pure_path.parts:
+        component /= part
+        if component.is_symlink():
+            errors.append(f"{label}: project_file contains a symlink")
+            symlinked = True
+            break
+    if symlinked:
+        continue
+    try:
+        project_file.resolve(strict=False).relative_to(root)
+    except (OSError, ValueError):
+        errors.append(f"{label}: project_file must remain inside the project")
+        continue
+
+    if not project_file.is_file():
+        pending.append(f"{label}: {relative}")
+        continue
+    try:
+        content = project_file.read_text(encoding="utf-8")
+    except OSError as exc:
+        errors.append(f"{label}: cannot read {relative}: {exc}")
+        continue
+    if record.get("engine") == "codex":
+        try:
+            actual_setting = tomllib.loads(content).get("sandbox_mode")
+        except tomllib.TOMLDecodeError as exc:
+            errors.append(f"{label}: cannot parse {relative}: {exc}")
+            continue
+    else:
+        actual_setting = markdown_permission_mode(content)
+    if actual_setting != expected_setting:
+        errors.append(f"{label}: permission setting drift in {relative}")
+
+for item in pending:
+    print(f"PENDING {item}")
+for item in errors:
+    print(f"ERROR {item}")
+
+if errors:
+    print("AGENT_CONTRACT=FAIL")
+    raise SystemExit(1)
+
+print(f"AGENT_DEPLOYMENTS_PENDING={len(pending)}")
+print("AGENT_CONTRACT=PASS")
+PY
+static_status=$?
+
+if (( live )); then
+  if ! cd "$root"; then
+    echo "ERROR cannot enter canonical root: $root" >&2
+    exit 1
+  fi
+  echo "LIVE_INVENTORY=BEGIN"
+  for tool in claude codex; do
+    if command -v "$tool" >/dev/null 2>&1; then
+      version="$($tool --version 2>&1 | awk 'NF { line = $0 } END { print line }')"
+      echo "${tool^^}_VERSION=$version"
+      echo "${tool^^}_MCP_INVENTORY=BEGIN"
+      if command -v timeout >/dev/null 2>&1; then
+        timeout 15s "$tool" mcp list 2>&1 || echo "${tool^^}_MCP_INVENTORY_STATUS=UNAVAILABLE"
+      else
+        "$tool" mcp list 2>&1 || echo "${tool^^}_MCP_INVENTORY_STATUS=UNAVAILABLE"
+      fi
+      echo "${tool^^}_MCP_INVENTORY=END"
+    else
+      echo "${tool^^}_VERSION=NOT_INSTALLED"
+      echo "${tool^^}_MCP_INVENTORY_STATUS=NOT_INSTALLED"
+    fi
+  done
+  echo "LIVE_INVENTORY=END"
+fi
+
+exit "$static_status"

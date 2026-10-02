@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "authority": "Dawa chooses.",
+  "canonical_roles": {
+    "TRACE": {
+      "engine": "codex",
+      "permission_class": "read-only",
+      "project_file": ".codex/agents/trace.toml",
+      "permission_marker": "sandbox_mode = \"read-only\""
+    },
+    "STRIKE": {
+      "engine": "claude",
+      "permission_class": "read-only",
+      "project_file": ".claude/agents/strike.md",
+      "permission_marker": "permissionMode: plan"
+    },
+    "FORGE": {
+      "engine": "codex",
+      "permission_class": "workspace-write",
+      "project_file": ".codex/agents/forge.toml",
+      "permission_marker": "sandbox_mode = \"workspace-write\""
+    },
+    "MIRROR": {
+      "engine": "codex",
+      "permission_class": "workspace-write",
+      "project_file": ".codex/agents/mirror.toml",
+      "permission_marker": "sandbox_mode = \"workspace-write\""
+    },
+    "VALHLA": {
+      "engine": "codex",
+      "permission_class": "read-only",
+      "project_file": ".codex/agents/valhla.toml",
+      "permission_marker": "sandbox_mode = \"read-only\""
+    },
+    "LUX": {
+      "engine": "codex",
+      "permission_class": "read-only",
+      "project_file": ".codex/agents/lux.toml",
+      "permission_marker": "sandbox_mode = \"read-only\""
+    }
+  },
+  "strike_lanes": [
+    {
+      "name": "SOURCE",
+      "agent": "strike-source",
+      "engine": "claude",
+      "permission_class": "read-only",
+      "project_file": ".claude/agents/strike-source.md",
+      "permission_marker": "permissionMode: plan"
+    },
+    {
+      "name": "HISTORY",
+      "agent": "strike-history",
+      "engine": "claude",
+      "permission_class": "read-only",
+      "project_file": ".claude/agents/strike-history.md",
+      "permission_marker": "permissionMode: plan"
+    },
+    {
+      "name": "RUNTIME",
+      "agent": "strike-runtime",
+      "engine": "claude",
+      "permission_class": "read-only",
+      "project_file": ".claude/agents/strike-runtime.md",
+      "permission_marker": "permissionMode: plan"
+    },
+    {
+      "name": "PRIMARY",
+      "agent": "strike-primary",
+      "engine": "claude",
+      "permission_class": "read-only",
+      "project_file": ".claude/agents/strike-primary.md",
+      "permission_marker": "permissionMode: plan"
+    },
+    {
+      "name": "INDEPENDENT",
+      "agent": "strike-independent",
+      "engine": "claude",
+      "permission_class": "read-only",
+      "project_file": ".claude/agents/strike-independent.md",
+      "permission_marker": "permissionMode: plan"
+    },
+    {
+      "name": "COUNTER",
+      "agent": "strike-counter",
+      "engine": "claude",
+      "permission_class": "read-only",
+      "project_file": ".claude/agents/strike-counter.md",
+      "permission_marker": "permissionMode: plan"
+    },
+    {
+      "name": "ADVERSARIAL",
+      "agent": "vex",
+      "engine": "claude",
+      "permission_class": "read-only",
+      "project_file": ".claude/agents/vex.md",
+      "permission_marker": "permissionMode: plan"
+    },
+    {
+      "name": "REVIEW",
+      "agent": "strike-review",
+      "engine": "claude",
+      "permission_class": "read-only",
+      "project_file": ".claude/agents/strike-review.md",
+      "permission_marker": "permissionMode: plan"
+    }
+  ],
+  "legacy_aliases": {
+    "WITNESS": "TRACE",
+    "ECHO": "MIRROR"
+  }
+}
