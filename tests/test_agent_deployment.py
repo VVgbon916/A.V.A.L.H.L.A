@@ -5,6 +5,7 @@ import json
 import os
 import subprocess
 import tempfile
+import tomllib
 import unittest
 from pathlib import Path
 
@@ -501,6 +502,85 @@ class ClaudeAgentDeploymentTests(unittest.TestCase):
                     "PRIVATE != AUTO-READ", "credential access",
                 ):
                     self.assertIn(boundary, body)
+
+
+class CodexAgentDeploymentTests(unittest.TestCase):
+    """Task 3 contracts for project-scoped Codex agents."""
+
+    CANONICAL = {
+        "TRACE": ("trace", "read-only"),
+        "FORGE": ("forge", "workspace-write"),
+        "MIRROR": ("mirror", "workspace-write"),
+        "VALHLA": ("valhla", "read-only"),
+        "LUX": ("lux", "read-only"),
+    }
+    COMPAT = {
+        "witness": ("TRACE", "read-only"),
+        "echo": ("MIRROR", "workspace-write"),
+    }
+
+    def load_toml(self, relative):
+        path = ROOT / relative
+        self.assertTrue(path.is_file(), f"missing Task 3 deployment: {relative}")
+        return tomllib.loads(path.read_text(encoding="utf-8"))
+
+    def test_project_config_uses_one_canonical_agent_discovery_path(self):
+        config = self.load_toml(".codex/config.toml")
+        agents = config["agents"]
+        nested = {key for key, value in agents.items() if isinstance(value, dict)}
+        self.assertEqual(nested, set(), f"duplicate explicit roles: {sorted(nested)}")
+        self.assertIs(agents["enabled"], True)
+        self.assertEqual(agents["max_concurrent_threads_per_session"], 5)
+        self.assertEqual(agents["default_subagent_reasoning_effort"], "high")
+
+    def test_canonical_codex_agents_match_registry_and_permissions(self):
+        registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
+        for role, (agent_name, sandbox) in self.CANONICAL.items():
+            with self.subTest(role=role):
+                record = registry["canonical_roles"][role]
+                self.assertEqual(record["engine"], "codex")
+                self.assertEqual(record["project_file"],
+                                 f".codex/agents/{agent_name}.toml")
+                data = self.load_toml(record["project_file"])
+                self.assertEqual(data["name"], agent_name)
+                self.assertEqual(data["sandbox_mode"], sandbox)
+                self.assertTrue(data["description"].strip())
+                self.assertTrue(data["developer_instructions"].strip())
+
+    def test_codex_vex_ownership_is_removed(self):
+        self.assertFalse((ROOT / ".codex/agents/vex.toml").exists())
+        registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
+        adversarial = next(
+            lane for lane in registry["strike_lanes"]
+            if lane["name"] == "ADVERSARIAL"
+        )
+        self.assertEqual(adversarial["agent"], "vex")
+        self.assertEqual(adversarial["engine"], "claude")
+        self.assertEqual(adversarial["project_file"], ".claude/agents/vex.md")
+
+    def test_witness_and_echo_are_compatibility_aliases_only(self):
+        for name, (target, sandbox) in self.COMPAT.items():
+            with self.subTest(agent=name):
+                data = self.load_toml(f".codex/agents/{name}.toml")
+                body = data["developer_instructions"]
+                self.assertEqual(data["name"], name)
+                self.assertEqual(data["sandbox_mode"], sandbox)
+                self.assertIn(f"compatibility alias for {target}", body)
+                self.assertIn("not a canonical role", body)
+
+    def test_codex_agent_prompts_use_current_authority_and_recast_language(self):
+        names = [item[0] for item in self.CANONICAL.values()] + list(self.COMPAT)
+        for name in names:
+            with self.subTest(agent=name):
+                body = self.load_toml(f".codex/agents/{name}.toml")[
+                    "developer_instructions"
+                ]
+                self.assertIn("Dawa chooses.", body)
+                self.assertIn("AvvA is the relation", body)
+                self.assertIn("evidence, not authority", body)
+                self.assertNotIn("Dawa decides.", body)
+                self.assertNotIn("Return-to-Fang", body)
+                self.assertNotIn("FANG", body)
 
 
 if __name__ == "__main__":
