@@ -117,6 +117,18 @@ At session start, derive current state before interpreting stored state.
 Read the canonical source first, then compare runtime, Git, review, and history.
 Never copy a volatile result into this Master.
 
+## Interruption and reboot recovery
+
+REBOOT != RESET. DISK SURVIVAL != VERIFIED CURRENT.
+REMOTE CHECKPOINT != LOCAL UNCOMMITTED STATE.
+
+After interruption, re-derive host/tool state and both worktree states before mutation.
+Read the original dirty worktree before any modifying Git command. Compare the isolated
+worktree with its remote checkpoint, prove stale writers are gone, then re-run focused
+tests, deterministic contracts, and diff checks for surviving uncommitted work. Classify
+conflicts from current source and resume the next task only after evidence converges.
+Never reconstruct source from memory when current source still exists.
+
 ## Recast and convergence
 
 A new file, function, tool, agent, MCP server, permission, schema field, hook,

@@ -4,7 +4,7 @@
 
 **Goal:** Deploy the Master role topology as project-scoped Claude Code and Codex agents with deterministic validation, bounded permissions, and compatibility aliases.
 
-**Architecture:** A machine-readable agent registry defines current roles, engine ownership, evidence lanes, and legacy aliases. Claude owns STRIKE and its eight read-only search lanes; Codex owns TRACE, FORGE, MIRROR, VALHLA, and LUX. A Bash validator and Python tests enforce the deployment contract, while existing WITNESS/VEX/ECHO entry points remain compatibility-only until the later naming migration.
+**Architecture:** A machine-readable agent registry defines current roles, engine ownership, evidence lanes, and legacy aliases. Claude owns STRIKE and its eight read-only search lanes, including active VEX as the ADVERSARIAL lane; Codex owns TRACE, FORGE, MIRROR, VALHLA, and LUX. A Bash validator and Python tests enforce the deployment contract. WITNESS/ECHO may remain compatibility entry points until migration; old Codex VEX ownership is retired rather than aliased.
 
 **Tech Stack:** Bash, Python 3 unittest, JSON, TOML, Claude Code project agents, Codex project agents, MCP configuration.
 
@@ -26,7 +26,7 @@
 ## Review Focus
 
 - Parent permission overrides must not silently broaden a supposedly read-only agent into a production writer.
-- Legacy WITNESS/VEX/ECHO aliases must not remain authoritative canonical roles.
+- Legacy WITNESS/ECHO aliases must not remain authoritative canonical roles; VEX remains the active Claude ADVERSARIAL lane and must not be recreated as a Codex compatibility alias.
 - STRIKE must be able to spawn eight distinct lanes without allowing lane workers to recursively multiply.
 - Agent discovery must match the installed Claude/Codex versions rather than stale registration syntax.
 - MCP/documentation access must add evidence capability without adding credentials or write authority.
@@ -114,17 +114,17 @@ Commit only Claude deployment files and their tests.
 - Create: `.codex/agents/valhla.toml`
 - Keep/modify: `.codex/agents/lux.toml`
 - Modify: `.codex/agents/witness.toml`
-- Modify: `.codex/agents/vex.toml`
+- Delete: `.codex/agents/vex.toml`
 - Modify: `.codex/agents/echo.toml`
 - Modify: `tests/test_agent_deployment.py`
 
 **Interfaces:**
-- Consumes: Task 1 registry and installed Codex 0.159.3 standalone `.codex/agents/*.toml` discovery.
-- Produces: canonical Codex TRACE/FORGE/MIRROR/VALHLA/LUX agents plus explicit compatibility aliases for WITNESS/VEX/ECHO.
+- Consumes: Task 1 registry and Codex agent-discovery behavior re-derived from the installed CLI and current official documentation at execution time.
+- Produces: canonical Codex TRACE/FORGE/MIRROR/VALHLA/LUX agents plus WITNESS/ECHO compatibility aliases; old Codex VEX ownership is removed because VEX remains Claude-owned under STRIKE.
 
 - [ ] **Step 1: Add failing Codex deployment tests**
 
-Assert TRACE/VALHLA/LUX are read-only, FORGE/MIRROR are workspace-write, stale `config_file` registrations are absent, compatibility files identify themselves as aliases, and `Dawa decides.` is absent from active agent prompts.
+Assert TRACE/VALHLA/LUX are read-only, FORGE/MIRROR are workspace-write, stale `config_file` registrations are absent, WITNESS/ECHO identify themselves as compatibility aliases, `.codex/agents/vex.toml` is absent, VEX remains the Claude ADVERSARIAL lane, and `Dawa decides.` is absent from active agent prompts.
 
 - [ ] **Step 2: Prove RED**
 
@@ -133,7 +133,7 @@ Expected: FAIL against the current WITNESS/VEX/ECHO deployment.
 
 - [ ] **Step 3: Implement current Codex agent files**
 
-Preserve global `approval_policy = "on-request"` and workspace sandbox defaults. Do not add MCP credentials. Keep `firecrawl` and `openaiDeveloperDocs` as existing evidence sources; canonical role prompts classify external output as evidence rather than authority.
+Preserve global `approval_policy = "on-request"` and workspace sandbox defaults. Remove obsolete Codex VEX registration/file only after current discovery semantics are verified. Do not add MCP credentials. Keep `firecrawl` and `openaiDeveloperDocs` as existing evidence sources; canonical role prompts classify external output as evidence rather than authority.
 
 - [ ] **Step 4: Prove GREEN and inspect live discovery**
 
@@ -160,7 +160,7 @@ Commit only Codex deployment files and their tests.
 
 - [ ] **Step 1: Add failing integration tests**
 
-Assert the static contract invokes `scripts/ava-agent-check`; active docs point to TRACE/STRIKE/FORGE/MIRROR/VALHLA/LUX; legacy WITNESS/VEX/ECHO references are explicitly historical/compatibility where retained; and active choice language is `Dawa chooses.`
+Assert the static contract invokes `scripts/ava-agent-check`; active docs point to TRACE/STRIKE/FORGE/MIRROR/VALHLA/LUX; retained WITNESS/ECHO role references are explicitly historical/compatibility, VEX remains an active Claude STRIKE lane rather than a legacy alias, and active choice language is `Dawa chooses.`
 
 - [ ] **Step 2: Prove RED**
 
