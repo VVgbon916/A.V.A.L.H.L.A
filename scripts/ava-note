@@ -2,6 +2,7 @@
 # ava-note -- append a dated entry to docs/DAWA_NOTES.md (append-only).
 #   ava-note [-t TAG] "text"     add entry (TAG: REALITY MEMORY REFLECTION DREAM SOURCE CHOICE)
 #   ava-note -l [N]              show last N entries (default 5)
+#   ava-note -s                  ask Avalhla (ai-ask) to suggest the best next note; prints only
 set -Eeuo pipefail
 
 REPO="${AVA_NOTES_REPO:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
@@ -15,6 +16,23 @@ if [[ "${1:-}" == "-l" ]]; then
         cnt { buf[cnt] = buf[cnt] $0 "\n" }
         END { for (i = (cnt > n ? cnt - n + 1 : 1); i <= cnt; i++) printf "%s", buf[i] }
     ' "$FILE"
+    exit 0
+fi
+
+if [[ "${1:-}" == "-s" ]]; then
+    [[ -f "$FILE" ]] || { echo "ava-note: missing $FILE" >&2; exit 1; }
+    HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    RECENT="$(git -C "$REPO" log -8 --format='- %s' 2>/dev/null || true)"
+    PROMPT="You help keep Dawa's append-only notepad. Existing notes:
+$(tail -n 40 "$FILE")
+
+Recent commits:
+$RECENT
+
+Suggest up to 3 NEW notes worth keeping that are not already recorded. For each give a tag (REALITY, MEMORY, REFLECTION, DREAM, SOURCE or CHOICE) and one or two factual lines. Do not invent facts."
+    "$HERE/ai-ask" "$PROMPT"
+    echo ""
+    echo "review, then add with: ava-note -t TAG \"text\""
     exit 0
 fi
 
