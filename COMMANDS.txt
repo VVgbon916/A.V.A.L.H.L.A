@@ -22,6 +22,7 @@
   1.12 ava-safety    deterministic safety boundary / --self-test
   1.13 ava-verify    end-to-end verification
   1.14 ava-help      full current door map
+  1.15 ava-note      append to Dawa notepad (docs/DAWA_NOTES.md)
 
 02 / AI
   2.1 ai-chat        persistent chat

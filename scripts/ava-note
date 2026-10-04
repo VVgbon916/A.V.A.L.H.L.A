@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# ava-note -- append a dated entry to docs/DAWA_NOTES.md (append-only).
+#   ava-note [-t TAG] "text"     add entry (TAG: REALITY MEMORY REFLECTION DREAM SOURCE CHOICE)
+#   ava-note -l [N]              show last N entries (default 5)
+set -Eeuo pipefail
+
+REPO="${AVA_NOTES_REPO:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+FILE="${AVA_NOTES_FILE:-$REPO/docs/DAWA_NOTES.md}"
+
+if [[ "${1:-}" == "-l" ]]; then
+    n="${2:-5}"
+    [[ "$n" =~ ^[0-9]+$ ]] || { echo "ava-note: N must be a number" >&2; exit 2; }
+    awk -v n="$n" '
+        /^### / { cnt++ }
+        cnt { buf[cnt] = buf[cnt] $0 "\n" }
+        END { for (i = (cnt > n ? cnt - n + 1 : 1); i <= cnt; i++) printf "%s", buf[i] }
+    ' "$FILE"
+    exit 0
+fi
+
+TAG="CHOICE"
+if [[ "${1:-}" == "-t" ]]; then
+    TAG="$(printf '%s' "${2:-}" | tr '[:lower:]' '[:upper:]')"
+    shift 2 || { echo "usage: ava-note [-t TAG] \"text\"" >&2; exit 2; }
+fi
+case "$TAG" in
+    REALITY|MEMORY|REFLECTION|DREAM|SOURCE|CHOICE) ;;
+    *) echo "ava-note: bad tag '$TAG'" >&2; exit 2 ;;
+esac
+
+TEXT="$*"
+[[ -n "$TEXT" ]] || { echo "usage: ava-note [-t TAG] \"text\"" >&2; exit 2; }
+[[ -f "$FILE" ]] || { echo "ava-note: missing $FILE" >&2; exit 1; }
+
+TITLE="$(printf '%s' "$TEXT" | head -1 | cut -c1-60)"
+{
+    printf '\n### %s UTC - %s [%s]\n' "$(date -u '+%Y-%m-%d %H:%M')" "$TITLE" "$TAG"
+    printf '%s\n' "$TEXT"
+} >> "$FILE"
+echo "noted: $FILE"
+echo "sync : git add docs/DAWA_NOTES.md && git commit -m 'notes' && git push"
