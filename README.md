@@ -49,6 +49,7 @@ See docs/FAST_VIEW.md and docs/AVALHLA_SPINE.md.
 | memory/ | private runtime/historical memory |
 | docs/ | contracts, maps, phase gates, development |
 | BOARD.txt | human map |
+| docs/DAWA_NOTES.md | durable append-only notepad for Dawa |
 | COMMANDS.txt | command-door inventory |
 | QUICKREF.txt | compact operational reference |
 | ORDER.md | reading/care order |
