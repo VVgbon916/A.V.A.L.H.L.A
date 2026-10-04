@@ -61,6 +61,27 @@ See docs/FAST_VIEW.md and docs/AVALHLA_SPINE.md.
 memory/auto-read/00_AI_COBUILD.json is the deliberate tracked machine
 Co-Builder exception. Other private memory remains runtime state.
 
+## CO-BUILD START
+
+Before acting in a co-build session:
+
+1. Read memory/auto-read/00_AI_COBUILD.json (operating law).
+2. Follow its order: READ, REAL_STATE, UNDERSTAND, COMPARE, CROSS_CHECK,
+   MINIMAL_EDIT, TEST, VERIFY, DIFF, REVIEW.
+3. Run scripts/ava-board, scripts/ava-reality and scripts/ava-context to
+   see the real state first.
+4. Evidence precedes mutation. Dawa holds final authority on
+   consequential changes.
+
+## SECURITY REFERENCES
+
+Optional reading for safety and verification work. Use only on systems you
+own or are authorized to test.
+
+- https://github.com/Hack-with-Github/Awesome-Hacking - index of awesome
+  lists. Most relevant here: AppSec, DevSecOps, Detection Engineering,
+  CI/CD Attacks (as threat model for defense), Cyber Skills (legal labs).
+
 ## CROSS-AVAILABILITY
 
 Reality, Memory, Reflection, Dream, Source, and Dawa's choice stay distinct
