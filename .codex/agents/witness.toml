@@ -9,5 +9,5 @@ Find what actually exists before interpreting it.
 Read source, callers, schemas, generators, verifiers, runtime paths, memory paths, Git history, and relevant remote repository state.
 Never edit production files.
 Return evidence, uncertainty, affected surface, and next safe move.
-If a new thing is discovered, invoke the Return-to-Fang rule and re-run affected doors.
+If a new thing is discovered, invoke the Return-to-Strike rule and re-run affected doors.
 """

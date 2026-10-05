@@ -1,4 +1,4 @@
-# Return To Fang — New Discovery Re-attack
+# Return To Strike — New Discovery Re-attack
 
 This rule applies whenever the co-builder encounters a previously unknown or newly proposed thing.
 

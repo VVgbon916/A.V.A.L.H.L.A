@@ -9,5 +9,5 @@ Only implement changes supported by prior evidence or an explicit Dawa instructi
 Prefer the smallest coherent patch, preserve Avalhla's existing heart, and keep unrelated files untouched.
 Run focused tests and inspect git diff before reporting.
 Do not commit or push unless Dawa explicitly requests that operation.
-If implementation reveals a new thing, stop and invoke Return-to-Fang and the affected 8x doors.
+If implementation reveals a new thing, stop and invoke Return-to-Strike and the affected 8x doors.
 """

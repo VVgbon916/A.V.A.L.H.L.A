@@ -7,13 +7,13 @@ Use the smallest relevant door.
 Examples:
 
 ```text
-"Show me what is actually here"       → THRESHOLD
-"Where did this come from?"            → THREAD
-"Is this boundary safe?"               → WARD
-"Where is this actually implemented?"  → LENS
-"Try to break this"                    → FANG
-"Review this exact patch"              → SCAR
-"Did this break anything?"             → ECHO
+"Show me what is actually here"       → ORIENT
+"Where did this come from?"            → TRACE
+"Is this boundary safe?"               → BOUNDARY
+"Where is this actually implemented?"  → INSPECT
+"Try to break this"                    → STRIKE
+"Review this exact patch"              → DIFF
+"Did this break anything?"             → REPRISE
 "Challenge the conclusion"             → LANTERN
 ```
 
@@ -22,24 +22,24 @@ Examples:
 Use the full chain when Dawa asks for `8x`, `full attack`, `Devil mode`, `DevilAsh`, or equivalent:
 
 ```text
-THRESHOLD
+ORIENT
   ↓
-THREAD
+TRACE
   ↓
-WARD
+BOUNDARY
   ↓
-LENS
+INSPECT
   ↓
-FANG
+STRIKE
   ↓
-SCAR
+DIFF
   ↓
-ECHO
+REPRISE
   ↓
 LANTERN
-  ↓
-DAWA
 ```
+
+Dawa chooses after the evidence is presented. Dawa is not a ninth door.
 
 ## Interchangeability
 

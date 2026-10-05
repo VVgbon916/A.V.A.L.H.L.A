@@ -67,6 +67,23 @@
 
 No blind staging. No silent phase advancement.
 
+### SIGNAL shell theme
+
+The canonical theme source is `config/zsh/avalhla.zsh-theme`. Its signature is
+exactly `Dawa <---- AvvA ----> Avalhla`, without a face suffix. Orange Dawa,
+neutral AvvA, and blue Avalhla are presentation only, not status or authority.
+The second line shows the local path, Git branch (or detached HEAD), and
+nonzero exit status. The third line accepts commands. No clock or mood dot is
+added, and the theme makes no model or network calls.
+
+Install a copy at `${ZSH_CUSTOM:-$ZSH/custom}/themes/avalhla.zsh-theme` and source
+it as shown in `config/zshrc.example`. Back up shell settings before replacing
+only the old prompt definition, not the whole `.zshrc`. Existing terminal-title
+behavior can remain independent. Reload with `source ~/.zshrc`.
+
+The chat Modelfile source uses the same plain signature. Editing it does not
+rebuild or activate an installed Ollama model.
+
 ## 08 / TOOLS, COSTS, AND HARDWARE
 
 ```text

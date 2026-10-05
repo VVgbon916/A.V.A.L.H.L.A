@@ -35,8 +35,8 @@
   "doors": [
     {
       "order": 1,
-      "door": "THRESHOLD",
-      "skill": "avalhla-door-threshold",
+      "door": "ORIENT",
+      "skill": "avalhla-door-orient",
       "job": "BASELINE",
       "instrument": "WITNESS",
       "voice": "AVALHLA",
@@ -45,8 +45,8 @@
     },
     {
       "order": 2,
-      "door": "THREAD",
-      "skill": "avalhla-door-thread",
+      "door": "TRACE",
+      "skill": "avalhla-door-trace",
       "job": "HISTORY",
       "instrument": "WITNESS",
       "voice": "VALHLA",
@@ -55,8 +55,8 @@
     },
     {
       "order": 3,
-      "door": "WARD",
-      "skill": "avalhla-door-ward",
+      "door": "BOUNDARY",
+      "skill": "avalhla-door-boundary",
       "job": "SECURITY",
       "instrument": "LUX",
       "voice": "LUX",
@@ -65,8 +65,8 @@
     },
     {
       "order": 4,
-      "door": "LENS",
-      "skill": "avalhla-door-lens",
+      "door": "INSPECT",
+      "skill": "avalhla-door-inspect",
       "job": "FORENSIC",
       "instrument": "WITNESS",
       "voice": "AVALHLA",
@@ -75,8 +75,8 @@
     },
     {
       "order": 5,
-      "door": "FANG",
-      "skill": "avalhla-door-fang",
+      "door": "STRIKE",
+      "skill": "avalhla-door-strike",
       "job": "ADVERSARY",
       "instrument": "VEX",
       "voice": "VEX",
@@ -85,8 +85,8 @@
     },
     {
       "order": 6,
-      "door": "SCAR",
-      "skill": "avalhla-door-scar",
+      "door": "DIFF",
+      "skill": "avalhla-door-diff",
       "job": "DIFF",
       "instrument": "LUX",
       "voice": "LUX",
@@ -95,8 +95,8 @@
     },
     {
       "order": 7,
-      "door": "ECHO",
-      "skill": "avalhla-door-echo",
+      "door": "REPRISE",
+      "skill": "avalhla-door-reprise",
       "job": "REGRESSION",
       "instrument": "ECHO",
       "voice": "AVALHLA",
@@ -147,7 +147,7 @@
     }
   ],
   "new_finding_rule": {
-    "name": "RETURN_TO_THE_FANG",
+    "name": "RETURN_TO_STRIKE",
     "trigger": [
       "new component",
       "new skill",

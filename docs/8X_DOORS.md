@@ -3,35 +3,35 @@
 ```text
 Dawa <---- AvvA ----> Avalhla
 
-01 THRESHOLD  → BASELINE
-02 THREAD     → HISTORY
-03 WARD       → SECURITY
-04 LENS       → FORENSIC
-05 FANG       → ADVERSARY
-06 SCAR       → DIFF
-07 ECHO       → REGRESSION
+01 ORIENT  → BASELINE
+02 TRACE     → HISTORY
+03 BOUNDARY       → SECURITY
+04 INSPECT       → FORENSIC
+05 STRIKE       → ADVERSARY
+06 DIFF       → DIFF
+07 REPRISE       → REGRESSION
 08 LANTERN    → LUX + VEX GATE
 ```
 
-## 01 THRESHOLD — WITNESS
+## 01 ORIENT — WITNESS
 
 Enter the system without assumptions.
 
 Find actual files, commands, paths, environment, Git state, runtime boundaries, and current behavior.
 
-## 02 THREAD — WITNESS / VALHLA
+## 02 TRACE — WITNESS / VALHLA
 
 Follow lineage.
 
 Compare local tree, remote tree, commits, tags, prior safety decisions, and historical references.
 
-## 03 WARD — LUX
+## 03 BOUNDARY — LUX
 
 Map the trust boundary.
 
 Inspect permissions, sandbox, network, secrets, sensitive paths, input boundaries, and security tooling.
 
-## 04 LENS — WITNESS
+## 04 INSPECT — WITNESS
 
 Open the microscope.
 
@@ -39,19 +39,19 @@ Trace actual generators → schema → verifier → callers → records → evid
 
 Never infer corruption merely because a verifier reports failure.
 
-## 05 FANG — VEX
+## 05 STRIKE — VEX
 
 Attack the claim.
 
 Malformed records, missing fields, duplicate IDs, stale references, path confusion, symlinks, partial writes, races, prompt injection, secrets, and state confusion.
 
-## 06 SCAR — LUX
+## 06 DIFF — LUX
 
 Inspect the exact wound left by the patch.
 
 Review the precise diff, permission changes, data-flow changes, trust changes, and security implications.
 
-## 07 ECHO — ECHO
+## 07 REPRISE — ECHO
 
 Repeat the behavior.
 
@@ -67,7 +67,7 @@ Neither decides.
 
 Dawa decides.
 
-## RETURN-TO-FANG
+## RETURN-TO-STRIKE
 
 Whenever a new thing is found or introduced, run the naming and boundary attack again. Repeat every affected door. Escalate to full 8× whenever the new thing can affect runtime behavior, security, provenance, persistent state, permissions, or canonical data.
 
@@ -86,13 +86,13 @@ agents. No recursion, unlimited worker creation, free execution, or automatic
 permission follows from the name. Keep each investigation scoped; record
 contradictions and blocked gates instead of multiplying workers indefinitely.
 
-## Visual door-name proposal / not applied
+## Historical visual proposal / not applied
 
 The 2026-10-04 attachment proposed fantasy-inspired display names. They remain
 unapproved style candidates here, not command aliases, skill triggers, new
 canonical IDs, or changes to the door owners.
 
-| Canonical door | Proposed display label |
+| Historical door name | Historical proposed display label |
 |---|---|
 | THRESHOLD | SCRY |
 | THREAD | LORE |
@@ -107,6 +107,13 @@ The proposed RESTORE "door 0" is not part of the canonical eight-door sequence.
 Stopping and rebuilding a bounded handoff can be a recovery practice; clearing
 another worker's context is not assumed to be available or authorized.
 
-RETURN-TO-FANG keeps its current name. Applying a display skin or changing a
-role requires a separate explicit choice, source comparison, and affected
-checks. Literary references do not import another system's rules or powers.
+These older display proposals are historical only. Dawa selected the current
+canonical sequence on 2026-10-05: ORIENT, TRACE, BOUNDARY, INSPECT, STRIKE,
+DIFF, REPRISE, LANTERN. RETURN-TO-STRIKE is the current re-attack rule.
+Literary references do not import another system's rules or powers.
+
+Historical migration aliases: THRESHOLD -> ORIENT, THREAD -> TRACE,
+WARD -> BOUNDARY, LENS -> INSPECT, FANG -> STRIKE, SCAR -> DIFF,
+ECHO (door only) -> REPRISE. The ECHO instrument remains ECHO.
+The former `references/RETURN_TO_FANG.md` owner is now
+`references/RETURN_TO_STRIKE.md`; there is no second active rule artifact.

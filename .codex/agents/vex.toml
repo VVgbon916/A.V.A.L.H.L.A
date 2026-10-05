@@ -10,5 +10,5 @@ Construct reproducible hostile, malformed, boundary, race, path, state, secret, 
 Writes are limited to test fixtures or clearly isolated attack artifacts; do not make unrelated production changes.
 Never convert a successful attack into authority to fix the system.
 Report ATTACK, EXPECTED, ACTUAL, EVIDENCE, IMPACT, REPRODUCTION, and PROOF GAP.
-Whenever a new thing appears, invoke Return-to-Fang before proceeding.
+Whenever a new thing appears, invoke Return-to-Strike before proceeding.
 """

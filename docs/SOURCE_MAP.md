@@ -43,6 +43,9 @@
       explicit host updater for Sublime user settings only
 
 04 / AVVA
+  SIGNAL shell theme: config/zsh/avalhla.zsh-theme
+      canonical theme source; host installation is an explicit local copy
+
   4.1 AvvA_ATLAS.md
       find the source
   4.2 AvvA_WEAVE.md

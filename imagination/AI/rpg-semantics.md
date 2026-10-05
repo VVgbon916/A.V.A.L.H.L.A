@@ -33,7 +33,7 @@ PERSONA → declared ABILITY → reusable SKILL → typed ACTION
 ```
 
 The implemented slice is only the existing `avalhla-chat` persona's declared
-`review.capture_scope` ability → reusable `avalhla-door-scar` workflow
+`review.capture_scope` ability → reusable `avalhla-door-diff` workflow
 (Instrument: LUX) → `capture_review_scope` → an unverified, non-persisted
 `review_scope` object. The action has no persistence effect. It hashes one explicitly referenced local Markdown or
 text file under `docs/`. It does not perform the review or call a tool. LUX

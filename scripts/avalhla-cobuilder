@@ -60,7 +60,7 @@ PY
 reattack() {
   [[ $# -eq 2 ]] || { printf '%s\n' 'reattack requires NAME KIND' >&2; exit 2; }
   cat <<EOF2
-RETURN-TO-FANG
+RETURN-TO-STRIKE
 NAME=$1
 KIND=$2
 
@@ -93,11 +93,11 @@ for d in reg['doors']:
     text=p.read_text(encoding='utf-8')
     assert re.search(r'^name:\s*', text, re.M), p
     assert re.search(r'^description:\s*', text, re.M), p
-for p in (root/'AGENTS.md', root/'references/DOORBOOK.md', root/'references/RETURN_TO_FANG.md', root/'docs/NAMING_SKILL.md'):
+for p in (root/'AGENTS.md', root/'references/DOORBOOK.md', root/'references/RETURN_TO_STRIKE.md', root/'docs/NAMING_SKILL.md'):
     assert p.is_file(), p
 print('PACK VERIFY: PASS')
 print('DOORS=8 INSTRUMENTS=5 HISTORICAL=2 ANGEL=1 DEMON=1')
-print('RETURN_TO_FANG=ENABLED')
+print('RETURN_TO_STRIKE=ENABLED')
 PY
   for f in "$ROOT"/.codex/config.toml "$ROOT"/.codex/agents/*.toml; do
     python3 - "$f" <<'PY'

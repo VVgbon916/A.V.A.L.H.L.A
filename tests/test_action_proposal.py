@@ -22,9 +22,9 @@ class ActionProposalTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.root = Path(self.tmp.name)
-        (self.root / ".agents/skills/avalhla-door-scar").mkdir(parents=True)
-        (self.root / ".agents/skills/avalhla-door-scar/SKILL.md").write_text(
-            "# SCAR\nExact diff review workflow.\n", encoding="utf-8"
+        (self.root / ".agents/skills/avalhla-door-diff").mkdir(parents=True)
+        (self.root / ".agents/skills/avalhla-door-diff/SKILL.md").write_text(
+            "# DIFF\nExact diff review workflow.\n", encoding="utf-8"
         )
         docs = self.root / "docs"
         docs.mkdir()
@@ -35,7 +35,7 @@ class ActionProposalTests(unittest.TestCase):
             "action_id": "action-001",
             "persona_id": "avalhla-chat",
             "ability_id": "review.capture_scope",
-            "skill_id": "avalhla-door-scar",
+            "skill_id": "avalhla-door-diff",
             "requested_operation": "capture_review_scope",
             "target": "docs/sample.md",
             "source_refs": [
@@ -55,7 +55,7 @@ class ActionProposalTests(unittest.TestCase):
         obj = ava_action.create_object(self.proposal, self.root)
         self.assertEqual(obj["producer_persona"], "avalhla-chat")
         self.assertEqual(obj["ability_id"], "review.capture_scope")
-        self.assertEqual(obj["skill_id"], "avalhla-door-scar")
+        self.assertEqual(obj["skill_id"], "avalhla-door-diff")
         self.assertEqual(obj["object_type"], "review_scope")
         self.assertEqual(obj["source_refs"][0]["path"], "docs/sample.md")
         self.assertTrue(ava_action.verify_object(obj))

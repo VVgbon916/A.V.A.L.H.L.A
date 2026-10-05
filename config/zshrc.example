@@ -451,18 +451,8 @@ if [[ -o interactive ]] && [[ -z "$AVA_BANNER_SHOWN" ]]; then
 fi
 
 # ═══ Ava Prompt ═══
-setopt PROMPT_SUBST
-
-git_prompt() {
-    local b
-    b=$(git symbolic-ref --short HEAD 2>/dev/null) || return
-    echo " %F{240}git:(%F{cyan}${b}%F{240})%f"
-}
-
-PROMPT='%F{magenta}Dawa%f %F{green}<%f %F{cyan}AvvA%f %F{green}>%f %F{yellow}Avalhla%f %F{240}[%~]%f$(git_prompt)
-%F{green}❯%f '
-
-RPROMPT='%F{240}%*%f'
+# Install config/zsh/avalhla.zsh-theme in the Oh My Zsh custom themes directory.
+source "${ZSH_CUSTOM:-$ZSH/custom}/themes/avalhla.zsh-theme"
 
 # you-should-use: quiet noise
 export YSU_MESSAGE_POSITION="after"

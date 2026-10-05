@@ -28,18 +28,20 @@ Dawa = final authority.
 
 ## Doors
 
-1. THRESHOLD — establish the actual present state.
-2. THREAD — trace lineage through history.
-3. WARD — establish the security boundary.
-4. LENS — inspect generators, schema, verifiers, callers, and evidence.
-5. FANG — attack the claim.
-6. SCAR — examine the exact change.
-7. ECHO — prove what changed and what did not.
-8. LANTERN — LUX guards, VEX attacks, Dawa decides.
+1. ORIENT — establish the actual present state.
+2. TRACE — trace lineage through history.
+3. BOUNDARY — establish the security boundary.
+4. INSPECT — inspect generators, schema, verifiers, callers, and evidence.
+5. STRIKE — attack the claim.
+6. DIFF — examine the exact change.
+7. REPRISE — prove what changed and what did not.
+8. LANTERN — compare supported evidence and unresolved challenges.
+
+Dawa chooses afterward, outside the eight doors.
 
 The order is deliberate: reality before interpretation, lineage before novelty, boundary before attack, evidence before change, change before release.
 
-## Return-to-Fang rule
+## Return-to-Strike rule
 
 Whenever a new thing is found, named, or introduced, stop normal flow long enough to re-attack the discovery.
 

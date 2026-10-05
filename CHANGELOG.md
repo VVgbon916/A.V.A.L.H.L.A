@@ -23,6 +23,9 @@ This project currently uses an `Unreleased` section while release/version naming
 
 ### Added
 
+- SIGNAL Zsh theme: plain relational signature, orange Dawa, neutral AvvA,
+  blue Avalhla, local path/Git context, and nonzero exit status.
+  No clock, mood dot, model call, or network call is added by the theme.
 - Bounded public-source headless review adapter `scripts/ava-team.py` and its
   subordinate `avalhla-team` skill: SHA-256 evidence, exact-request caching,
   Slow/Normal/Fast scheduling, tool-free Claude or explicit local Ollama
@@ -42,6 +45,12 @@ This project currently uses an `Unreleased` section while release/version naming
 
 ### Changed
 
+- Dawa-selected canonical doors: ORIENT, TRACE, BOUNDARY, INSPECT, STRIKE,
+  DIFF, REPRISE, LANTERN; RETURN-TO-STRIKE replaces the former re-attack label.
+  Dawa chooses outside the eight-door chain. Agent/instrument roles and
+  permissions remain unchanged; old door names are historical migration only.
+- The chat persona source uses only `Dawa <---- AvvA ----> Avalhla`, without
+  a face suffix. No installed model rebuild or activation is implied.
 - CoBuilder machine state now records the activation vocabulary and operating method.
 - CoBuilder toolbelt, command inventory, source map, and README expose the new activation door and role vocabulary.
 - Reviewer output remains evidence only; current repository source remains the authority.

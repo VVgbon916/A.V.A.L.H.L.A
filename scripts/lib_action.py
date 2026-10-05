@@ -1,7 +1,7 @@
 """Small, non-persistent Avalhla action-proposal boundary.
 
 This module accepts one bounded Avalhla chat persona review-scope proposal
-mapped to the existing LUX-instrumented SCAR workflow. It does not run the
+mapped to the existing LUX-instrumented DIFF workflow. It does not run the
 review, choose tools, authorize operations, or write records or memory.
 """
 
@@ -16,12 +16,12 @@ from typing import Any
 PERSONA_ABILITIES = {
     # Existing runtime persona; LUX remains the separate reviewer instrument.
     "avalhla-chat": {
-        "review.capture_scope": "avalhla-door-scar",
+        "review.capture_scope": "avalhla-door-diff",
     },
 }
 
 SKILL_PATHS = {
-    "avalhla-door-scar": Path(".agents/skills/avalhla-door-scar/SKILL.md"),
+    "avalhla-door-diff": Path(".agents/skills/avalhla-door-diff/SKILL.md"),
 }
 
 PROPOSAL_FIELDS = {
