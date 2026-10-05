@@ -130,3 +130,7 @@ This pass does not claim a complete content review of the archive.
 - `tests/test_team.py`: source-boundary, request-cache, and failure checks.
 - [CoBuilder toolbelt](CO_BUILDER_TOOLBELT.md): command, cost, and permission
   contract. No competing team master or auto-read lane is created.
+- [Research sources](../references/RESEARCH_SOURCES.md): inspected third-party
+  revisions, GDP endpoint provenance, adoption holds, and evidence gaps.
+  Account identifiers, private snapshots, and credentials are not research
+  artifacts and are not published here.

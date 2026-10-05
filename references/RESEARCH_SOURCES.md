@@ -148,3 +148,163 @@ not trust or security ratings; none were installed:
 
 The last result is GitHub CLI-specific, not an Avalhla review contract. Existing
 GitHub tooling is preferable to installing these merely because they were found.
+
+## Desktop Commander / deployment research 2026-10-05
+
+Observed repository revision:
+[`c774c3b505de990219637ecdc9a830c8772fae9d`](https://github.com/wonderwhy-er/DesktopCommanderMCP/tree/c774c3b505de990219637ecdc9a830c8772fae9d).
+The repository is unarchived; its package manifest declares MIT licensing,
+version `0.2.52`, and Node.js `>=18.0.0`. This is a source inspection, not an
+installation, dependency audit, or runtime certification.
+
+### One product / separate connection boundaries
+
+The [Claude plugin manifest](https://github.com/wonderwhy-er/DesktopCommanderMCP/blob/c774c3b505de990219637ecdc9a830c8772fae9d/plugins/claude/.claude-plugin/plugin.json)
+declares a local stdio MCP server plus workflow skills. Its command uses
+`npx -y @wonderwhy-er/desktop-commander@latest`. The manifest's plugin version
+`0.2.0` is not the MCP package version. A future deployment should pin the
+package/image separately rather than treating a plugin revision as a runtime pin.
+No plugin was installed in this research pass.
+
+Local stdio and Remote are not interchangeable:
+
+```text
+LOCAL CLIENT -> STDIO MCP -> LOCAL PROCESS
+
+REMOTE CLIENT -> REMOTE MCP SERVICE -> PAIRED DEVICE -> LOCAL MCP
+                arguments/results cross this service
+```
+
+The [Remote guide](https://github.com/wonderwhy-er/DesktopCommanderMCP/blob/c774c3b505de990219637ecdc9a830c8772fae9d/src/remote-device/README.md)
+documents browser-confirmed OAuth device authorization and a saved device
+session. Restart normally reuses that session. Stopping the process takes the
+device offline; local logout removes saved credentials but does not revoke
+server-side authorization. Revocation and removing a client's connector are
+separate actions. An identifier supplied in chat is not proof of any of them.
+Never copy one service's credentials into an unrelated plugin or model project.
+
+### Isolation / privacy / persistence
+
+The [security policy](https://github.com/wonderwhy-er/DesktopCommanderMCP/blob/c774c3b505de990219637ecdc9a830c8772fae9d/SECURITY.md)
+classifies the tool as privileged automation: directory allowlists and command
+blocklists are guardrails, not a sandbox. Terminal commands execute with the
+server's user permissions. OS-level isolation is needed when the client must
+not reach the host. Container safety depends on mounts, capabilities, sockets,
+network access, and runtime configuration; README claims of "zero risk" are
+not adopted as verified facts.
+
+The [README history section](https://github.com/wonderwhy-er/DesktopCommanderMCP/blob/c774c3b505de990219637ecdc9a830c8772fae9d/README.md#local-tool-history-and-audit-logs)
+states that local tool-call argument logs are unredacted. Remote routing also
+temporarily stores arguments/results. The
+[privacy policy](https://github.com/wonderwhy-er/DesktopCommanderMCP/blob/c774c3b505de990219637ecdc9a830c8772fae9d/PRIVACY.md)
+describes optional telemetry as enabled by default, with an opt-out setting.
+Telemetry, local logs, and Remote transit are different data paths. None was
+disabled or reconfigured by this research.
+
+**Decision: HOLD activation; candidate for an isolated local stdio trial.**
+Before enablement, inspect a pinned artifact, mount only a disposable public
+fixture, avoid host sockets/credentials, verify denied host access and clean
+shutdown, and document log retention. Remote pairing/revocation requires a
+separate test. Existing `ava-team.py` reviewers intentionally remain tool-free;
+adding this plugin to them would change that tested boundary.
+
+## Additional integration candidates / 2026-10-05
+
+Public-source research only: no candidate code, installer, model training,
+credential flow, or gateway tool was executed. Repository documentation and
+research benchmarks are project claims, not Avalhla measurements.
+
+| Candidate / observed revision | Actual purpose | Decision for Avalhla |
+|---|---|---|
+| [Mini-Omni-Reasoner](https://github.com/xzf-thu/Mini-Omni-Reasoner/tree/d8af7984e4693114516ce973c152ba00035b1f4b) | MIT-licensed speech-reasoning research built on Qwen2.5-Omni-3B; not a coding-review MCP plugin | HOLD deployment; possible future voice research |
+| [LowRankClone](https://github.com/CURRENTF/LowRankClone/tree/7b458b266e93d1c83f888f6b67e48e1c70f3e985) | Teacher/student model distillation with low-rank projections; heavyweight training, not a drop-in inference adapter | HOLD; licensing and hardware feasibility unresolved |
+| [RayCodes_FreeToken](https://github.com/47thtechcorner/RayCodes_FreeToken/tree/cea93d078e861098c205f68f9880ba8c4754df6b) | Tutorial wrapper around an optional separate inference package, with a canned fallback report | HOLD; not measured inference evidence or cloud token entitlement |
+| [xmltokenizer](https://github.com/muktihari/xmltokenizer/tree/5d45a12228369e198fb41135f746002ad29966cf) | MIT-licensed Go XML tokenizer, not an LLM token counter | RESEARCH only for a concrete Go/XML parsing requirement |
+
+### Model research is not a plugin install
+
+Mini-Omni-Reasoner's
+[README](https://github.com/xzf-thu/Mini-Omni-Reasoner/blob/d8af7984e4693114516ce973c152ba00035b1f4b/README.md)
+describes interleaved speech reasoning and points to its research report.
+It does not establish a local coding/review backend, MCP interface, or a
+verified memory requirement on Dawa's machine. Promised releases are not proof
+that every training artifact or dataset was delivered.
+
+LowRankClone's
+[README](https://github.com/CURRENTF/LowRankClone/blob/7b458b266e93d1c83f888f6b67e48e1c70f3e985/README.md)
+describes a distillation/training workflow with version-sensitive GPU
+dependencies and multi-GPU examples. No repository license was found in this
+inspection; do not infer redistribution rights from public visibility.
+Reference training hardware is not a proved minimum for every configuration.
+Student-checkpoint licensing and inference compatibility require their own
+review before any deployment. Neither project changes Avalhla's active model.
+
+### FreeToken name / measurement boundary
+
+The RayCodes tutorial's
+[main.py](https://github.com/47thtechcorner/RayCodes_FreeToken/blob/cea93d078e861098c205f68f9880ba8c4754df6b/main.py)
+optionally imports `freetoken` and provides a fallback with a fixed speed value
+and canned report. That fallback must not be counted as a successful model run
+or benchmark. No repository license was found for the tutorial.
+
+The separate [FlashML-org/FreeToken](https://github.com/FlashML-org/FreeToken)
+is a lead, not an adopted or independently audited Avalhla backend. Its identity,
+package provenance, model licensing, runtime behavior, and hardware fit need a
+bounded follow-up before installation. Local inference may avoid a cloud
+inference invoice; it still consumes memory, compute, power, and context.
+The tutorial supplies no proof of free cloud-provider credits. No credential
+reuse, quota bypass, or provider authentication change follows from its name.
+
+### XML tokens are not model tokens
+
+The xmltokenizer
+[README](https://github.com/muktihari/xmltokenizer/blob/5d45a12228369e198fb41135f746002ad29966cf/README.md)
+and [module declaration](https://github.com/muktihari/xmltokenizer/blob/5d45a12228369e198fb41135f746002ad29966cf/go.mod)
+describe Go XML parsing. Its non-namespace design and parsing benchmarks do
+not establish LLM token savings, prompt compression, or compatibility with
+namespace-dependent XML formats. Avalhla has no demonstrated need to add this
+dependency in the current Python review adapter.
+
+## GDP / Git Diff Patcher Bridge / 2026-10-05
+
+The [methetech GitHub profile](https://github.com/methetech) alone did not
+identify the gateway. First-party Help documentation subsequently established
+GDP's published connection path; the initial lack of GitHub source was not
+evidence that the product did not exist.
+
+The [connection guide](https://methe.tech/help/gdp/connect-chatgpt-to-gdp)
+explicitly names `https://mcp.methe.tech/gdp/mcp`, browser authorization,
+Demo Workspace, and a connected GDP Desktop workflow. An unauthenticated GET
+to the endpoint returned HTTP 200 with HTML. This verifies reachability and
+published endpoint provenance, not an MCP handshake, account authentication,
+node selection, enforced routing, or successful execution.
+
+The [repository tool reference](https://methe.tech/help/gdp/gdp-repository-tool-reference)
+describes a caller-effective, variable tool catalog. Pasted tool descriptions
+are useful leads, but not live schemas or evidence that a capability is exposed
+in this CLI session. Absence of a name in public Help is not proof that a
+user-supplied catalog is false. GDP's worker terminology must not be equated
+with Microsoft Fabric Spark merely because both use the word "Spark."
+
+The published architecture preserves GDP Desktop's local execution/policy
+boundary. Hosted patch intake is not patch application, suggested checks are
+not command execution, and a publication request is not a commit/push receipt.
+Selected repository context can cross the AI host/gateway; "local-first" does
+not mean every data path is offline. These are documented design boundaries,
+not an independent implementation audit.
+
+The [plans and entitlements guide](https://methe.tech/help/gdp/understand-gdp-plans-and-entitlements)
+explicitly defers numeric allowances to live Pricing and account Profile.
+The [usage and queue guide](https://methe.tech/help/gdp/understand-gdp-cloud-usage-and-queue)
+separates gateway metering and admission from execution authority. No account
+balance or numeric entitlement was verified. Gateway units must not be
+converted to model tokens or reviewer credits without a documented conversion.
+Private identifiers and supplied account snapshots are intentionally excluded.
+
+**Decision: RESEARCH / readiness verification before integration.**
+Use the actual connected host's read-only discovery and exact effective schemas
+when available. Establish the selected node, workspace/repository, limits, and
+authority separately before any material request. Do not invent a bearer token
+from an identifier, share Desktop Commander credentials, install GDP from an
+unverified download, or retry a possibly non-idempotent dispatch blindly.
+No GDP connector was configured, authorized, or invoked in this pass.

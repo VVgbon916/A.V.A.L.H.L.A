@@ -8,6 +8,10 @@ This project currently uses an `Unreleased` section while release/version naming
 
 ### Documentation remaster - 2026-10-05
 
+- Recorded bounded research for speech reasoning, model distillation, a
+  FreeToken tutorial, XML parsing, Desktop Commander, and GDP. Distinguished
+  published capabilities from runtime proof, endpoint provenance from account
+  authentication, and gateway allowances from model tokens; installed nothing.
 - Distilled ten user-supplied references into English public-safe explanations
   in the existing definition, development, spine, handoff, voices, doors,
   board, research, and Dawa-boundary owners.

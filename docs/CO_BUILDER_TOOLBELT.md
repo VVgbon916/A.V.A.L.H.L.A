@@ -121,6 +121,60 @@ Three valuable upgrades delivered by this adapter:
 These improve the workflow; they do not prove universal savings, perfect
 security, compatibility with every platform, or that no further upgrade exists.
 
+### Candidate plugins and gateway accounts
+
+Research authorization permits reading public sources; it does not make an
+account identifier an API credential or prove a connector is paired.
+Use the [research source record](../references/RESEARCH_SOURCES.md) for inspected
+candidate revisions and adoption decisions. A shared workflow can reuse public
+handoff formats, not credentials between unrelated services.
+
+```text
+SOURCE -> VERIFIED CAPABILITY -> ISOLATED TRIAL -> EXPLICIT ENABLEMENT
+                     |
+             unsupported: HOLD
+
+QUOTA != TOKENS != CONCURRENCY != REVIEW CREDIT
+INSTALLED != AUTHENTICATED != ROUTED != VERIFIED
+```
+
+For any proposed gateway adapter, verify the official service endpoint,
+authentication method, account scope, model routing, and plan units first.
+Keep identifiers, credentials, account snapshots, and remaining balances out
+of the public research record. Do not publish them to demonstrate connectivity.
+
+A future quota-aware scheduler should treat each resource separately:
+monthly gateway units, reviewer credits, guaranteed concurrency, spare-capacity
+concurrency, queue length, daily token pools, and temporary bonuses. Missing or
+zero reviewer credits must not silently select a paid reviewer. Spare capacity
+is opportunistic, not guaranteed throughput; a one-time bonus is not recurring
+capacity. Official exhaustion behavior, reset timezone, model multipliers,
+retry billing, and cancellation semantics need evidence before scheduling.
+
+This is a design checklist, not an implemented gateway scheduler. The current
+`ava-team.py` does not consume these plan values, connect to an account gateway,
+or synchronize devices. Tool-free headless review remains its tested scope.
+Dataverse and Fabric skills should be loaded for a concrete data task, not
+enabled merely because a list of candidate projects includes broad permission.
+
+Three next upgrades worth a separately bounded implementation:
+
+1. **GDP readiness receipt:** capture effective catalog/version, selected
+   node/workspace, exact repository and authority checks in one compact record.
+   This avoids repeated discovery without mistaking account login for routing.
+   Requires GDP tools in the actual connected host; none are exposed here.
+2. **Quota-aware admission:** schedule guaranteed versus opportunistic jobs
+   separately, enforce queue limits, and reject unsupported reviewer funding.
+   Requires live account limits and documented metering/reset rules; no
+   user-reported allowance is currently wired into `ava-team.py`.
+3. **Isolated Desktop Commander trial:** use a pinned local stdio runtime on a
+   disposable public fixture, with host-access denial and stop/restart tests.
+   This can add persistent tool workflows without giving tool-free reviewers
+   host authority. Container configuration, logs, and credential exposure need
+   verification; Remote activation remains a separate decision.
+
+These are proposed upgrades, not installed integrations or measured savings.
+
 ## CoBuilder activation
 
 Canonical activation door:
