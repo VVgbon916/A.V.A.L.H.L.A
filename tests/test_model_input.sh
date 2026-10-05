@@ -4,7 +4,7 @@ set -Eeuo pipefail
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
 source "$ROOT/scripts/lib_model_input.sh"
 
-actual="$(printf 'abcdefgh' | ava_model_input_stdin REVIEW_STDIN 4)"
+actual="$(printf 'abcd' | ava_model_input_stdin REVIEW_STDIN 4)"
 expected=$'[[ BEGIN MODEL INPUT :: STDIN :: REVIEW_STDIN ]]\ntrust: untrusted-data\nabcd\n[[ END MODEL INPUT :: STDIN :: REVIEW_STDIN ]]'
 [[ "$actual" == "$expected" ]] || {
     printf '%s\n' 'FAIL: requested stdin limit was not applied' >&2
@@ -71,3 +71,9 @@ fi
 printf '%s\n' 'PASS: ava-review rejects inconsistent inherited global limit'
 
 printf '%s\n' 'MODEL_INPUT_TEST_OK'
+
+if printf 'abcde' | ava_model_input_stdin REVIEW_STDIN 4 >/dev/null 2>&1; then
+    echo 'FAIL: oversized stdin was accepted as a truncated prefix' >&2
+    exit 1
+fi
+printf '%s\n' 'PASS: oversized stdin fails closed'

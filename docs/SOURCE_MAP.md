@@ -9,6 +9,10 @@
       standard fast-reading grammar
   1.3 docs/AVALHLA_SPINE.md
       authority + information-flow architecture
+  1.5 docs/SKILL_SYSTEM.md
+      on-demand skill and consultation-lane workflow contract
+  1.6 config/avalhla-naming.v1.json
+      canonical naming, roles, doors, and skill activation registry
 
 02 / EXECUTION + PROOF
   2.1 docs/PHASING.md

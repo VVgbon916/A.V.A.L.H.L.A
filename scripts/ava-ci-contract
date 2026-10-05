@@ -11,7 +11,7 @@ bad() { printf "  [FAIL] %s -- %s\n" "$1" "$2"; FAIL=$((FAIL + 1)); }
 printf "%s\n" "== avalhla static contract =="
 printf "root: %s\n\n" "$ROOT"
 printf "%s\n" "-- canonical files --"
-for f in docs/FAST_VIEW.md docs/AVALHLA_SPINE.md docs/PHASING.md docs/CO_BUILDER_TOOLBELT.md docs/DAWA_NOTEPAD.md config/sublime/Preferences.sublime-settings memory/auto-read/00_AI_COBUILD.json config/color/avalhla-color-field.v1.json config/integrity/avalhla-integrity.v1.json docs/COLOR_BOOK.md scripts/ava-cobuilder scripts/lib_color_field.sh scripts/lib_integrity.sh scripts/lib_model_input.sh scripts/lib_action.py tests/test_color_field.sh tests/test_integrity.sh tests/test_action_proposal.py tests/test_model_input.sh tests/test_review_gate.sh tests/test_ava_mood.sh scripts/ava-sublime-update scripts/ava-resume scripts/ava-github-review scripts/ava-ci-contract AGENTS.md .github/workflows/avalhla-static-verify.yml; do
+for f in docs/FAST_VIEW.md docs/AVALHLA_SPINE.md docs/PHASING.md docs/CO_BUILDER_TOOLBELT.md docs/DAWA_NOTEPAD.md docs/SKILL_SYSTEM.md config/sublime/Preferences.sublime-settings memory/auto-read/00_AI_COBUILD.json config/color/avalhla-color-field.v1.json config/integrity/avalhla-integrity.v1.json docs/COLOR_BOOK.md scripts/ava-cobuilder scripts/ava-cobuilder-projection scripts/ava-health tests/test_ava_health.sh tests/test_cobuilder_projection.sh tests/test_skill_routing.sh scripts/lib_color_field.sh scripts/lib_integrity.sh scripts/lib_model_input.sh scripts/lib_action.py tests/test_color_field.sh tests/test_integrity.sh tests/test_action_proposal.py tests/test_model_input.sh tests/test_redact.py tests/test_model_transport.py tests/test_ava_diff_failure.py tests/test_github_review_capture.py tests/test_ava_explain.sh tests/test_review_gate.sh tests/test_ava_mood.sh scripts/ava-sublime-update scripts/ava-resume scripts/ava-github-review scripts/ava-ci-contract AGENTS.md .github/workflows/avalhla-static-verify.yml; do
   [[ -f "$f" ]] && ok "present $f" || bad "present $f" "missing"
 done
 
@@ -62,6 +62,14 @@ printf "%s\n" "" "-- color and integrity contracts --"
 if tests/test_color_field.sh; then ok "Color Field contract"; else bad "Color Field contract" "test failed"; fi
 if tests/test_integrity.sh; then ok "SHA-256 integrity contract"; else bad "SHA-256 integrity contract" "test failed"; fi
 if tests/test_model_input.sh; then ok "bounded untrusted model input"; else bad "bounded untrusted model input" "test failed"; fi
+if PYTHONDONTWRITEBYTECODE=1 python3 tests/test_redact.py; then ok "secret redaction positive and negative cases"; else bad "secret redaction positive and negative cases" "test failed"; fi
+if PYTHONDONTWRITEBYTECODE=1 python3 tests/test_model_transport.py; then ok "untrusted file and diff transport"; else bad "untrusted file and diff transport" "test failed"; fi
+if PYTHONDONTWRITEBYTECODE=1 python3 tests/test_ava_diff_failure.py; then ok "ava-diff failure and cache boundaries"; else bad "ava-diff failure and cache boundaries" "test failed"; fi
+if PYTHONDONTWRITEBYTECODE=1 python3 tests/test_github_review_capture.py; then ok "atomic GitHub review evidence capture"; else bad "atomic GitHub review evidence capture" "test failed"; fi
+if bash tests/test_ava_explain.sh; then ok "ava-explain output gate"; else bad "ava-explain output gate" "test failed"; fi
+if bash tests/test_ava_health.sh; then ok "ava-health output gate"; else bad "ava-health output gate" "test failed"; fi
+if bash tests/test_cobuilder_projection.sh; then ok "cobuilder projection bounded"; else bad "cobuilder projection bounded" "test failed"; fi
+if bash tests/test_skill_routing.sh; then ok "on-demand skill routing"; else bad "on-demand skill routing" "test failed"; fi
 if bash tests/test_review_gate.sh; then ok "exact review verdict contract"; else bad "exact review verdict contract" "test failed"; fi
 if tests/test_ava_mood.sh; then ok "bounded mood reference"; else bad "bounded mood reference" "test failed"; fi
 

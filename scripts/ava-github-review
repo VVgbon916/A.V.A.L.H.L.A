@@ -46,17 +46,18 @@ else
 fi
 [[ -n "$PR" && "$PR" != "null" ]] || { printf "No open pull request found for %s.\n" "$BRANCH"; exit 0; }
 
-TITLE="$(gh pr view "$PR" --json title --jq ".title")"
-STATE="$(gh pr view "$PR" --json state --jq ".state")"
-BASE="$(gh pr view "$PR" --json baseRefName --jq ".baseRefName")"
-HEAD_BRANCH="$(gh pr view "$PR" --json headRefName --jq ".headRefName")"
-HEAD_SHA="$(gh pr view "$PR" --json headRefOid --jq ".headRefOid")"
+capture_required "pull request metadata" PR_METADATA gh pr view "$PR" --json title,state,baseRefName,headRefName,headRefOid,url,reviewDecision
+TITLE="$(jq -er '.title | strings' <<<"$PR_METADATA")"
+STATE="$(jq -er '.state | strings' <<<"$PR_METADATA")"
+BASE="$(jq -er '.baseRefName | strings' <<<"$PR_METADATA")"
+HEAD_BRANCH="$(jq -er '.headRefName | strings' <<<"$PR_METADATA")"
+HEAD_SHA="$(jq -er '.headRefOid | strings' <<<"$PR_METADATA")"
 [[ "$HEAD_SHA" =~ ^[0-9a-fA-F]{40}([0-9a-fA-F]{24})?$ ]] || {
   printf 'ava-github-review: invalid PR head SHA: %s\n' "$HEAD_SHA" >&2
   exit 1
 }
-URL="$(gh pr view "$PR" --json url --jq ".url")"
-DECISION="$(gh pr view "$PR" --json reviewDecision --jq ".reviewDecision // \"UNKNOWN\"")"
+URL="$(jq -er '.url | strings' <<<"$PR_METADATA")"
+DECISION="$(jq -r '.reviewDecision // "UNKNOWN"' <<<"$PR_METADATA")"
 
 capture_required "pull request reviews" REVIEW_ROWS gh api --paginate "repos/$REPO/pulls/$PR/reviews?per_page=100" --jq '.[] | select(.state != "PENDING") | [(.user.login // "?"),(.state // "?"),(.commit_id // "UNBOUND"),(.submitted_at // "?"),(.body // "")] | @tsv'
 capture_required "CodeRabbit inline comments" CR_ROWS env HEAD_SHA="$HEAD_SHA" gh api --paginate "repos/$REPO/pulls/$PR/comments?per_page=100&sort=created&direction=asc" --jq '.[] | select((.user.login // "") == "coderabbitai[bot]") | [(if ((.original_commit_id // "") == env.HEAD_SHA or (.commit_id // "") == env.HEAD_SHA) then "CURRENT" elif ((.original_commit_id // "") != "" or (.commit_id // "") != "") then "HISTORICAL" else "UNBOUND" end),(.path // "?"),((.line // 0)|tostring),(.commit_id // "UNBOUND"),(.original_commit_id // "UNBOUND"),(.body // "")] | @tsv'

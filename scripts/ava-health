@@ -1,0 +1,151 @@
+#!/usr/bin/env bash
+# ava-health -- deterministic Avalhla repo + runtime health check.
+# Aggregates existing gates (ava-audit, door syntax, Ollama reachability and
+# required models). Pure bash by default -- no LLM call unless --explain.
+set -Eeuo pipefail
+
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$HERE/lib_runtime.sh"
+
+REQUIRED_MODELS=("$AVA_MODEL" "$AVA_CHAT_MODEL" "$AVA_CODE_MODEL" "$AVA_REVIEW_MODEL")
+
+AVA_HEALTH_TMPDIR="$(mktemp -d)"
+trap 'rm -rf "$AVA_HEALTH_TMPDIR"' EXIT
+
+health_audit() {
+    local tmp="$AVA_HEALTH_TMPDIR/audit"
+    if "$AVA_SCRIPTS_DIR/ava-audit" "$AVA_ROOT" >"$tmp" 2>&1; then
+        echo "AUDIT: clean"
+    else
+        echo "AUDIT: findings -- see: ava-audit --portability"
+    fi
+}
+
+health_doors() {
+    local bad=0 f
+    while IFS= read -r -d "" f; do
+        if ! bash -n "$f" >/dev/null 2>&1; then
+            echo "DOORS: syntax error -- ${f#"$AVA_ROOT"/}"
+            bad=$((bad + 1))
+        fi
+    done < <(find "$AVA_SCRIPTS_DIR" -maxdepth 1 -type f -perm -u+x -print0 2>/dev/null)
+    (( bad == 0 )) && echo "DOORS: none"
+}
+
+health_model() {
+    local tmp="$AVA_HEALTH_TMPDIR/tags"
+    if ! curl -fsS --max-time 3 "$OLLAMA_HOST/api/tags" >"$tmp" 2>&1; then
+        echo "MODEL: Ollama unreachable at $OLLAMA_HOST"
+        return
+    fi
+    local missing=() m have
+    have="$(jq -r '.models[].name' "$tmp" 2>/dev/null || true)"
+    for m in "${REQUIRED_MODELS[@]}"; do
+        grep -qxF "$m" <<<"$have" || grep -qxF "${m}:latest" <<<"$have" || missing+=("$m")
+    done
+    if (( ${#missing[@]} == 0 )); then
+        echo "MODEL: reachable, all required models present"
+    else
+        echo "MODEL: reachable, missing: ${missing[*]}"
+    fi
+}
+
+health_gate() {
+    if [[ "${1:-}" != "--full" ]]; then
+        echo "GATE: skipped (pass --full to run scripts/ava-ci-contract)"
+        return
+    fi
+    local tmp="$AVA_HEALTH_TMPDIR/gate"
+    if "$AVA_SCRIPTS_DIR/ava-ci-contract" >"$tmp" 2>&1; then
+        echo "GATE: ALL GREEN"
+    else
+        echo "GATE: failures -- see: scripts/ava-ci-contract"
+    fi
+}
+
+run_report() {
+    local full_flag="${1:-}"
+    health_audit
+    health_doors
+    health_model
+    health_gate "$full_flag"
+}
+
+ava_health_self_test() {
+    local out
+    out="$(run_report)"
+    [[ "$out" == *"AUDIT:"* ]] || { echo "self-test FAIL: no AUDIT line" >&2; return 1; }
+    [[ "$out" == *"DOORS:"* ]] || { echo "self-test FAIL: no DOORS line" >&2; return 1; }
+    [[ "$out" == *"MODEL:"* ]] || { echo "self-test FAIL: no MODEL line" >&2; return 1; }
+    [[ "$out" == *"GATE:"* ]] || { echo "self-test FAIL: no GATE line" >&2; return 1; }
+    echo "ava-health self-test: OK"
+}
+
+health_explain() {
+    local report="$1"
+    source "$HERE/lib_model_input.sh"
+    source "$HERE/lib_output_gate.sh"
+    local model="${AVA_HEALTH_MODEL}"
+
+    if ! curl -fsS --max-time 3 "$OLLAMA_HOST/api/tags" >/dev/null 2>&1; then
+        echo "X Ollama server not reachable at $OLLAMA_HOST" >&2
+        return 1
+    fi
+
+    local labeled
+    labeled="$(ava_model_input_context "ava-health-report" "scripts/ava-health" "$report")" || return 1
+
+    local prompt
+    prompt="[TASK]
+Summarize the CONTEXT below using the fixed HEALTH block format.
+
+$labeled"
+
+    local raw
+    raw="$(curl -s "$OLLAMA_HOST/api/generate" \
+        -d "$(jq -n --arg m "$model" --arg p "$prompt" \
+        '{model: $m, prompt: $p, stream: false}')" \
+        | jq -r '.response' \
+        | ava_output_gate)"
+
+    echo ""
+    echo "== ava-health --explain :: $model =="
+    echo ""
+    echo "$raw"
+}
+
+case "${1:-}" in
+    --self-test)
+        ava_health_self_test
+        ;;
+    --full)
+        echo "== ava-health :: $AVA_ROOT =="
+        echo ""
+        run_report --full
+        ;;
+    --explain)
+        REPORT="$(run_report)"
+        echo "== ava-health :: $AVA_ROOT =="
+        echo ""
+        echo "$REPORT"
+        health_explain "$REPORT"
+        ;;
+    -h|--help)
+        cat <<'HELP'
+usage:
+  ava-health             quick check: audit + door syntax + model reachability
+  ava-health --full      also runs scripts/ava-ci-contract (slower)
+  ava-health --explain   quick check, then summarized by avalhla-health model
+  ava-health --self-test smoke-test the door itself
+HELP
+        ;;
+    "")
+        echo "== ava-health :: $AVA_ROOT =="
+        echo ""
+        run_report
+        ;;
+    *)
+        echo "unknown flag: $1" >&2
+        exit 2
+        ;;
+esac

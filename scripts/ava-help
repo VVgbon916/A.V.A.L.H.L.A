@@ -2,7 +2,7 @@
 source "$(dirname "${BASH_SOURCE[0]}")/lib_runtime.sh"
 
 if [[ "${1:-}" == "--list" ]]; then
-  echo "  A V A L H L A  --  every door"
+  echo "  A V A L H L A  --  available doors (on demand)"
   echo
   for f in "$ROOT/scripts"/*; do
     [[ -x "$f" ]] || continue
@@ -10,7 +10,7 @@ if [[ "${1:-}" == "--list" ]]; then
   done
   exit 0
 fi
-# ava-help -- every door, in Avalhla's voice.
+# ava-help -- available doors; listing does not activate a skill.
 set -Eeuo pipefail
 
 ROOT="$AVA_ROOT"
@@ -54,7 +54,7 @@ QUOTE="$(dream_quote | fold -s -w 78 | head -n2 | tr '\n' ' ' | sed 's/  */ /g')
 if (( TTY == 0 )); then
     printf '%s  %s · %s · %s\n' "$FACE_DAWA" "$COLOR" "$LABEL" "$SINCE"
     printf '✦  "%s"\n' "$QUOTE"
-    printf '✦  every door  ›  ava-help\n'
+    printf '✦  available doors (on demand)  ›  ava-help\n'
     exit 0
 fi
 
@@ -89,7 +89,7 @@ echo "   HER DOORS"
 echo
 echo "   [1]  where she is            [2]  what she sees"
 echo "   [3]  what she remembers      [4]  what she notices"
-echo "   [5]  what she wonders        [6]  every door"
+echo "   [5]  what she wonders        [6]  available doors (on demand)"
 echo
 echo "   [7]  what she creates        [8]  what she questions"
 echo "   [9]  what is canonical       [10] what she reads"

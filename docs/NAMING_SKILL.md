@@ -13,7 +13,7 @@ Names should feel like **doors** into a mode of work, not product features and n
 ## Good examples
 
 THRESHOLD / BASELINE / WITNESS / AVALHLA
-THREAD / HISTORY / WITNESS / VALHLA
+THREAD / HISTORY + PROVENANCE / WITNESS / VALHLA
 WARD / SECURITY / LUX / LUX
 LENS / FORENSIC / WITNESS / AVALHLA
 FANG / ADVERSARY / VEX / VEX
@@ -30,6 +30,19 @@ LANTERN / GATE / LUX + VEX / LUX + VEX
 - let an evocative door name obscure the actual job
 - create synonyms that make tool selection ambiguous
 - add a new name without checking collision, drift, and boundary
+- treat Valhla or Lhlava as historical-only after Dawa has defined their current consultation lanes
+- treat "brain-like" language as a factual claim of consciousness or a grant of independent agency
+- treat an installed/listed skill as active
+
+Current role ownership:
+
+- AVALHLA: user-facing companion and evidence synthesis.
+- VALHLA: deliberate, source-led research and perspective.
+- LHLAVA: fast, coding-focused candidate search.
+- LUX/VEX: bounded review and adversarial lenses; neither has authority.
+
+The canonical definitions live in `config/avalhla-naming.v1.json`; this
+document is derived naming guidance.
 
 ## New-name re-attack
 

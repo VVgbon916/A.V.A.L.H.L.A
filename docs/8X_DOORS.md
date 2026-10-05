@@ -1,5 +1,10 @@
 # AVALHLA 8× — DOORS
 
+These are available engineering abilities, not an always-active bundle. Invoke
+only the task-relevant door/skill unless a complete 8× pass is explicitly
+requested or required by the gate. Availability and listing do not activate a
+skill or grant tool permission.
+
 ```text
 D A W A > AvvA < A V A L H L A
 
@@ -21,9 +26,11 @@ Find actual files, commands, paths, environment, Git state, runtime boundaries, 
 
 ## 02 THREAD — WITNESS / VALHLA
 
-Follow lineage.
+Follow lineage and research provenance.
 
 Compare local tree, remote tree, commits, tags, prior safety decisions, and historical references.
+Valhla is the deliberate, source-led research lane; older Valhla material stays
+historical evidence until checked against current sources.
 
 ## 03 WARD — LUX
 

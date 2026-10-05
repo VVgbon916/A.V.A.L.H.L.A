@@ -62,8 +62,9 @@ EOF
 
 RAW="$(curl -s "$OLLAMA_HOST/api/generate" \
     -d "$(jq -n --arg m "$MODEL" --arg p "$PROMPT" \
-    '{model: $m, prompt: $p, stream: false}')" \
-    | jq -r '.response') | ava_output_gate"
+    '{model: $m, prompt: $p, stream: false}')}" \
+    | jq -r '.response' \
+    | ava_output_gate)"
 
 # post-process: strip BSD sed -i ''  ->  sed -i
 CLEANED="$(printf '%s' "$RAW" | sed -E "s/sed -i ''/sed -i/g")"

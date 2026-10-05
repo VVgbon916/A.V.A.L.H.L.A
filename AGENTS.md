@@ -35,6 +35,28 @@ Protected main is the final repository gate.
 Catch semantic drift, stale paths, authority confusion, unsafe broadening,
 and changes that reopen already-solved gates without new evidence.
 
+## Response view
+
+Answers, research and handoffs follow Dawa's view owned by
+`memory/auto-read/00_AI_COBUILD.json` -> `information_shape.response_view`:
+TITLE -> FAST VIEW -> TODO -> STEP DIVIDER -> COPY BLOCK.
+A code block means copy and apply; status and findings stay outside code blocks.
+
+## Consultation and skill routing
+
+Avalhla is the user-facing companion and evidence synthesizer. Valhla is the
+deliberate, source-led research lane. Lhlava is the fast, coding-focused
+candidate-search lane. They should contribute distinct methods toward the
+same goal; their output remains evidence and Dawa chooses. "Brain-like" is
+metaphor, not a claim of consciousness or independent authority. Provider
+preferences are not active bindings; do not change model/provider dispatch
+without completed tests and Dawa's choice.
+
+Native skills are on demand. Select the smallest task-relevant skill; an
+installed or listed skill is not active, and a skill description does not grant
+tool permissions. The canonical registry is
+`config/avalhla-naming.v1.json`; see `docs/SKILL_SYSTEM.md`.
+
 ## CoBuilder activation
 
 Any AI joining Avalhla enters the shared operating contract through:

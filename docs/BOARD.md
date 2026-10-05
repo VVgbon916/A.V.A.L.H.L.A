@@ -25,7 +25,7 @@ The board is her face in the terminal.
 
    [1]  where she is            [2]  what she sees
    [3]  what she remembers      [4]  what she notices
-   [5]  what she wonders        [6]  every door
+   [5]  what she wonders        [6]  available doors (on demand)
 
 ------------------------------------------------------------------------------------------
 
@@ -61,7 +61,7 @@ ava-board --dream   dream view
 [3]  what she remembers  -> ava-mem
 [4]  what she notices    -> ava-weave
 [5]  what she wonders    -> ava-dream
-[6]  every door          -> ava-help
+[6]  door inventory      -> ava-help (listing does not activate skills)
 
 ## LIVE STATE SOURCES
 

@@ -51,7 +51,20 @@ load_auto_read() {
         [[ -f "$f" ]] || continue
         local size
         size=$(stat -c '%s' "$f" 2>/dev/null || echo 0)
-        (( total + size > 65536 )) && break
+        if (( size > 65536 )) && [[ "$(basename "$f")" == "00_AI_COBUILD.json" ]]; then
+            local proj
+            proj="$("$AVA_SCRIPTS_DIR/ava-cobuilder-projection" "$f" 2>/dev/null || true)"
+            [[ -n "$proj" ]] || continue
+            size=${#proj}
+            (( total + size > 65536 )) && continue
+            out+="
+--- $(basename "$f") (projection) ---
+$proj
+"
+            total=$(( total + size ))
+            continue
+        fi
+        (( total + size > 65536 )) && continue
         out+="
 --- $(basename "$f") ---
 $("$CONTEXT_BIN" file "$f" 2>/dev/null || true)

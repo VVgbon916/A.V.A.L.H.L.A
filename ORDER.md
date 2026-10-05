@@ -16,6 +16,10 @@ TREE
       fast reading grammar
   1.3 docs/AVALHLA_SPINE.md
       authority + information flow
+  1.5 docs/SKILL_SYSTEM.md
+      on-demand skill and consultation-lane contract
+  1.6 config/avalhla-naming.v1.json
+      canonical role, door, and skill activation registry
   1.4 persona/
       Avalhla identity and model definitions
 

@@ -94,7 +94,13 @@ ava_model_input_stdin() {
     fi
 
     safe_label="$(printf '%q' "$label")"
-    value="$(head -c "$max_bytes")"
+    value="$(python3 -c 'import sys
+limit = int(sys.argv[1])
+data = sys.stdin.buffer.read(limit + 1)
+if len(data) > limit:
+    print("X model-input: incomplete input refused; payload exceeds requested limit", file=sys.stderr)
+    sys.exit(1)
+sys.stdout.buffer.write(data)' "$max_bytes")" || return 1
 
     ava_model_input_assert_bytes "$value" || return 1
 

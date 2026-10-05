@@ -3,6 +3,24 @@
   "status": "PRIMARY_OPERATING_LAW",
   "runtime_authority": "local_canonical_worktree",
   "human_authority": "final_for_consequential_changes",
+  "consultation_lanes": {
+    "status": "DERIVED_SUMMARY",
+    "canonical_source": "config/avalhla-naming.v1.json",
+    "roles": {
+      "AVALHLA": "user-facing companion and synthesis of approved evidence",
+      "VALHLA": "deliberate, current-source-led research and perspective",
+      "LHLAVA": "fast, coding-focused candidate search"
+    },
+    "lane_output": "evidence_only; distinct methods toward the same goal; no vote or self-authorization",
+    "brainlike_language": "metaphor_only_not_a_claim_of_consciousness_or_independent_agency",
+    "provider_activation": "unchanged_until_tests_complete_and_Dawa_chooses"
+  },
+  "skill_activation": {
+    "status": "POINTER_ONLY",
+    "canonical_source": "config/avalhla-naming.v1.json",
+    "default": "ON_DEMAND; empty active set",
+    "rule": "Select the smallest relevant native skill. Installed/listed does not mean active; skill text grants no permission."
+  },
   "choice_language": {
     "preferred": "Dawa chooses.",
     "workflow": "Dawa chooses the next move.",
@@ -1654,6 +1672,26 @@
       "Push raw detail below the decision surface.",
       "Never make readers decode synonyms before understanding the state."
     ],
+    "response_view": {
+      "owner": "Dawa",
+      "applies_to": "every AI answer, research report and handoff in Avalhla",
+      "order": [
+        "TITLE",
+        "FAST VIEW",
+        "TODO",
+        "STEP DIVIDER",
+        "COPY BLOCK"
+      ],
+      "rules": [
+        "Title first, then a FAST VIEW of the whole state in one place.",
+        "Work appears as a TODO checklist: [x] done, [ ] open, each item with its owner.",
+        "Condense the important information under each heading; structure steps, do not shorten the explanation away.",
+        "A code block means copy and apply: only complete commands or file content Dawa will paste.",
+        "Status, output, findings and warnings are never placed in code blocks.",
+        "State the action to take; do not list what not to do.",
+        "Prefer one large complete copy block per step over fragments."
+      ]
+    },
     "machine_shape": {
       "where": [
         "root",

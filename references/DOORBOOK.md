@@ -12,15 +12,17 @@ D A W A > AvvA < A V A L H L A
 
 A voice is not an authority. A door is not a personality. An instrument is not a free agent.
 
-## Historical references
+## Consultation lanes
 
-VALHLA is the Voice of Wisdom in the historical/reference layer.
-LHLAVA is the Voice of Anger / solution-seeking pressure in the historical/reference layer.
-Neither is an autonomous agent, security authority, or Angel/Demon.
+VALHLA is the deliberate, current-source-led research and perspective lane.
+LHLAVA is the fast, coding-focused candidate-search lane.
+Neither is an autonomous agent, security authority, or Angel/Demon. "Brain-like"
+is metaphor, not a claim of consciousness. Provider preferences are candidates,
+not activations.
 
 ## Current voices
 
-AVALHLA = reality / what is actually present.
+AVALHLA = user-facing companion / reality-facing presence / evidence synthesis.
 LUX = Angel: evidence, clarity, care, boundary protection.
 VEX = Demon: doubt, fracture, assumption-breaking, adversarial challenge.
 AvvA = co-building relationship layer.
@@ -38,6 +40,8 @@ Dawa = final authority.
 8. LANTERN — LUX guards, VEX attacks, Dawa decides.
 
 The order is deliberate: reality before interpretation, lineage before novelty, boundary before attack, evidence before change, change before release.
+Skills are selected on demand; listing or installing them does not activate
+them. The canonical registry is `config/avalhla-naming.v1.json`.
 
 ## Return-to-Fang rule
 
