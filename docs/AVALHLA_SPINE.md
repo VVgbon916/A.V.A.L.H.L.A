@@ -78,3 +78,60 @@ ONE SPINE. MANY VIEWS.
 
   Filename = address.
   concept_id = identity.
+
+## 07 / EVIDENCE INSTRUMENTS
+
+This diagram explains responsibilities. It is not a scheduler, proof that
+workers ran, or a new authority chain.
+
+```text
+                    DAWA
+                     |
+              chooses bounded work
+                     |
+          Dawa <--- AvvA ---> Avalhla
+                     |
+             CANONICAL SOURCE
+                     |
+       +-------------+-------------+
+       |             |             |
+    WITNESS         VEX          FORGE
+    observe        attack       smallest
+                                justified edit
+       |             |             |
+       +-------------+-------------+
+                     |
+                    ECHO
+              before / after
+                     |
+             LANTERN / LUX + VEX
+             proven?   breakable?
+                     |
+               EVIDENCE ONLY
+                     |
+                Dawa chooses.
+```
+
+These instruments can describe separate passes without requiring separate
+agents. Tools and configured workers retain their own explicit boundaries.
+See [voices](AVALHLA_VOICES.md) and [eight doors](8X_DOORS.md).
+
+## 08 / SOURCE AND DERIVED VIEWS
+
+```text
+CANONICAL SOURCE / RAW RECORD
+           |
+           +--> structural navigation
+           +--> relation / caller navigation
+           +--> optional relevance candidates
+           |
+      BOUNDED SEARCH
+           |
+      EXACT SOURCE READ
+           |
+         EVIDENCE
+```
+
+This is a design direction, not a claim that these indexes exist.
+A generated view must not overwrite its source or redefine its meaning.
+See the [indexing research](../references/RESEARCH_SOURCES.md#indexing-and-retrieval-design-candidates).

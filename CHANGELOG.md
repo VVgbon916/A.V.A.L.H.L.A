@@ -6,6 +6,17 @@ This project currently uses an `Unreleased` section while release/version naming
 
 ## [Unreleased] - 2026-09-27
 
+### Documentation remaster - 2026-10-05
+
+- Distilled ten user-supplied references into English public-safe explanations
+  in the existing definition, development, spine, handoff, voices, doors,
+  board, research, and Dawa-boundary owners.
+- Added an attachment-to-owner table to the canonical source map.
+- Kept fantasy door labels unapplied, historical technical claims explicitly
+  historical, and indexing ideas research-only.
+- Excluded personal material and unsupported absolute-security, cost, and
+  unlimited-capability claims; changed no runtime or editor configuration.
+
 ### Added
 
 - `COBUILDER INIT` as the first-contact activation for AI co-building.

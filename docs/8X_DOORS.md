@@ -70,3 +70,43 @@ Dawa decides.
 ## RETURN-TO-FANG
 
 Whenever a new thing is found or introduced, run the naming and boundary attack again. Repeat every affected door. Escalate to full 8× whenever the new thing can affect runtime behavior, security, provenance, persistent state, permissions, or canonical data.
+
+## DEVILASH / method, not multiplication
+
+```text
+CLAIM -> FIND SOURCE -> ATTACK -> OBSERVE
+                                    |
+                     RECOMPARE -> BOUND CONCLUSION
+                                    |
+                              Dawa chooses.
+```
+
+Eight doors name verification questions, not a requirement to launch eight
+agents. No recursion, unlimited worker creation, free execution, or automatic
+permission follows from the name. Keep each investigation scoped; record
+contradictions and blocked gates instead of multiplying workers indefinitely.
+
+## Visual door-name proposal / not applied
+
+The 2026-10-04 attachment proposed fantasy-inspired display names. They remain
+unapproved style candidates here, not command aliases, skill triggers, new
+canonical IDs, or changes to the door owners.
+
+| Canonical door | Proposed display label |
+|---|---|
+| THRESHOLD | SCRY |
+| THREAD | LORE |
+| WARD | WARD |
+| LENS | TRUESIGHT |
+| FANG | HEX |
+| SCAR | IDENTIFY |
+| ECHO | ECHO |
+| LANTERN | COUNTERSPELL |
+
+The proposed RESTORE "door 0" is not part of the canonical eight-door sequence.
+Stopping and rebuilding a bounded handoff can be a recovery practice; clearing
+another worker's context is not assumed to be available or authorized.
+
+RETURN-TO-FANG keeps its current name. Applying a display skin or changing a
+role requires a separate explicit choice, source comparison, and affected
+checks. Literary references do not import another system's rules or powers.

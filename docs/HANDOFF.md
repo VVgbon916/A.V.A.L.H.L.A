@@ -42,3 +42,30 @@ Dawa <---- AvvA ----> Avalhla  //  (^.-)
   Then stop at the protected-main human approval gate.
   Temporary build branches stay undeleted until that gate is complete.
   Phase 02 continues only after its exit evidence passes.
+
+## 06 / READING HISTORICAL TECHNICAL REPORTS
+
+The supplied technical fragments are historical observations, not a new live
+handoff or permission to reopen every previously repaired gate.
+
+```text
+OLD REPORT -> LOCATE CURRENT SOURCE -> REPRODUCE
+                       |
+          CURRENT / HISTORICAL / UNCONFIRMED
+                       |
+              smallest remaining question
+```
+
+Treat old divergence counts, SHAs, container observations, self-test warnings,
+and model-input bypass claims as dated evidence. Recheck the exact current
+files and callers before asserting that a failure still exists or that a repair
+is complete.
+
+An old instruction not to run a self-test is a reason to inspect its current
+isolation first, not a permanent ban or evidence of safety. A historical key
+containing "phase_03" does not advance the execution phase.
+
+For each resumed finding, record the current HEAD, relevant working-tree bytes,
+source path, reproduction, result, and limitation. A changed candidate requires
+affected evidence to be rerun. GitHub checks, approval, and unresolved threads
+must be looked up live; the snapshots above are not current remote proof.

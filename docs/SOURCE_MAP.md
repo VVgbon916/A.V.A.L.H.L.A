@@ -75,3 +75,27 @@ NAMING LAW
 
 Do not create a second Map, Guide, Overview, Cheatsheet, or Reference
 for an existing semantic role. Add an alias or update the canonical source.
+
+## English attachment remaster / public documentation
+
+The ten supplied attachments were distilled into the existing owners below,
+not copied into a second documentation tree. These are public-safe English
+explanations, not verbatim translations, execution instructions, or fresh proof
+of historical claims. Raw personal material and local attachment paths are not
+published.
+
+| Supplied reference | Public owner |
+|---|---|
+| `01_avalhla_definition_projet_systeme.txt` | [README](../README.md): definition and limits |
+| `02_avalhla_outils_couts_materiel.txt` | [Development](DEVELOPMENT.md): tools, costs, hardware candidates |
+| `03_avalhla_diagrammes.txt` | [Spine](AVALHLA_SPINE.md): evidence and derived-view diagrams |
+| `04_avalhla_etat_technique.txt` | [Handoff](HANDOFF.md): historical-report handling |
+| `05_avalhla_lux_explication.txt` | [Voices](AVALHLA_VOICES.md): LUX proof-quality explanation |
+| `06_avalhla_lux_vex_devilash_portes.txt` | [Voices](AVALHLA_VOICES.md) and [doors](8X_DOORS.md): bounded roles and method |
+| `2026-10-04_door-rename-proposal.md` | [Doors](8X_DOORS.md): unapplied visual-name proposal |
+| `avalhla-design-philosophy.md` | [Board](BOARD.md): useful-first presentation |
+| `AVVA_INDEXING_MASTERY_RESEARCH_2026-09-29.md` | [Research](../references/RESEARCH_SOURCES.md): derived indexing candidates |
+| `DAWA_NOTEPAD.md` | [Dawa boundary](DAWA_NOTEPAD.md): settings and private-editor separation |
+
+Draft labels remain drafts. Existing canonical names, runtime permissions,
+machine context, model configuration, and editor settings are unchanged.

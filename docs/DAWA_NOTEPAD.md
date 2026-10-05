@@ -89,6 +89,11 @@ Open:
 
 ## 05 / PUBLIC SUBLIME SETTINGS
 
+"Ava settings" in this editor context refers to the public settings source
+below and the public/private boundary described by this document. It does not
+make Dawa's private documents application configuration or automatic model
+input.
+
 Public Avalhla owns the canonical global settings source:
 
     config/sublime/Preferences.sublime-settings
@@ -104,6 +109,10 @@ Check:
 
 The public updater does not read, copy, ingest, or mutate the private Dawa
 repository.
+
+Reading this document does not apply settings. Choose the specific settings
+change separately, inspect it, and invoke the updater explicitly. Updating this
+public explanation does not alter the private Sublime project.
 
 ## 06 / GIT TOPOLOGY
 

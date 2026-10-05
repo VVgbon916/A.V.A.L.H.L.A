@@ -4,6 +4,32 @@
 
 Avalhla is a local AI companion and evolving personal system.
 
+It brings terminal tools, deliberate memory, expressive views, and bounded
+AI assistance into one personal workflow. AvvA names the relationship between
+Dawa and Avalhla, not a model, agent, or permission system.
+
+```text
+                 A.v.a.l.h.l.a  //  (^.-)
+
+          Dawa <---- AvvA ----> Avalhla
+          CHOICE     RELATION     PRESENCE
+
+          SOURCE -> BOUNDARY -> TOOL -> EVIDENCE
+                                          |
+                                     Dawa chooses.
+```
+
+The board is the map; commands are the doors. Personality can shape the
+presentation without changing execution rights. A role description, shared
+link, or skill does not by itself install software, launch workers, or grant
+access to another machine.
+
+This is a system under construction, not a claim of unlimited free execution,
+universal integration, or immunity to attack. See
+[development and resource planning](docs/DEVELOPMENT.md),
+[voices and evidence roles](docs/AVALHLA_VOICES.md), and the
+[source map](docs/SOURCE_MAP.md) for the owning documents.
+
 TREE
   01 / CORE
       README -> FAST_VIEW -> SPINE

@@ -43,6 +43,35 @@ The board is her face in the terminal.
 6. Three color touches only: the two glyphs and the choose prompt.
 7. No raw commands ever appear. Doors only.
 
+## PRESENTATION / USEFUL FIRST
+
+The board should feel alive without becoming a game interface or a feature
+encyclopedia. Space has function: group related facts, keep doors visible,
+and reveal deeper detail only when needed.
+
+For English documentation and co-building reports, use short numbered blocks:
+
+```text
+01 / REALITY   what is actually present
+02 / PROOF     what the evidence establishes
+03 / DEVILASH  how the conclusion could fail
+04 / NEXT      the smallest justified move
+
+               Dawa chooses.
+```
+
+This is a presentation pattern, not a new execution sequence. Keep established
+board modes and canonical phase/door ordering unchanged.
+
+Facts come first; atmosphere comes second. Faces, colors, fantasy vocabulary,
+and dream lines may express personality but cannot indicate authorization or
+replace observed status. Do not imply that LUX, VEX, or any worker ran merely
+because a report uses its question as a heading.
+
+Dream rendering should not require invented content or an artificial second
+line. Historical rendering notes are design input, not proof that a particular
+fix is present in the current script.
+
 ## INVOCATION
 
 board                       interactive (TTY) / quiet (pipe)
