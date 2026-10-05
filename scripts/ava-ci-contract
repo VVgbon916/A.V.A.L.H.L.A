@@ -66,6 +66,11 @@ if bash tests/test_review_gate.sh; then ok "exact review verdict contract"; else
 if tests/test_ava_mood.sh; then ok "bounded mood reference"; else bad "bounded mood reference" "test failed"; fi
 
 printf "%s\n" "" "-- action proposal contract --"
+if PYTHONDONTWRITEBYTECODE=1 python3 tests/test_github_review.py; then
+  ok "GitHub review metadata snapshot and head recheck"
+else
+  bad "GitHub review metadata snapshot and head recheck" "test suite failed"
+fi
 if PYTHONDONTWRITEBYTECODE=1 python3 tests/test_action_proposal.py; then
   ok "typed action proposal positive and negative cases"
 else

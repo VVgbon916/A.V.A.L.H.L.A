@@ -46,21 +46,26 @@ else
 fi
 [[ -n "$PR" && "$PR" != "null" ]] || { printf "No open pull request found for %s.\n" "$BRANCH"; exit 0; }
 
-TITLE="$(gh pr view "$PR" --json title --jq ".title")"
-STATE="$(gh pr view "$PR" --json state --jq ".state")"
-BASE="$(gh pr view "$PR" --json baseRefName --jq ".baseRefName")"
-HEAD_BRANCH="$(gh pr view "$PR" --json headRefName --jq ".headRefName")"
-HEAD_SHA="$(gh pr view "$PR" --json headRefOid --jq ".headRefOid")"
+capture_required "pull request metadata" PR_METADATA gh pr view "$PR" \
+  --json title,state,baseRefName,headRefName,headRefOid,url,reviewDecision \
+  --template '{{.state}}{{"\n"}}{{.baseRefName}}{{"\n"}}{{.headRefName}}{{"\n"}}{{.headRefOid}}{{"\n"}}{{.url}}{{"\n"}}{{if .reviewDecision}}{{.reviewDecision}}{{else}}UNKNOWN{{end}}{{"\n"}}{{.title}}'
+# Fixed-format fields precede the title, which may contain multiple lines.
+{
+  IFS= read -r STATE
+  IFS= read -r BASE
+  IFS= read -r HEAD_BRANCH
+  IFS= read -r HEAD_SHA
+  IFS= read -r URL
+  IFS= read -r DECISION
+  TITLE="$(cat)"
+} <<< "$PR_METADATA"
 [[ "$HEAD_SHA" =~ ^[0-9a-fA-F]{40}([0-9a-fA-F]{24})?$ ]] || {
   printf 'ava-github-review: invalid PR head SHA: %s\n' "$HEAD_SHA" >&2
   exit 1
 }
-URL="$(gh pr view "$PR" --json url --jq ".url")"
-DECISION="$(gh pr view "$PR" --json reviewDecision --jq ".reviewDecision // \"UNKNOWN\"")"
-
-capture_required "pull request reviews" REVIEW_ROWS gh api --paginate "repos/$REPO/pulls/$PR/reviews?per_page=100" --jq '.[] | select(.state != "PENDING") | [(.user.login // "?"),(.state // "?"),(.commit_id // "UNBOUND"),(.submitted_at // "?"),(.body // "")] | @tsv'
-capture_required "CodeRabbit inline comments" CR_ROWS env HEAD_SHA="$HEAD_SHA" gh api --paginate "repos/$REPO/pulls/$PR/comments?per_page=100&sort=created&direction=asc" --jq '.[] | select((.user.login // "") == "coderabbitai[bot]") | [(if ((.original_commit_id // "") == env.HEAD_SHA or (.commit_id // "") == env.HEAD_SHA) then "CURRENT" elif ((.original_commit_id // "") != "" or (.commit_id // "") != "") then "HISTORICAL" else "UNBOUND" end),(.path // "?"),((.line // 0)|tostring),(.commit_id // "UNBOUND"),(.original_commit_id // "UNBOUND"),(.body // "")] | @tsv'
-capture_required "Devin inline comments" DEVIN_ROWS env HEAD_SHA="$HEAD_SHA" gh api --paginate "repos/$REPO/pulls/$PR/comments?per_page=100&sort=created&direction=asc" --jq '.[] | select((.user.login // "") == "devin-ai-integration[bot]") | [(if ((.original_commit_id // "") == env.HEAD_SHA or (.commit_id // "") == env.HEAD_SHA) then "CURRENT" elif ((.original_commit_id // "") != "" or (.commit_id // "") != "") then "HISTORICAL" else "UNBOUND" end),(.path // "?"),((.line // 0)|tostring),(.commit_id // "UNBOUND"),(.original_commit_id // "UNBOUND"),(.body // "")] | @tsv'
+capture_required "pull request reviews" REVIEW_ROWS env HEAD_SHA="$HEAD_SHA" gh api --paginate "repos/$REPO/pulls/$PR/reviews?per_page=100" --jq '.[] | select(.state != "PENDING") | [(if (.commit_id // "") == env.HEAD_SHA then "CURRENT" elif (.commit_id // "") != "" then "HISTORICAL" else "UNBOUND" end),(.user.login // "?"),(.state // "?"),(.commit_id // "UNBOUND"),(.submitted_at // "?"),(.body // "")] | @tsv'
+capture_required "CodeRabbit inline comments" CR_ROWS env HEAD_SHA="$HEAD_SHA" gh api --paginate "repos/$REPO/pulls/$PR/comments?per_page=100&sort=created&direction=asc" --jq '.[] | select((.user.login // "") == "coderabbitai[bot]") | [(if (.original_commit_id // "") == env.HEAD_SHA then "CURRENT" elif ((.original_commit_id // "") != "" or (.commit_id // "") != "") then "HISTORICAL" else "UNBOUND" end),(.path // "?"),((.line // 0)|tostring),(.commit_id // "UNBOUND"),(.original_commit_id // "UNBOUND"),(.body // "")] | @tsv'
+capture_required "Devin inline comments" DEVIN_ROWS env HEAD_SHA="$HEAD_SHA" gh api --paginate "repos/$REPO/pulls/$PR/comments?per_page=100&sort=created&direction=asc" --jq '.[] | select((.user.login // "") == "devin-ai-integration[bot]") | [(if (.original_commit_id // "") == env.HEAD_SHA then "CURRENT" elif ((.original_commit_id // "") != "" or (.commit_id // "") != "") then "HISTORICAL" else "UNBOUND" end),(.path // "?"),((.line // 0)|tostring),(.commit_id // "UNBOUND"),(.original_commit_id // "UNBOUND"),(.body // "")] | @tsv'
 capture_required "CodeRabbit summary comments" CR_SUMMARY gh api --paginate "repos/$REPO/issues/$PR/comments?per_page=100&sort=created&direction=asc" --jq '.[] | select((.user.login // "") == "coderabbitai[bot]") | ["UNBOUND",(.created_at // "?"),(.id|tostring),(.body // "")] | @tsv'
 capture_required "Devin issue comments" DEVIN_SUMMARY gh api --paginate "repos/$REPO/issues/$PR/comments?per_page=100&sort=created&direction=asc" --jq '.[] | select((.user.login // "") == "devin-ai-integration[bot]") | ["UNBOUND",(.created_at // "?"),(.id|tostring),(.body // "")] | @tsv'
 capture_pr_checks() {
@@ -108,6 +113,7 @@ printf "    STATE     %s\n" "$STATE"
 printf "    BASE      %s\n" "$BASE"
 printf "    HEAD      %s\n" "$HEAD_BRANCH"
 printf "    COMMIT    %s\n" "$HEAD_SHA"
+printf "%s\n" "    BINDING   CURRENT = written against COMMIT; HISTORICAL = earlier commit; UNBOUND = issue comment, no commit"
 printf "    URL       %s\n" "$URL"
 
 printf "%s\n" "02 FLOW"
