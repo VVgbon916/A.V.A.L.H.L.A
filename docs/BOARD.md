@@ -72,6 +72,90 @@ Dream rendering should not require invented content or an artificial second
 line. Historical rendering notes are design input, not proof that a particular
 fix is present in the current script.
 
+## TEXT COMPATIBILITY / PROGRESSIVE STYLE
+
+Use plain ASCII for portable terminal reports and logs. Unicode box-drawing,
+braille art, and emoji are optional human-facing skins; verify encoding, font
+coverage, display width, and the receiving application before relying on them.
+Even ASCII can wrap on a narrow screen. No character tier guarantees identical
+rendering everywhere.
+
+```text
++--------------------------------------+
+| A.v.a.l.h.l.a  //  CURRENT VIEW       |
++--------------------------------------+
+| SOURCE   exact file / candidate      |
+| PROOF    observed result            |
+| LIMIT    what was not established   |
+| NEXT     smallest justified move    |
++--------------------------------------+
+```
+
+Keep essential meaning in words rather than glyphs or color alone. Prefer a
+simple fallback over changing identity when a decorative skin cannot render.
+Avoid artificial percentages or progress bars unless an actual measurement
+exists.
+
+Occasional expressive cards may describe a role, memory hook, or harmless
+quirk in dream material. Imagined armor, levels, skills, and magic remain fiction:
+they never encode permissions, security strength, runtime capabilities, or a
+memory-write instruction. Do not randomize operational status to match a style.
+
+## COMPOSITION / ONE QUESTION, ONE VIEW
+
+Choose a shape to serve the information, not to fill the screen:
+
+| Need | Shape | Limit |
+|---|---|---|
+| Separate topics | Short divider and whitespace | Avoid repeated full-width walls |
+| Explain a relationship | Small tree or flow | Arrows do not grant authority |
+| Emphasize a boundary | Compact frame with a written label | Weight is emphasis, not proof |
+| Compare observations | Aligned rows or a Markdown table | Preserve uncertainty and source identity |
+| Invite conversation | A short question and a few doors | Do not invent a current mood or dream |
+
+```text
+INTENT -> CONTENT -> SHAPE -> OPTIONAL COLOR -> RENDER -> CHECK
+
+READABLE?
+  words survive without color
+  frame fits the intended width
+  unknown remains unknown
+  source and dream remain distinct
+```
+
+This is an authoring checklist, not a new command or renderer. Keep templates
+small enough to adapt. Decorative faces and motifs do not require a second
+machine-readable glyph dictionary, a new identity, or another board.
+
+A quiet conversation view can offer a few relevant doors without reproducing
+the full command inventory. Keep the complete inventory available through
+`ava-help`; do not turn a historical board snapshot into a claim that a command
+is installed or a generated dream is current.
+
+Use current AvvA relation language in new templates. Historical AwA forms stay
+in historical sources, not in active signatures. Fictional dialogue should be
+labeled as an example, never presented as actual worker output.
+
+## PLAIN READING / COPYABLE COMMANDS
+
+Documentation and reports should also work without decorative frames, color,
+or tree glyphs. Use short word labels in a plain alternative:
+
+```text
+Reality: observed source and candidate.
+Proof: result and its scope.
+Limit: unknown, not checked, or stale as of the recorded observation.
+Next: smallest justified move.
+```
+
+Put commands intended for copying on their own unframed lines with ordinary
+ASCII quotes and spaces. Label illustrative output with the word "Example";
+do not make an example look like a live verification result.
+
+These are presentation requirements for authored views, not a claim that
+`ava-board` already implements a new plain-mode flag. New rendering behavior
+needs its own source review and positive/negative checks.
+
 ## INVOCATION
 
 board                       interactive (TTY) / quiet (pipe)

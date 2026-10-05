@@ -99,3 +99,25 @@ published.
 
 Draft labels remain drafts. Existing canonical names, runtime permissions,
 machine context, model configuration, and editor settings are unchanged.
+
+## Legacy archive / bounded remaster
+
+The private legacy archive is inventoried in Dawa_Notepad, not copied into
+public Avalhla. Candidate classification is not publication approval.
+
+The first bounded style pass integrates the legacy ASCII compatibility,
+plain-text frame, and output-card references into [Board](BOARD.md).
+Compatibility claims are qualified; fictional cards do not grant capabilities.
+The follow-up presentation pass adds a compact composition checklist from the
+legacy visual cheat-sheet, the visual library's opening principles, and the
+quiet command-board snapshot. Only the library's introductory section was
+reviewed; its full motif collection is not remastered or publication-cleared.
+Legacy branch/cross indexes are historical navigation only: this source map
+remains the existing owner, with no replicated index in every branch.
+
+Previously remastered reference filenames are skipped at Dawa's request;
+their current bytes have not been compared to the original attachments.
+All private-only material stays excluded from public output and worker input.
+Mixed transcripts and historical executable contracts remain held pending
+their own bounded review and explicit disposition. Dawa chooses publication.
+This pass does not claim a complete content review of the archive.
