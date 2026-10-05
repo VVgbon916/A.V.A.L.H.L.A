@@ -71,6 +71,11 @@ if PYTHONDONTWRITEBYTECODE=1 python3 tests/test_github_review.py; then
 else
   bad "GitHub review metadata snapshot and head recheck" "test suite failed"
 fi
+if PYTHONDONTWRITEBYTECODE=1 python3 tests/test_team.py; then
+  ok "bounded team source, cache, and provider failure contracts"
+else
+  bad "bounded team source, cache, and provider failure contracts" "test suite failed"
+fi
 if PYTHONDONTWRITEBYTECODE=1 python3 tests/test_action_proposal.py; then
   ok "typed action proposal positive and negative cases"
 else

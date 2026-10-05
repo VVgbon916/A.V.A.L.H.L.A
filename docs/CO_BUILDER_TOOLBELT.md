@@ -5,6 +5,122 @@
 Keep resume, review, and research work bounded so Avalhla does not have to
 rediscover the whole project from a giant prompt.
 
+## Local-first headless team
+
+`scripts/ava-team.py` is the bounded evidence/review adapter. It does not replace
+CoBuilder activation, phase gates, the coding owner, or the GitHub review door.
+The subordinate workflow skill is `.agents/skills/avalhla-team/SKILL.md`.
+
+Collect approved public sources without calling a model:
+
+```bash
+python3 scripts/ava-team.py collect --quest "Review role boundaries" --files docs/AVALHLA_VOICES.md
+```
+
+One-command persistent review console, after explicitly choosing to send those
+public bytes to Claude:
+
+```bash
+python3 scripts/ava-team.py launch --quest "Review role boundaries" --files docs/AVALHLA_VOICES.md --speed normal --send-public --budget-usd 1
+```
+
+The command prints the exact `tmux attach-session` command. The created window
+retains completed output; detaching does not close the job. It does not restart
+existing sessions, change global tmux settings, or launch Desktop Commander.
+For foreground JSON/echoable results, use `run` instead of `launch`.
+
+| Preset | Reviewers | Scheduling | Model effort |
+|---|---|---|---|
+| Slow | One proof reviewer | Sequential | Low |
+| Normal | Proof + challenge | Sequential | Low |
+| Fast | Proof + challenge | At most two concurrently | Low |
+
+Normal and Fast perform the same jobs; Fast changes latency, not guaranteed cost.
+The current operator remains the only coding owner. Worker roles are request
+labels, not new canonical identities. Valhla/Lhlava are not merged into one
+model, or into Lux/Vex.
+
+### Evidence and cache boundary
+
+Only explicit tracked text in the public review lane can be selected. Private
+memory, traversals, symlinks, unsupported files, and untracked paths are rejected.
+The 16,000-byte serialized evidence limit rejects oversized input instead of
+silently truncating it. A path allowlist does not detect secrets in source:
+inspect the selected public content before `--send-public`.
+
+The SHA-256 bundle includes HEAD, relative paths, modes, and exact source text.
+The adapter rechecks the candidate after capture and review. Cache keys also
+include quest, role, policy, provider version, and command. Local records under
+`~/.cache/avalhla/team/` retain evidence hashes, creation time, provider-reported
+cost, and result integrity. They are not a second memory or auto-read lane.
+`--refresh` explicitly spends again. Cache reuse does not certify truth or
+current external state. No fresh external-state claim can be inferred from a
+cached local-source review.
+
+### Headless permissions and costs
+
+The Claude adapter uses low effort, no tools, no session persistence, empty
+setting sources, and an explicit empty MCP configuration with strict loading.
+Reviewers cannot run file/web tools or delegate. Provider authentication is
+reused without changing it; no permission bypass or plugin installation occurs.
+The selected provider still receives the approved prompt/source and consumes
+usage. Output is not approval.
+
+The total `--budget-usd` ceiling (default 1, maximum 10) is split between the
+selected reviewers and passed to Claude's native budget control. A five-minute
+subprocess timeout and no automatic retries bound execution. Subscription
+billing and provider enforcement are not independently guaranteed by this
+adapter. Failed or malformed provider results are errors, never cached successes.
+
+### Optional local Ollama backend
+
+For local inference with an already installed model, choose the exact tag:
+
+```bash
+python3 scripts/ava-team.py run --quest "Review role boundaries" --files docs/AVALHLA_VOICES.md --provider ollama --model avalhla-review:latest --speed slow --send-public
+```
+
+This uses the fixed loopback endpoint `127.0.0.1:11434`, not a remote host.
+It includes the installed model digest and server version in cache identity,
+rechecking that identity after review. It never
+pulls a model, changes aliases, rewrites provider config, or installs a skill
+loader. Inference may load the explicitly selected model into RAM/VRAM.
+The request uses an 8,192-token context setting and a 512-token output setting.
+Incomplete/error responses are rejected. Local context handling still depends
+on the installed model/server; this is not a universal no-truncation guarantee.
+
+Claude dollar budgets do not apply to local Ollama: local inference consumes
+compute, memory, time, and power. It has no external provider invoice from this
+adapter. Both backends return evidence only and have no tool-calling loop.
+
+### Research, tools, and Remote remain separate
+
+This release intentionally does not give headless reviewers web search.
+Use one bounded research pass when new facts are needed, with source URL,
+observation date/version, contradiction, and proposed use. Reuse that record
+instead of asking every worker to repeat the same search. GitHub evidence stays
+owned by `ava-github-review`. It does not post comments or request CodeRabbit
+automatically; meaningful candidate batches need fresh review under existing
+human gates.
+
+Codex, Copilot, Desktop Commander Remote, cross-account discovery,
+and platform sync are not implemented provider backends here. Do not describe
+them as tested integrations. Desktop Commander host restrictions are not a
+sandbox: Remote activation needs its own isolated, authenticated, revocable
+deployment. Installing every plugin is not a low-cost or trustworthy default.
+
+Three valuable upgrades delivered by this adapter:
+
+1. Deterministic collection before inference: no model call for byte collection,
+   less repeated context, and explicit rejection of oversized evidence.
+2. Exact-request cache: unchanged scoped reviews reuse evidence rather than
+   paying for identical prompts; source changes invalidate reuse.
+3. Bounded persistent console: one coding owner, at most two tool-free reviewers,
+   and retained output without restarting or exposing unrelated sessions.
+
+These improve the workflow; they do not prove universal savings, perfect
+security, compatibility with every platform, or that no further upgrade exists.
+
 ## CoBuilder activation
 
 Canonical activation door:

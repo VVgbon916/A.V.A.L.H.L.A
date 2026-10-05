@@ -19,6 +19,12 @@ This project currently uses an `Unreleased` section while release/version naming
 
 ### Added
 
+- Bounded public-source headless review adapter `scripts/ava-team.py` and its
+  subordinate `avalhla-team` skill: SHA-256 evidence, exact-request caching,
+  Slow/Normal/Fast scheduling, tool-free Claude or explicit local Ollama
+  inference, and a scoped persistent tmux console.
+- Deterministic tests for provider/cache failures, source boundaries, permission
+  rejection, and retained tmux output without changing existing sessions.
 - `COBUILDER INIT` as the first-contact activation for AI co-building.
 - `COBUILDER MODE` as the active co-building state.
 - `COBUILDER // DEVILASH` as the adversarial verification method, not an agent identity.

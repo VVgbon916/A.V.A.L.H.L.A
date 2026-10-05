@@ -31,6 +31,8 @@
   2.3 ai-ask         one-shot question
   2.4 ai-remember    reflection
   2.5 ai-learn       approved-source indexing
+  2.6 python3 scripts/ava-team.py collect|run|launch --quest "..." --files ...
+      Bounded public evidence / tool-free headless reviews; see docs/CO_BUILDER_TOOLBELT.md.
 
 03 / MODEL
   3.1 ollama run avalhla

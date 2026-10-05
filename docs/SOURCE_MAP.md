@@ -121,3 +121,12 @@ All private-only material stays excluded from public output and worker input.
 Mixed transcripts and historical executable contracts remain held pending
 their own bounded review and explicit disposition. Dawa chooses publication.
 This pass does not claim a complete content review of the archive.
+
+## Bounded team adapter
+
+- `scripts/ava-team.py`: explicit public-source collection and low-effort
+  tool-free review; not an autonomous writer or remote-access controller.
+- `.agents/skills/avalhla-team/SKILL.md`: subordinate workflow trigger.
+- `tests/test_team.py`: source-boundary, request-cache, and failure checks.
+- [CoBuilder toolbelt](CO_BUILDER_TOOLBELT.md): command, cost, and permission
+  contract. No competing team master or auto-read lane is created.

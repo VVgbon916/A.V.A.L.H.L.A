@@ -30,6 +30,11 @@ universal integration, or immunity to attack. See
 [voices and evidence roles](docs/AVALHLA_VOICES.md), and the
 [source map](docs/SOURCE_MAP.md) for the owning documents.
 
+For bounded headless reviews, exact-request caching, and a persistent local
+console, see the [CoBuilder toolbelt](docs/CO_BUILDER_TOOLBELT.md#local-first-headless-team).
+Existing local Ollama models and tool-free Claude reviews are supported;
+Desktop Commander Remote and all-provider orchestration are not enabled.
+
 TREE
   01 / CORE
       README -> FAST_VIEW -> SPINE

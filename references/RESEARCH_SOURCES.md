@@ -119,3 +119,32 @@ Provider-specific guidance in the original research is not reasserted here.
 Consult current official documentation before changing provider integration.
 No dependency, service, index, schema, or generated skill is enabled by this
 research section.
+
+## Low-cost team / source cross-check 2026-10-05
+
+- The supplied ChatGPT share
+  `https://chatgpt.com/share/6ac35692-d5c8-83e9-a0ec-65e9a86d1499`
+  returned only "ChatGPT - Updated Repo Handoff" to the available fetch tool.
+  Its conversation contents were not available and are not treated as evidence.
+- [5e-database](https://github.com/5e-bits/5e-database) is archived according
+  to both its README and GitHub repository metadata. Its README points to
+  [5e-srd-api](https://github.com/5e-bits/5e-srd-api), observed unarchived.
+  RPG terms can inform presentation only; no database, game rules, or dependency
+  is imported. Licensing must be reviewed before copying reference content.
+- Local Claude CLI help confirmed `--effort low`, `--tools ""`, strict MCP
+  configuration, empty setting sources, no session persistence, JSON output,
+  and the native dollar-budget option used by the headless adapter.
+  This is installed-CLI evidence, not a guarantee for other client versions.
+
+Agent Finder discovery returned the following leads. Scores are relevance only,
+not trust or security ratings; none were installed:
+
+1. **Github**, Claude plugin, score 90:
+   https://github.com/anthropics/claude-plugins-public/blob/main/external_plugins/github
+2. **Sourcegraph MCP Server**, MCP server, score 80:
+   https://api.mcp.github.com/oss/v0.1/servers/io.github.sourcegraph%2Fmcp/versions/latest
+3. **CLI Code Reviewer**, skill, score 70:
+   https://github.com/cli/cli/blob/trunk/.github/skills/cli-code-reviewer/SKILL.md
+
+The last result is GitHub CLI-specific, not an Avalhla review contract. Existing
+GitHub tooling is preferable to installing these merely because they were found.
