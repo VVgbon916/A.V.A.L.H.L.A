@@ -1,0 +1,118 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+MODE="${1:-init}"
+
+case "$MODE" in
+  init|--init) ;;
+  -h|--help)
+    printf "%s\n" \
+      "usage: ava-cobuilder init" \
+      "COBUILDER INIT = first-contact AI operating contract" \
+      "COBUILDER MODE = active co-building state" \
+      "COBUILDER // DEVILASH = adversarial verification method"
+    exit 0
+    ;;
+  *)
+    printf "usage: ava-cobuilder init\n" >&2
+    exit 2
+    ;;
+esac
+
+SCRIPT_PATH="$(readlink -f -- "${BASH_SOURCE[0]}")"
+ROOT="$(cd -- "$(dirname -- "$SCRIPT_PATH")/.." && pwd -P)"
+cd "$ROOT"
+
+branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "?")"
+head="$(git rev-parse HEAD 2>/dev/null || echo "?")"
+dirty="$(git status --porcelain 2>/dev/null | wc -l | tr -d " ")"
+
+required=(
+  "AGENTS.md"
+  "docs/FAST_VIEW.md"
+  "docs/PHASING.md"
+  "docs/CO_BUILDER_TOOLBELT.md"
+  "memory/auto-read/00_AI_COBUILD.json"
+  "config/sublime/Preferences.sublime-settings"
+  "docs/DAWA_NOTEPAD.md"
+  "scripts/ava-sublime-update"
+  "config/color/avalhla-color-field.v1.json"
+  "config/integrity/avalhla-integrity.v1.json"
+  "docs/COLOR_BOOK.md"
+  "scripts/lib_color_field.sh"
+  "scripts/lib_integrity.sh"
+  "tests/test_color_field.sh"
+  "tests/test_integrity.sh"
+  "scripts/lib_action.py"
+  "tests/test_action_proposal.py"
+)
+
+missing=0
+for f in "${required[@]}"; do
+  if [[ -f "$f" ]]; then
+    continue
+  fi
+  printf "    MISSING   %s\n" "$f"
+  missing=1
+done
+
+printf "%s\n" "COBUILDER INIT"
+printf "%s\n" "-------------"
+printf "    MODE      COBUILDER MODE\n"
+printf "    METHOD    COBUILDER // DEVILASH\n"
+printf "    ROOT      %s\n" "$ROOT"
+printf "    BRANCH    %s\n" "$branch"
+printf "    HEAD      %s\n" "$head"
+printf "    WORKTREE  %s dirty file(s)\n" "$dirty"
+
+printf "%s\n" "" "01 ORDER"
+printf "%s\n" "    READ -> REAL_STATE -> UNDERSTAND -> COMPARE"
+printf "%s\n" "    -> RESEARCH -> CROSS_CHECK -> MINIMAL_EDIT"
+printf "%s\n" "    -> TEST -> VERIFY -> REVIEW -> DAWA HUMAN GATE"
+
+printf "%s\n" "" "02 AUTHORITY"
+printf "%s\n" "    DAWA      final human choice"
+printf "%s\n" "    MODEL     approved visibility / bounded synthesis"
+printf "%s\n" "    AVVA      relation, not authority"
+printf "%s\n" "    REVIEW    evidence, not authority"
+
+printf "%s\n" "" "03 PUBLIC / PRIVATE"
+printf "%s\n" "    PUBLIC    VVgbon916/A.V.A.L.H.L.A"
+printf "%s\n" "              Avalhla system / public CoBuilder / public docs"
+printf "%s\n" "    PRIVATE   VVgbon916/Dawa_Notepad"
+printf "%s\n" "              Dawa human lane / private editor project"
+printf "%s\n" "    AVALHLA   memory/auto-read/"
+printf "%s\n" "              canonical Avalhla auto-read lane"
+printf "%s\n" "    EDITOR    visibility does not grant ingestion authority"
+printf "%s\n" "    UPDATE    scripts/ava-sublime-update (public settings only)"
+
+printf "%s\n" "" "04 DEVILASH"
+printf "%s\n" "    QUESTION ASSUMPTIONS"
+printf "%s\n" "    FIND CURRENT SOURCE"
+printf "%s\n" "    ATTACK NEGATIVE PATH"
+printf "%s\n" "    KEEP SMALLEST SAFE CHANGE"
+printf "%s\n" "    STALE PROOF IS HISTORICAL"
+
+printf "%s\n" "" "05 INTEGRITY"
+if [[ -f "config/color/avalhla-color-field.v1.json" && -f "config/integrity/avalhla-integrity.v1.json" && -f "scripts/lib_color_field.sh" && -f "scripts/lib_integrity.sh" && -x "tests/test_color_field.sh" && -x "tests/test_integrity.sh" ]]; then
+  printf "%s\n" "    PRIMITIVES  PRESENT"
+else
+  printf "%s\n" "    PRIMITIVES  MISSING"
+  missing=1
+fi
+if [[ -f "scripts/lib_action.py" && -f "tests/test_action_proposal.py" ]]; then
+  printf "%s\n" "    ACTION PROPOSAL  PRESENT (RUNTIME CALLER UNVERIFIED)"
+else
+  printf "%s\n" "    ACTION PROPOSAL  MISSING"
+  missing=1
+fi
+
+printf "%s\n" "" "06 SOURCES"
+if (( missing == 0 )); then
+  printf "%s\n" "    REQUIRED  PASS"
+else
+  printf "%s\n" "    REQUIRED  FAIL"
+fi
+
+printf "%s\n" "" "COBUILDER INIT COMPLETE // READ-ONLY"
+(( missing == 0 )) || exit 1

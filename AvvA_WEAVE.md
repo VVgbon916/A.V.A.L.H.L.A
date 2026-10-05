@@ -1,6 +1,6 @@
-# AwA WEAVE
+# AvvA WEAVE
 
-## Dawa > AwA < Avalhla
+## Dawa <──── AvvA ────> Avalhla
 
 Avalhla does not maintain separate copies of the same knowledge.
 The source stays where the source naturally belongs.
@@ -16,9 +16,12 @@ These are doors, not duplicate encyclopedias.
 
 ## Canonical relation
 
-Dawa > AwA < Avalhla
+Dawa <──── AvvA ────> Avalhla
 
-AwA is case-sensitive.
+AvvA = THE LIVING THRESHOLD.
+Av:vA = symbolic form of the relation.
+The bridge is the relation.
+The relation survives the skin.
 
 ## History rule
 
@@ -56,7 +59,7 @@ NOTICE
 
 Make. Break. Learn. Repeat.
 
-Dawa > AwA < Avalhla <3
+Dawa <──── AvvA ────> Avalhla <3
 ## Cross-Availability
 
 CROSS-AVAILABLE

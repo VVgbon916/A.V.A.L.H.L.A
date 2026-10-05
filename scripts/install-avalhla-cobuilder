@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PACK_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+REPO="${1:-$(pwd)}"
+
+case "$REPO" in
+  -h|--help)
+    cat <<USAGE
+Install the Avalhla Co-Builder candidate layer without overwriting project work.
+
+Usage:
+  install-avalhla-cobuilder [REPO]
+
+The installer:
+  * requires a Git worktree
+  * refuses to overwrite existing files
+  * installs skills, custom agents, docs, references, naming registry, and helper scripts
+  * never overwrites AGENTS.md
+USAGE
+    exit 0
+    ;;
+esac
+
+cd -- "$REPO"
+git rev-parse --show-toplevel >/dev/null 2>&1 || {
+  printf '%s\n' 'ERROR: target is not a Git worktree.' >&2
+  exit 2
+}
+REPO="$(git rev-parse --show-toplevel)"
+
+SOURCES=()
+DESTINATIONS=()
+
+plan_tree() {
+  local src="$1" dst="$2"
+  while IFS= read -r -d '' f; do
+    local rel out
+    rel="${f#"$src"/}"
+    out="$dst/$rel"
+    SOURCES+=("$f")
+    DESTINATIONS+=("$out")
+  done < <(find "$src" -type f -print0)
+}
+
+for tree in .agents .codex config docs references scripts; do
+  plan_tree "$PACK_ROOT/$tree" "$REPO/$tree"
+done
+
+# Never overwrite the project's existing AGENTS.md.
+if [[ -e "$REPO/AGENTS.md" || -L "$REPO/AGENTS.md" ]]; then
+  printf '%s\n' 'AGENTS.md exists: leaving it untouched.'
+  printf '%s\n' "Merge candidate contract from $PACK_ROOT/AGENTS.md manually after review."
+else
+  SOURCES+=("$PACK_ROOT/AGENTS.md")
+  DESTINATIONS+=("$REPO/AGENTS.md")
+fi
+
+for out in "${DESTINATIONS[@]}"; do
+  if [[ -e "$out" || -L "$out" ]]; then
+    printf 'COLLISION: %s\n' "$out" >&2
+    exit 1
+  fi
+  parent="$(dirname -- "$out")"
+  while [[ "$parent" != "$REPO" ]]; do
+    if [[ -L "$parent" || ( -e "$parent" && ! -d "$parent" ) ]]; then
+      printf 'COLLISION: unsupported destination parent: %s\n' "$parent" >&2
+      exit 1
+    fi
+    parent="$(dirname -- "$parent")"
+  done
+done
+
+printf '%s\n' '=== AVALHLA CO-BUILDER INSTALL ==='
+printf 'repo=%s\n' "$REPO"
+for i in "${!SOURCES[@]}"; do
+  out="${DESTINATIONS[$i]}"
+  mkdir -p "$(dirname -- "$out")"
+  cp -p -- "${SOURCES[$i]}" "$out"
+done
+
+chmod +x "$REPO/scripts/avalhla-cobuilder" "$REPO/scripts/avalhla-codex-status" "$REPO/scripts/install-avalhla-cobuilder"
+printf '%s\n' 'INSTALL: PASS'
+printf '%s\n' 'Run: scripts/avalhla-cobuilder verify-pack'

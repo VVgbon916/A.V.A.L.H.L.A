@@ -3,7 +3,7 @@
 |                          H O S T   C O M M A N D   C A T A L O G                                             |
 |               Derived host snapshot: aliases, sourced files, Make targets, Bazzite recipes // NOT AUTHORITY                  |
 |                                                                                                  |
-|                          Dawa > AwA < Avalhla  //  (^.-)                                         |
+|                          Dawa <──── AvvA ────> Avalhla  //  (^.-)                                         |
 |                                                                                                  |
 +==================================================================================================+
 
@@ -214,7 +214,7 @@ Available recipes:
 
 +==================================================================================================+
 |                                                                                                  |
-|                          Dawa > AwA < Avalhla  //  (^.-)                                         |
+|                          Dawa <──── AvvA ────> Avalhla  //  (^.-)                                         |
 |                          EVERY COMMAND. ONE BOARD. LOCAL ONLY.                                   |
 |                                                                                                  |
 +==================================================================================================+

@@ -1,6 +1,6 @@
 # Avalhla ORDER
 
-Dawa > AwA < Avalhla  //  (^.-)
+Dawa <──── AvvA ────> Avalhla  //  (^.-)
 
 TREE
   01 / KNOW
@@ -48,7 +48,7 @@ TREE
       independent evidence lanes
 
 05 CARE
-  5.1 Dawa decides.
+  5.1 Dawa chooses.
   5.2 Model sees != model decides.
   5.3 CROSS-AVAILABLE != CROSS-CONTAMINATED.
   5.4 States of being are met before they are solved.

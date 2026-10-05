@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+REGISTRY="$ROOT/config/avalhla-naming.v1.json"
+
+usage() {
+  cat <<USAGE
+Avalhla Co-Builder helper
+
+  avalhla-cobuilder list
+  avalhla-cobuilder check-name NAME
+  avalhla-cobuilder reattack NAME KIND
+  avalhla-cobuilder verify-pack
+USAGE
+}
+
+need_python() {
+  command -v python3 >/dev/null 2>&1 || {
+    printf '%s\n' 'ERROR: python3 is required for deterministic JSON validation.' >&2
+    exit 2
+  }
+}
+
+list_doors() {
+  need_python
+  python3 - "$REGISTRY" <<'PY'
+import json, sys
+with open(sys.argv[1], encoding='utf-8') as f: d=json.load(f)
+for x in d['doors']:
+    print(f"{x['order']:02d} {x['door']:<10} {x['job']:<12} {x['instrument']:<11} {x['skill']}")
+PY
+}
+
+check_name() {
+  need_python
+  NAME="$1" python3 - "$REGISTRY" <<'PY'
+import json, os, re, sys
+name=os.environ['NAME']
+d=json.load(open(sys.argv[1], encoding='utf-8'))
+flat=[]
+for x in d['doors']:
+    flat += [x['door'], x['skill'], x['job']]
+for x in d['five_instruments']:
+    flat += [x['name'], x['job']]
+for x in d['historical_voices'].values():
+    flat.append(x['role'])
+for x in d['runtime_voices'].values():
+    flat.append(x['role'])
+norm=lambda s: re.sub(r'[^a-z0-9]+','',s.lower())
+needle=norm(name)
+for existing in flat:
+    if norm(existing)==needle:
+        print(f"COLLISION: {name} == {existing}")
+        raise SystemExit(1)
+print(f"AVAILABLE: {name}")
+PY
+}
+
+reattack() {
+  [[ $# -eq 2 ]] || { printf '%s\n' 'reattack requires NAME KIND' >&2; exit 2; }
+  cat <<EOF2
+RETURN-TO-STRIKE
+NAME=$1
+KIND=$2
+
+REQUIRED:
+  1 naming collision / semantic drift
+  2 source + caller + history trace
+  3 permission / boundary check
+  4 prompt-injection / malformed-input attack
+  5 re-run affected 8x doors
+  6 full 8x if behavior/security/provenance/persistence/permissions/canonical data can change
+
+No commit or push is implied.
+EOF2
+}
+
+verify_pack() {
+  need_python
+  python3 - "$ROOT" <<'PY'
+import json, pathlib, re, sys
+root=pathlib.Path(sys.argv[1])
+reg=json.load(open(root/'config/avalhla-naming.v1.json', encoding='utf-8'))
+assert len(reg['doors']) == 8
+assert [x['order'] for x in reg['doors']] == list(range(1,9))
+assert len(reg['five_instruments']) == 5
+assert set(reg['runtime_voices']) >= {'AVALHLA','LUX','VEX'}
+assert set(reg['historical_voices']) >= {'VALHLA','LHLAVA'}
+for d in reg['doors']:
+    p=root/'.agents'/'skills'/d['skill']/'SKILL.md'
+    assert p.is_file(), p
+    text=p.read_text(encoding='utf-8')
+    assert re.search(r'^name:\s*', text, re.M), p
+    assert re.search(r'^description:\s*', text, re.M), p
+for p in (root/'AGENTS.md', root/'references/DOORBOOK.md', root/'references/RETURN_TO_STRIKE.md', root/'docs/NAMING_SKILL.md'):
+    assert p.is_file(), p
+print('PACK VERIFY: PASS')
+print('DOORS=8 INSTRUMENTS=5 HISTORICAL=2 ANGEL=1 DEMON=1')
+print('RETURN_TO_STRIKE=ENABLED')
+PY
+  for f in "$ROOT"/.codex/config.toml "$ROOT"/.codex/agents/*.toml; do
+    python3 - "$f" <<'PY'
+import sys
+try:
+    import tomllib
+except ImportError:
+    raise SystemExit('python3 lacks tomllib; TOML syntax not checked')
+with open(sys.argv[1], 'rb') as f: tomllib.load(f)
+PY
+  done
+  bash -n "$ROOT/scripts/avalhla-cobuilder"
+}
+
+case "${1:-}" in
+  list) list_doors ;;
+  check-name) [[ $# -eq 2 ]] || { usage; exit 2; }; check_name "$2" ;;
+  reattack) shift; reattack "$@" ;;
+  verify-pack) verify_pack ;;
+  -h|--help|"") usage ;;
+  *) usage; exit 2 ;;
+esac

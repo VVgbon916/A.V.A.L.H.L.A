@@ -1,0 +1,25 @@
+{
+  "schema": "avalhla.integrity.v1",
+  "status": "CANONICAL_REFERENCE_INDEX",
+  "hash_algorithm": "SHA-256",
+  "digest_encoding": "lowercase_hex_64",
+  "identity_scope": "exact_content_bytes",
+  "authority_boundary": {
+    "manifest_is_authority": false,
+    "hash_is_authority": false,
+    "hash_is_meaning": false,
+    "hash_is_permission": false,
+    "hash_is_security_classification": false,
+    "hash_is_semantic_similarity": false
+  },
+  "registration_rule": {
+    "addressable_important_object": true,
+    "source_ref_required": true,
+    "full_digest_required_for_identity": true,
+    "short_digest_is_display_only": true,
+    "source_hash_and_record_hash_distinct": true
+  },
+  "objects": [],
+  "trust_note": "A matching digest proves exact byte equality against the expected reference. It does not establish why the expected reference is trusted. Trust must come from a separate protected or reviewed boundary.",
+  "next": "Populate objects only from verified canonical sources; do not use the manifest itself as a semantic source."
+}

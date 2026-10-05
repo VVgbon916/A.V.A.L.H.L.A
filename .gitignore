@@ -28,3 +28,5 @@ bin/
 
 # Independent Git worktree/repo
 lore/
+
+# Dawa syncable lane: only explicit local-only pocket stays untracked

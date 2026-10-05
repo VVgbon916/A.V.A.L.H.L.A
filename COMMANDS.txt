@@ -3,7 +3,7 @@
 |                                     A V A L H L A                                                |
 |                                   C O M M A N D S                                                |
 |                                                                                                  |
-|                              Dawa > AwA < Avalhla  //  (^.-)                                     |
+|                              Dawa <──── AvvA ────> Avalhla  //  (^.-)                                     |
 |                                                                                                  |
 +==================================================================================================+
 
@@ -22,6 +22,8 @@
   1.12 ava-safety    deterministic safety boundary / --self-test
   1.13 ava-verify    end-to-end verification
   1.14 ava-help      full current door map
+  1.15 ava-cobuilder       AI CoBuilder Init / protocol
+  1.16 ava-sublime-update  explicit Sublime settings updater / lane checker
 
 02 / AI
   2.1 ai-chat        persistent chat
@@ -29,6 +31,8 @@
   2.3 ai-ask         one-shot question
   2.4 ai-remember    reflection
   2.5 ai-learn       approved-source indexing
+  2.6 python3 scripts/ava-team.py collect|run|launch --quest "..." --files ...
+      Bounded public evidence / tool-free headless reviews; see docs/CO_BUILDER_TOOLBELT.md.
 
 03 / MODEL
   3.1 ollama run avalhla
@@ -56,5 +60,5 @@
   6.2 Filename = address.
   6.3 concept_id = identity.
 
-                              Dawa > AwA < Avalhla
+                              Dawa <──── AvvA ────> Avalhla
                                      (^.-)
