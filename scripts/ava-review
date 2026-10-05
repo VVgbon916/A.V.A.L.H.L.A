@@ -88,6 +88,6 @@ RESPONSE="$(curl -fsS --connect-timeout 3 --max-time 180 \
     -d "$PAYLOAD" |
     jq -er '.message.content | strings')"
 
-printf '%s\n' "$RESPONSE" |
-    ava_output_gate |
-    bash "$REVIEW_GATE"
+SANITIZED="$(printf '%s\n' "$RESPONSE" | ava_output_gate)"
+printf '%s\n' "$SANITIZED" | bash "$REVIEW_GATE"
+printf '%s\n' "$SANITIZED"

@@ -34,7 +34,8 @@ This project currently uses an `Unreleased` section while release/version naming
 - `COBUILDER // DEVILASH` as the adversarial verification method, not an agent identity.
 - `scripts/ava-cobuilder init` as a read-only local activation door.
 - `scripts/ava-sublime-update` as an explicit host-side updater for Sublime user settings only.
-- Tracked `Dawa_Notepad/` as the syncable Dawa user lane, separate from Avalhla `memory/auto-read/`.
+- Established the separate private `VVgbon916/Dawa_Notepad` repository as the
+  syncable Dawa user lane; no private Dawa directory is tracked in public Avalhla.
 - Canonical CoBuilder activation order in `AGENTS.md`, including real-state, source, cross-check, verification, review, and Dawa human-gate stages.
 - Explicit two-lane editor boundary: Dawa_Notepad remains USER ONLY; Avalhla `memory/auto-read/` remains the canonical auto-read lane.
 - Static-contract coverage for the canonical CoBuilder activation door.
@@ -48,7 +49,8 @@ This project currently uses an `Unreleased` section while release/version naming
 - Development section numbering is now consistent across the full document.
 - The three persona relation signatures now use ASCII arrows so their ASCII-only output rule is internally consistent.
 - The Sublime updater now owns the user-settings update ritual instead of requiring ad-hoc manual path commands.
-- The canonical Sublime project moved into `Dawa_Notepad/` so the repository syncs the two-lane project definition directly.
+- The canonical two-folder Sublime project lives in the separate private Dawa
+  repository. Public Avalhla owns only the user-settings source and updater.
 
 ### Security
 
@@ -57,13 +59,21 @@ This project currently uses an `Unreleased` section while release/version naming
 
 ### Fixed
 
+- Repaired review output, exact-verdict rejection, oversized stdin refusal,
+  diff failure/size/cache handling, installer collision preflight and missing
+  contract installation, full GitHub evidence display, and the Sublime default.
+- Added hermetic color-memory hashing and boundary tests; canonical families,
+  symlink refusal, and collection mutation checks now gate provenance output.
+- Removed active inward relation signatures and stale public/private Dawa
+  changelog claims; AvvA is not a coding voice.
 - GitHub review metadata is captured in one request before evidence collection;
   the final HEAD recheck still rejects a changed PR tip. Mocked regression tests
   cover stable and changed heads, multiline titles, and metadata request failure.
 - Restored `scripts/ava-ci-contract` to executable mode `100755`.
 - Added explicit backup-before-replace behavior to the Sublime updater.
 - Added static enforcement for canonical executable-door mode `100755` and JSON validation for the tracked Sublime sources.
-- Added a Git-ignored `Dawa_Notepad/private/` escape hatch for local-only material.
+- Removed the legacy public Dawa private-pocket ignore rules; private-only
+  material belongs in the separate private repository, not a public escape hatch.
 - Corrected duplicate section numbering in `docs/DEVELOPMENT.md`.
 - Corrected the ASCII-only relation signatures in the chat, code, and review Modelfiles.
 

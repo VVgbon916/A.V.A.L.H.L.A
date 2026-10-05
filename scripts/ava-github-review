@@ -103,7 +103,7 @@ if [[ "$HEAD_SHA_AFTER" != "$HEAD_SHA" ]]; then
 fi
 
 
-DISPLAY_ROWS() { printf "%s\n" "$1" | tail -n 8; }
+DISPLAY_ROWS() { printf "%s\n" "$1"; }
 
 printf "%s\n" "01 WHERE"
 printf "    REPO      %s\n" "$REPO"

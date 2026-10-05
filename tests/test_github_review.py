@@ -13,7 +13,7 @@ FIELDS = "title,state,baseRefName,headRefName,headRefOid,url,reviewDecision"
 
 
 class GitHubReviewTests(unittest.TestCase):
-    def run_review(self, mode):
+    def run_review(self, mode, synthesize=False):
         mock = r'''
 gh() {
   case "$1 $2" in
@@ -37,7 +37,14 @@ gh() {
         printf 'Unexpected separate metadata request: %s\n' "$*" >&2
         return 43
       fi ;;
-    'api --paginate') printf '' ;;
+    'api --paginate')
+      if [[ "$MODE" == many ]]; then
+        for row in {1..12}; do
+          printf 'CURRENT\\treviewer\\tCOMMENTED\\t%s\\tdate\\tfinding-%02d\\n' "$HEAD" "$row"
+        done
+      elif [[ "$MODE" == oversized ]]; then
+        printf '%25001s\n' 'oversized evidence'
+      fi ;;
     'pr checks') printf 'contract\tSUCCESS\tpass\n' ;;
     *) printf 'Unexpected request: %s\n' "$*" >&2; return 44 ;;
   esac
@@ -48,6 +55,14 @@ env() {
   done
   "$@"
 }
+python3() {
+  if [[ "$*" == *'urllib.request'* ]]; then
+    cat >"$SYNTH_LOG"
+    printf '%s\n' '{"convergence":"INSUFFICIENT","material_findings":[],"evidence_gaps":["mock"],"smallest_next_gate":"current source"}'
+  else
+    command python3 "$@"
+  fi
+}
 '''
         prefix = (
             f"MODE={mode}\nHEAD={HEAD}\nOTHER_HEAD={OTHER_HEAD}\n"
@@ -55,14 +70,19 @@ env() {
         )
         with tempfile.TemporaryDirectory(prefix="ava-review-test-") as directory:
             log = Path(directory) / "requests"
+            synth_log = Path(directory) / "synthesis"
             result = subprocess.run(
-                ["bash", "-c", prefix + f"REQUEST_LOG={log}\n" + mock
-                 + SCRIPT.read_text(), "review-test", "2"],
+                ["bash", "-c", prefix + f"REQUEST_LOG={log}\nSYNTH_LOG={synth_log}\n" + mock
+                 + SCRIPT.read_text(), "review-test", "2"]
+                + (["--synthesize"] if synthesize else []),
                 cwd=ROOT,
                 text=True,
                 capture_output=True,
             )
-            return result, log.read_text() if log.exists() else ""
+            requests = log.read_text() if log.exists() else ""
+            if synth_log.exists():
+                requests += "\nSYNTHESIS_INPUT\n" + synth_log.read_text()
+            return result, requests
 
     def test_one_snapshot_and_stable_head(self):
         result, requests = self.run_review("stable")
@@ -85,6 +105,26 @@ env() {
         self.assertIn("pull request metadata request failed", result.stderr)
         self.assertNotIn("HEAD_RECHECK", requests)
         self.assertNotIn("01 WHERE", result.stdout)
+
+    def test_report_preserves_every_collected_row(self):
+        result, _ = self.run_review("many")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        for row in range(1, 13):
+            self.assertIn(f"finding-{row:02d}", result.stdout)
+
+    def test_synthesis_receives_every_evidence_section(self):
+        result, requests = self.run_review("stable", synthesize=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("06 OLLAMA SYNTHESIS", result.stdout)
+        for section in ("REVIEW_ROWS", "CR_INLINE", "DEVIN_INLINE",
+                        "CR_SUMMARY", "DEVIN_SUMMARY", "CHECKS"):
+            self.assertIn(section, requests)
+
+    def test_oversized_synthesis_is_explicitly_refused(self):
+        result, requests = self.run_review("oversized", synthesize=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("no sections were truncated or sent", result.stderr)
+        self.assertNotIn("SYNTHESIS_INPUT", requests)
 
 
 if __name__ == "__main__":

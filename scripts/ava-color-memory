@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 source "$(dirname "${BASH_SOURCE[0]}")/lib_runtime.sh"
 set -Eeuo pipefail
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 
 usage() {
     cat <<'EOT'
@@ -39,7 +40,7 @@ parse_families() {
         return
     }
 
-    python3 - "$raw" <<'PY'
+    python3 - "$raw" "$SCRIPT_DIR/../config/color/avalhla-color-field.v1.json" <<'PY'
 import json
 import re
 import sys
@@ -47,11 +48,20 @@ import sys
 raw = sys.argv[1]
 items = [x.strip() for x in raw.split(",") if x.strip()]
 
+if len(items) != len(raw.split(",")):
+    raise SystemExit("empty family label")
 if len(items) > 3:
     raise SystemExit("maximum three families")
 
 if any(not re.fullmatch(r"[A-Za-z0-9_-]+", x) for x in items):
     raise SystemExit("invalid family label")
+
+with open(sys.argv[2], encoding="utf-8") as stream:
+    anchors = json.load(stream)["anchors"]
+if any(item not in anchors for item in items):
+    raise SystemExit("unknown family")
+if len(set(items)) != len(items):
+    raise SystemExit("duplicate family")
 
 print(json.dumps(items, separators=(",", ":")))
 PY
@@ -143,7 +153,7 @@ case "$cmd" in
         }
 
         [[ ! -L "$path" ]] || {
-            printf '%s\n' 'X symlink sources are denied'
+            printf '%s\n' 'X symlink sources are denied' >&2
             exit 1
         }
 
@@ -151,7 +161,7 @@ case "$cmd" in
         assert_inside_root "$resolved"
 
         source_ref="${resolved#"$AVA_ROOT"/}"
-        source_hash="$(sha256sum < "$resolved" | awk '{print $1}')"
+        source_hash="$(python3 "$SCRIPT_DIR/lib_color_memory.py" "$AVA_ROOT" file "$path")"
 
         emit "file" "$source_ref" "$source_hash" "$families_json"
         ;;
@@ -170,60 +180,7 @@ case "$cmd" in
         resolved="$(realpath -- "$path")"
         assert_inside_root "$resolved"
 
-        if find -P "$resolved" -type l -print -quit 2>/dev/null | grep -q .; then
-            printf '%s\n' 'X directory contains symlinks; refusing ambiguous collection identity'
-            exit 1
-        fi
-
-        manifest="$(mktemp)"
-        cleanup() { rm -f "$manifest"; }
-        trap cleanup EXIT
-
-        python3 - "$resolved" >"$manifest" <<'PY'
-import hashlib
-import json
-import os
-import sys
-
-root = sys.argv[1]
-entries = []
-
-for dirpath, dirnames, filenames in os.walk(root, topdown=True, followlinks=False):
-    dirnames.sort()
-    filenames.sort()
-
-    for name in filenames:
-        path = os.path.join(dirpath, name)
-
-        if os.path.islink(path) or not os.path.isfile(path):
-            raise SystemExit(f"unsupported collection member: {path}")
-
-        h = hashlib.sha256()
-
-        with open(path, "rb") as fh:
-            while True:
-                chunk = fh.read(1024 * 1024)
-                if not chunk:
-                    break
-                h.update(chunk)
-
-        rel = os.path.relpath(path, root).replace(os.sep, "/")
-        entries.append({
-            "path": rel,
-            "sha256": h.hexdigest()
-        })
-
-entries.sort(key=lambda x: x["path"])
-
-print(json.dumps(
-    entries,
-    ensure_ascii=False,
-    sort_keys=True,
-    separators=(",", ":"),
-))
-PY
-
-        source_hash="$(sha256sum -- "$manifest" | awk '{print $1}')"
+        source_hash="$(python3 "$SCRIPT_DIR/lib_color_memory.py" "$AVA_ROOT" directory "$path")"
         source_ref="${resolved#"$AVA_ROOT"/}"
 
         emit "directory" "$source_ref" "$source_hash" "$families_json"

@@ -48,6 +48,13 @@ RECORD_ASH identifies the canonical compact record.
 
 They are distinct.
 
+`scripts/ava-color-memory` hashes a file, a directory collection, or stdin without
+writing memory. Optional families must be distinct canonical anchor names (at
+most three). File and directory sources must be below the canonical root, with
+no symlink components. Collections are hashed twice and rejected if their
+content or filesystem identities change; this is bounded stability evidence,
+not a filesystem lock or proof of trust.
+
 ## Relationship law
 
 Dawa chooses.

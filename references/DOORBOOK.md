@@ -1,6 +1,6 @@
 # Avalhla Doorbook
 
-D A W A > AvvA < A V A L H L A
+Dawa <---- AvvA ----> Avalhla
 
 ## Naming hierarchy
 

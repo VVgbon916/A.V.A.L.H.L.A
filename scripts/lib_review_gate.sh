@@ -101,6 +101,10 @@ ava_review_validate() {
         }
 
         if (count == 5) {
+            if (content[5] != 0) {
+                fail("content after verdict")
+                next
+            }
             if (trimmed ~ /^(ship|fix-first|rewrite)$/) {
                 content[5] = 1
                 next

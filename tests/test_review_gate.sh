@@ -147,4 +147,19 @@ VERDICT
 fix-first
 extra'
 
+check_fail "repeated block verdict" 'BUGS: none
+SECURITY: none
+PERF: none
+STYLE: none
+VERDICT
+ship
+ship'
+
+check_fail "literal after inline verdict" 'BUGS: none
+SECURITY: none
+PERF: none
+STYLE: none
+VERDICT: ship
+rewrite'
+
 printf '\nReview-gate tests passed.\n'

@@ -1,7 +1,7 @@
 {
   "schema": "avalhla-naming.v1",
   "principle": "Doors are ways of working, not personalities. Jobs are capabilities. Voices are lenses. Dawa is the authority.",
-  "root": "D A W A > AvvA < A V A L H L A",
+  "root": "Dawa <---- AvvA ----> Avalhla",
   "historical_voices": {
     "VALHLA": {
       "type": "historical_reference",
@@ -130,7 +130,7 @@
     {
       "name": "FORGE",
       "job": "CODER",
-      "voice": "AvvA",
+      "voice": "AVALHLA",
       "boundary": "workspace-write; no automatic GitHub write"
     },
     {

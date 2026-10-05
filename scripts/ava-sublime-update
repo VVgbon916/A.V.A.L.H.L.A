@@ -105,7 +105,7 @@ apply() {
   printf '  installed     %s\n' "$PREF_TARGET"
 }
 
-case "${1:-check}" in
+case "${1:---check}" in
   --check) check ;;
   --apply) apply ;;
   --paths) print_paths ;;

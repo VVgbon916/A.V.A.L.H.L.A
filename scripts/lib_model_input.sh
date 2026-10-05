@@ -94,7 +94,20 @@ ava_model_input_stdin() {
     fi
 
     safe_label="$(printf '%q' "$label")"
-    value="$(head -c "$max_bytes")"
+    value="$(python3 -c '
+import sys
+limit = int(sys.argv[1])
+raw = sys.stdin.buffer.read(limit + 1)
+if len(raw) > limit:
+    raise SystemExit("X model-input: stdin exceeds requested byte limit; no input was sent")
+if b"\0" in raw:
+    raise SystemExit("X model-input: binary stdin denied")
+try:
+    text = raw.decode("utf-8")
+except UnicodeDecodeError:
+    raise SystemExit("X model-input: stdin must be UTF-8")
+sys.stdout.write(text)
+' "$max_bytes")" || return 1
 
     ava_model_input_assert_bytes "$value" || return 1
 

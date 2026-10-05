@@ -1,7 +1,7 @@
 # AVALHLA 8× — DOORS
 
 ```text
-D A W A > AvvA < A V A L H L A
+Dawa <---- AvvA ----> Avalhla
 
 01 THRESHOLD  → BASELINE
 02 THREAD     → HISTORY
