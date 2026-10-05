@@ -279,6 +279,19 @@ to the endpoint returned HTTP 200 with HTML. This verifies reachability and
 published endpoint provenance, not an MCP handshake, account authentication,
 node selection, enforced routing, or successful execution.
 
+A subsequent anonymous, metadata-only JSON-RPC `initialize` probe on
+2026-10-05 succeeded with `serverInfo.name = methetech-gdp-gateway`,
+`serverInfo.version = 0.3.0`, and protocol version `2025-06-18`.
+It advertised tool-catalog change notifications and resources without change
+notifications. No account identifier, credential, repository contents, or
+private snapshot was sent. Server instructions were treated as untrusted
+remote content, not an operating contract.
+
+This establishes a protocol handshake only. It does not prove authenticated
+tool access, correct node/workspace selection, account allowances, routing,
+or local execution. No `tools/list` or `tools/call` was performed. A public
+handshake is not evidence that material tools are unauthenticated.
+
 The [repository tool reference](https://methe.tech/help/gdp/gdp-repository-tool-reference)
 describes a caller-effective, variable tool catalog. Pasted tool descriptions
 are useful leads, but not live schemas or evidence that a capability is exposed
@@ -307,4 +320,6 @@ when available. Establish the selected node, workspace/repository, limits, and
 authority separately before any material request. Do not invent a bearer token
 from an identifier, share Desktop Commander credentials, install GDP from an
 unverified download, or retry a possibly non-idempotent dispatch blindly.
-No GDP connector was configured, authorized, or invoked in this pass.
+No authenticated GDP connector was configured or authorized; no GDP repository
+or execution tool was invoked. The anonymous protocol probe is separate from
+an installed, authenticated connector in the current CLI.

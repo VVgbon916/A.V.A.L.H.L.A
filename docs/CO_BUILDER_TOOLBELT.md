@@ -175,6 +175,37 @@ Three next upgrades worth a separately bounded implementation:
 
 These are proposed upgrades, not installed integrations or measured savings.
 
+### GDP readiness / next DEVILASH gate
+
+The published endpoint is `https://mcp.methe.tech/gdp/mcp`. A metadata-only
+anonymous handshake observed gateway `0.3.0` on protocol `2025-06-18`.
+The current CLI exposes no authenticated GDP tools. This probe did not pair
+an account or register an execution node.
+
+```text
+01 / ENDPOINT     published + handshake observed
+02 / ACCOUNT      browser authorization still unverified here
+03 / TARGET       live node + open repository still unverified here
+04 / POLICY       exact read/write authority still unverified here
+05 / QUOTA        live account units/reset rules still unverified here
+06 / MATERIAL     no GDP patch/test/commit/push claimed
+```
+
+Next, use the already-authorized GDP host for read-only discovery. The vendor
+documents GDP Desktop Settings > MCP Bridge, gateway connection, and opening
+the intended repository. Discover its live `repo_id` through `list_repos` if
+that tool is actually exposed; do not substitute tab order or a pasted path.
+For Avalhla, target the assigned public worktree, not the private Dawa lane or
+the main checkout. Inspect the effective tool descriptors and current policy
+before sending any patch or command.
+
+If a readiness snapshot contains no nodes, or does not establish routing,
+hold multi-device dispatch until a fresh snapshot identifies the intended
+authorized node. This is a readiness requirement, not an implemented routing
+enforcement mechanism. Login, paid entitlement, and public handshake are
+separate from material success. Use service-specific authorization; never
+reuse a GDP identifier as a credential for Desktop Commander or a model.
+
 ## CoBuilder activation
 
 Canonical activation door:
