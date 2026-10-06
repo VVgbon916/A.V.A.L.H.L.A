@@ -2,8 +2,10 @@
 
 [misc]
 disable = [
+    "system",         # handled separately by ujust on Bazzite
+    "flatpak",        # included in the ujust update
     "waydroid",
-    "cursor",
+    "cursor_agent",
     "antigravity",
     "containers",
     "ollama",         # replaced by the custom command below
@@ -11,7 +13,7 @@ disable = [
 
 ignore_failures = [
     "waydroid",
-    "cursor",
+    "cursor_agent",
     "antigravity",
     "containers",
 ]
