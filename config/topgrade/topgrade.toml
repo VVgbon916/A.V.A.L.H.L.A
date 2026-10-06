@@ -20,3 +20,7 @@ ignore_failures = [
 
 [commands]
 "Update my Ollama models" = "ollama pull qwen2.5-coder:7b"
+
+[distrobox]
+use_root = false
+containers = ["Coding-Lab"]
