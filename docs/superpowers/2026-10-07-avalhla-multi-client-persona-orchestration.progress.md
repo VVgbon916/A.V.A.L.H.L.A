@@ -21,3 +21,13 @@ Task 3: complete (tests: `bash tests/test_multi_client_manifest.sh && bash tests
 Task 4: Ruling: plugin discovery is catalogued and non-mutating; unavailable prerequisites such as `dnx`/`.NET` classify a plugin as deferred rather than triggering installation or enablement — cost if wrong: a user must explicitly install and authorize optional integrations later.
 
 Task 4: complete (tests: `bash tests/test_plugin_audit.sh && bash tests/test_multi_client_manifest.sh && bash tests/test_client_setup.sh && bash tests/test_dialogue.sh` → all four PASS)
+
+Task 5: Ruling: Desktop Commander is represented as the existing hyphenated `desktop-commander` key, and the setup tool preserves extra client-owned fields such as `tools`, `type`, and `env` — cost if wrong: a naming mismatch or replacement merge could create duplicate servers or remove client behavior.
+
+Task 5: Ruling: equivalent `/home` and `/var/home` symlink paths are treated as unchanged — cost if wrong: a real executable change could be missed only when both paths resolve to the same file.
+
+Task 5: Ruling: the existing local read-only repository MCP now bounds multi-query results per query instead of failing after discovering more than `max_results`; it still fails closed for payload-size and invalid-limit violations — cost if wrong: callers receive fewer results but retain representative query coverage.
+
+Task 5: Ruling: pre-existing dirty files `scripts/ava-ci-contract`, `scripts/ava-health`, `scripts/ava-resume`, and `docs/HANDOFF.md` were not staged wholesale; additive syntax/inventory fixes remain in the worktree to avoid overwriting user-owned edits.
+
+Task 5: complete (tests: `bash scripts/ava-ci-contract` with fixture write access → 168 pass, 0 fail; all four client plans → unchanged after Dawa Desktop apply; local repo MCP → 10 tests OK)

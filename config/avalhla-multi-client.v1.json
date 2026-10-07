@@ -148,7 +148,7 @@
       "activation": "selected_client_config_only",
       "writes": "proposal_or_explicit_patch_only"
     },
-    "desktop_commander": {
+    "desktop-commander": {
       "display_name": "Remote Desktop Commander",
       "transport": "local_stdio",
       "entrypoint": "@wonderwhy-er/desktop-commander",

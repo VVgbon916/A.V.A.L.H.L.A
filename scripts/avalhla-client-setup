@@ -47,23 +47,35 @@ def target_for(args: argparse.Namespace) -> Path:
     return Path(args.config).expanduser() if args.config else CLIENT_CONFIGS[args.client]
 
 
-def desktop_command(args: argparse.Namespace) -> str | None:
+def desktop_spec(args: argparse.Namespace) -> dict | None:
+    node = args.desktop_node or os.environ.get("AVALHLA_NODE_BIN")
+    entrypoint = args.desktop_entrypoint or os.environ.get("AVALHLA_DESKTOP_ENTRYPOINT")
+    if bool(node) != bool(entrypoint):
+        raise SetupError("Desktop Commander requires both node executable and entrypoint")
+    if node and entrypoint:
+        node_path = Path(node).expanduser()
+        entry_path = Path(entrypoint).expanduser()
+        if not node_path.exists() or not os.access(node_path, os.X_OK):
+            raise SetupError(f"Desktop Commander node is not executable: {node_path}")
+        if not entry_path.is_file():
+            raise SetupError(f"Desktop Commander entrypoint is missing: {entry_path}")
+        return {"command": str(node_path), "args": [str(entry_path)]}
     candidate = args.desktop_command or os.environ.get("AVALHLA_DESKTOP_COMMAND")
     if not candidate:
         return None
     path = Path(candidate).expanduser()
     if not path.exists() or not os.access(path, os.X_OK):
         raise SetupError(f"Desktop Commander executable is not executable: {path}")
-    return str(path)
+    return {"command": str(path)}
 
 
 def desired_servers(manifest: dict, args: argparse.Namespace) -> dict[str, dict]:
     servers = {}
     remote = manifest["mcp"]["avalhla"]
     servers["avalhla"] = {"type": "http", "url": remote["url"]}
-    command = desktop_command(args)
+    command = desktop_spec(args)
     if command:
-        servers["desktop_commander"] = {"command": command}
+        servers["desktop-commander"] = command
     return servers
 
 
@@ -80,9 +92,31 @@ def json_changes(config: dict, desired: dict[str, dict]) -> list[tuple[str, str]
         raise SetupError("JSON config mcpServers must be an object")
     changes = []
     for name, value in desired.items():
-        action = "add" if name not in current else "update" if current[name] != value else "unchanged"
+        if name not in current:
+            action = "add"
+        elif not isinstance(current[name], dict):
+            action = "update"
+        else:
+            projected = dict(current[name])
+            projected.update(value)
+            action = "update" if not values_equal(projected, current[name]) else "unchanged"
         changes.append((action, name))
     return changes
+
+
+def values_equal(left, right) -> bool:
+    """Compare config values while treating equivalent absolute symlink paths equally."""
+    if isinstance(left, dict) and isinstance(right, dict):
+        return left.keys() == right.keys() and all(values_equal(left[key], right[key]) for key in left)
+    if isinstance(left, list) and isinstance(right, list):
+        return len(left) == len(right) and all(values_equal(a, b) for a, b in zip(left, right))
+    if isinstance(left, str) and isinstance(right, str):
+        if left.startswith("/") and right.startswith("/"):
+            left_path = Path(left)
+            right_path = Path(right)
+            if left_path.exists() or right_path.exists():
+                return left_path.resolve() == right_path.resolve()
+    return left == right
 
 
 def apply_json(config: dict, desired: dict[str, dict]) -> dict:
@@ -93,7 +127,14 @@ def apply_json(config: dict, desired: dict[str, dict]) -> dict:
     if not isinstance(servers, dict):
         raise SetupError("JSON config mcpServers must be an object")
     merged = dict(servers)
-    merged.update(desired)
+    for name, value in desired.items():
+        existing = merged.get(name)
+        if isinstance(existing, dict):
+            updated = dict(existing)
+            updated.update(value)
+            merged[name] = updated
+        else:
+            merged[name] = value
     result["mcpServers"] = merged
     return result
 
@@ -146,8 +187,8 @@ def print_plan(args: argparse.Namespace, manifest: dict, target: Path, desired: 
         changes = json_changes(config, desired)
     for action, name in changes:
         print(f"action={action} server={name}")
-    if "desktop_commander" not in desired:
-        print("action=deferred server=desktop_commander reason=executable_not_supplied")
+    if "desktop-commander" not in desired:
+        print("action=deferred server=desktop-commander reason=executable_not_supplied")
     return 0
 
 
@@ -174,6 +215,9 @@ def apply_config(args: argparse.Namespace, manifest: dict, target: Path, desired
         updated = apply_json(config, desired)
         content = json.dumps(updated, indent=2, ensure_ascii=False) + "\n"
         changes = json_changes(config, desired)
+        if all(action == "unchanged" for action, _ in changes):
+            print(f"unchanged client={args.client} target={target}")
+            return 0
     if content == original:
         print(f"unchanged client={args.client} target={target}")
         return 0
@@ -191,6 +235,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--client", required=True, choices=sorted(CLIENT_CONFIGS))
     parser.add_argument("--config")
     parser.add_argument("--desktop-command")
+    parser.add_argument("--desktop-node")
+    parser.add_argument("--desktop-entrypoint")
     parser.add_argument("--backup-dir", default="~/.local/state/avalhla/backups")
     return parser.parse_args()
 
@@ -210,8 +256,8 @@ def main() -> int:
             else:
                 load_json(target)
             print(f"check=ok client={args.client} target={target}")
-            if "desktop_commander" not in desired:
-                print("deferred=desktop_commander reason=executable_not_supplied")
+            if "desktop-commander" not in desired:
+                print("deferred=desktop-commander reason=executable_not_supplied")
             return 0
         if args.command == "plan":
             return print_plan(args, manifest, target, desired)

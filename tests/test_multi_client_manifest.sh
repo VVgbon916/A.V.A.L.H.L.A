@@ -40,7 +40,7 @@ if "repository_url" in repositories["destiny_tower"]:
     raise SystemExit("virtual Destiny Tower must not invent a repository URL")
 
 mcp = manifest.get("mcp", {})
-for name in ("avalhla", "desktop_commander"):
+for name in ("avalhla", "desktop-commander"):
     entry = mcp.get(name, {})
     if entry.get("auto_start") is not True:
         raise SystemExit(f"shared MCP entry is not auto-start enabled: {name}")

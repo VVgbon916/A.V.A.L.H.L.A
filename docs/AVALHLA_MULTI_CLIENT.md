@@ -39,12 +39,15 @@ auto-start configured MCP processes after their normal client authentication;
 it cannot perform OAuth, bypass a permission prompt, or silently enable a
 connector. Supply a verified local Desktop Commander executable through
 `--desktop-command` or `AVALHLA_DESKTOP_COMMAND`; otherwise that entry remains
-deferred.
+deferred. For the bundled Node-based process, provide both
+`--desktop-node PATH --desktop-entrypoint PATH` (or `AVALHLA_NODE_BIN` and
+`AVALHLA_DESKTOP_ENTRYPOINT`) so the generated command preserves the two-part
+launcher.
 
 ## Shared MCP baseline
 
 - `avalhla`: authenticated GDP/Git Diff Patcher Bridge over the configured HTTP endpoint.
-- `desktop_commander`: local stdio process, client permission-gated.
+- `desktop-commander`: local stdio process, client permission-gated.
 
 The baseline is intentionally separate from optional services such as GitHub,
 Supabase, Notion, Slack, Firecrawl, Exa, Hugging Face, and Power BI. A listed
