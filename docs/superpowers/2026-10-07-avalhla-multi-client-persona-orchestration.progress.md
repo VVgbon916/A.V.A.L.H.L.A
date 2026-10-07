@@ -31,3 +31,7 @@ Task 5: Ruling: the existing local read-only repository MCP now bounds multi-que
 Task 5: Ruling: pre-existing dirty files `scripts/ava-ci-contract`, `scripts/ava-health`, `scripts/ava-resume`, and `docs/HANDOFF.md` were not staged wholesale; additive syntax/inventory fixes remain in the worktree to avoid overwriting user-owned edits.
 
 Task 5: complete (tests: `bash scripts/ava-ci-contract` with fixture write access → 168 pass, 0 fail; all four client plans → unchanged after Dawa Desktop apply; local repo MCP → 10 tests OK)
+
+Final review: self-review (no subagent tool available).
+
+Final: fixed stale TOML dry-run reporting — `plan` now uses the same section-value comparison as `apply`; regression test `test_client_setup.sh` RED→GREEN, full contract 168/168.

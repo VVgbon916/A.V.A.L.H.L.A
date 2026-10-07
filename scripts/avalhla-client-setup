@@ -158,21 +158,47 @@ def toml_has_section(text: str, name: str) -> bool:
     return re.search(rf"(?m)^\[mcp_servers\.{re.escape(name)}\]\s*$", text) is not None
 
 
+def toml_value(key: str, item) -> str:
+    if isinstance(item, str):
+        return f'{key} = {json.dumps(item)}\n'
+    if isinstance(item, bool):
+        return f"{key} = {'true' if item else 'false'}\n"
+    return f"{key} = {json.dumps(item)}\n"
+
+
+def update_toml_section(text: str, name: str, value: dict) -> str:
+    lines = text.splitlines(keepends=True)
+    section = toml_section_name(name)
+    try:
+        start = next(index for index, line in enumerate(lines) if line.strip() == section)
+    except StopIteration as exc:
+        raise SetupError(f"TOML section disappeared: {section}") from exc
+    end = next((index for index in range(start + 1, len(lines)) if lines[index].lstrip().startswith("[")), len(lines))
+    body = lines[start + 1 : end]
+    for key, item in value.items():
+        replacement = toml_value(key, item)
+        pattern = re.compile(rf"^\s*{re.escape(key)}\s*=")
+        for index, line in enumerate(body):
+            if pattern.match(line):
+                body[index] = replacement
+                break
+        else:
+            body.append(replacement)
+    return "".join(lines[: start + 1] + body + lines[end:])
+
+
 def apply_toml(text: str, desired: dict[str, dict]) -> tuple[str, list[tuple[str, str]]]:
     result = text.rstrip() + "\n"
     changes = []
     for name, value in desired.items():
         if toml_has_section(result, name):
-            changes.append(("unchanged", name))
+            updated = update_toml_section(result, name, value)
+            changes.append(("unchanged" if updated == result else "update", name))
+            result = updated
             continue
         result += "\n" + toml_section_name(name) + "\n"
         for key, item in value.items():
-            if isinstance(item, str):
-                result += f'{key} = {json.dumps(item)}\n'
-            elif isinstance(item, bool):
-                result += f"{key} = {'true' if item else 'false'}\n"
-            else:
-                result += f"{key} = {json.dumps(item)}\n"
+            result += toml_value(key, item)
         changes.append(("add", name))
     return result, changes
 
@@ -181,7 +207,7 @@ def print_plan(args: argparse.Namespace, manifest: dict, target: Path, desired: 
     print(f"client={args.client} target={target}")
     if target.suffix == ".toml":
         text = load_toml(target)
-        changes = [("unchanged" if toml_has_section(text, name) else "add", name) for name in desired]
+        _, changes = apply_toml(text, desired)
     else:
         config = load_json(target)
         changes = json_changes(config, desired)

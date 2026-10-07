@@ -105,6 +105,25 @@ PY
 ALIAS_PLAN="$($SETUP plan --manifest "$ROOT/config/avalhla-multi-client.v1.json" --client claude_code --config "$CONFIG3" --desktop-node "$NODE_ALIAS" --desktop-entrypoint "$ENTRYPOINT_ALIAS")"
 [[ "$ALIAS_PLAN" == *"action=unchanged server=desktop-commander"* ]] || { echo "equivalent Desktop Commander paths caused churn" >&2; exit 1; }
 
+TOML_CONFIG="$TMP/codex.toml"
+cat > "$TOML_CONFIG" <<'TOML'
+[mcp_servers.existing]
+url = "https://keep.example"
+
+[mcp_servers.avalhla]
+url = "https://old.example"
+
+[mcp_servers.desktop-commander]
+command = "/old/node"
+args = ["/old/entry.js"]
+TOML
+TOML_PLAN="$($SETUP plan --manifest "$ROOT/config/avalhla-multi-client.v1.json" --client codex_cli --config "$TOML_CONFIG" --desktop-node "$NODE" --desktop-entrypoint "$ENTRYPOINT")"
+[[ "$TOML_PLAN" == *"action=update server=avalhla"* ]] || { echo "TOML plan missed stale GDP URL" >&2; exit 1; }
+$SETUP apply --manifest "$ROOT/config/avalhla-multi-client.v1.json" --client codex_cli --config "$TOML_CONFIG" --desktop-node "$NODE" --desktop-entrypoint "$ENTRYPOINT" --backup-dir "$BACKUPS" >/dev/null
+grep -F 'url = "https://mcp.methe.tech/gdp/mcp"' "$TOML_CONFIG" >/dev/null || { echo "stale TOML GDP URL was not updated" >&2; exit 1; }
+grep -F "command = \"$NODE\"" "$TOML_CONFIG" >/dev/null || { echo "stale TOML Desktop Commander command was not updated" >&2; exit 1; }
+grep -F 'url = "https://keep.example"' "$TOML_CONFIG" >/dev/null || { echo "unrelated TOML section was changed" >&2; exit 1; }
+
 printf '{not-json\n' > "$TMP/bad.json"
 if $SETUP apply --manifest "$ROOT/config/avalhla-multi-client.v1.json" --client claude_code --config "$TMP/bad.json" --desktop-command "$DESKTOP" --backup-dir "$BACKUPS" >/dev/null 2>&1; then
   echo "malformed config was accepted" >&2
