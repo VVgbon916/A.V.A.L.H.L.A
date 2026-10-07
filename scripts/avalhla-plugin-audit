@@ -1,0 +1,102 @@
+#!/usr/bin/env python3
+"""Audit plugin roles and availability without mutating plugin state."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import shutil
+import sys
+from pathlib import Path
+
+
+class AuditError(RuntimeError):
+    pass
+
+
+def load(path: Path) -> dict:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise AuditError(f"invalid JSON: {path}: {exc}") from exc
+
+
+def catalog_plugins(catalog: dict) -> list[tuple[str, list[str]]]:
+    plugins: list[tuple[str, list[str]]] = []
+    seen: set[str] = set()
+    for role, entries in catalog.get("roles", {}).items():
+        for entry in entries:
+            if isinstance(entry, str):
+                name, requirements = entry, []
+            else:
+                name = entry["name"]
+                requirements = list(entry.get("requirements", []))
+            key = name.casefold()
+            if key not in seen:
+                seen.add(key)
+                plugins.append((name, requirements))
+    return plugins
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    sub = parser.add_subparsers(dest="command", required=True)
+    for name in ("catalog", "check"):
+        command = sub.add_parser(name)
+        command.add_argument("--catalog", default="config/plugin-role-catalog.v1.json")
+    check = sub.choices["check"]
+    check.add_argument("--inventory", required=True)
+    check.add_argument("--available-commands", default=None)
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    try:
+        catalog = load(Path(args.catalog).expanduser())
+        if catalog.get("schema_version") != "plugin-role-catalog.v1":
+            raise AuditError("unsupported plugin catalog schema")
+        if args.command == "catalog":
+            for role, entries in catalog.get("roles", {}).items():
+                names = []
+                for entry in entries:
+                    names.append(entry if isinstance(entry, str) else entry["name"])
+                print(f"role={role} plugins={','.join(names)}")
+            print(f"activation_policy={catalog['activation_policy']}")
+            return 0
+
+        inventory = load(Path(args.inventory).expanduser())
+        observed = {}
+        for entry in inventory.get("plugins", []):
+            if isinstance(entry, dict) and isinstance(entry.get("name"), str):
+                observed.setdefault(entry["name"].casefold(), entry)
+        if args.available_commands is None:
+            available = {name for name in ("dnx", "dotnet") if shutil.which(name)}
+        else:
+            available = {name.strip() for name in args.available_commands.split(",") if name.strip()}
+        for name, requirements in catalog_plugins(catalog):
+            entry = observed.get(name.casefold())
+            if entry is None:
+                status = "not-installed"
+            else:
+                state = str(entry.get("state", "unknown")).casefold()
+                missing = set(entry.get("requires", requirements)) - available
+                if missing:
+                    status = "deferred"
+                elif state in {"enabled", "active", "connected"}:
+                    status = "installed-enabled"
+                elif state in {"auth-needed", "needs-auth", "unauthenticated"}:
+                    status = "installed-auth-needed"
+                elif state in {"disabled", "installed-disabled"}:
+                    status = "installed-disabled"
+                else:
+                    status = "deferred"
+            print(f"{name}: {status}")
+        return 0
+    except AuditError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

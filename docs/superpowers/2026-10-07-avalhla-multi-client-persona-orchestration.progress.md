@@ -17,3 +17,7 @@ Task 2: complete (tests: `bash tests/test_client_setup.sh && scripts/avalhla-cob
 Task 3: Ruling: paired chat is rendered as a deterministic labeled transcript rather than claiming native multi-agent support in every client — cost if wrong: clients without native speaker orchestration still need a wrapper or prompt adapter to display the contract.
 
 Task 3: complete (tests: `bash tests/test_multi_client_manifest.sh && bash tests/test_client_setup.sh && bash tests/test_dialogue.sh && bash tests/test_cobuilder_projection.sh` → all four PASS)
+
+Task 4: Ruling: plugin discovery is catalogued and non-mutating; unavailable prerequisites such as `dnx`/`.NET` classify a plugin as deferred rather than triggering installation or enablement — cost if wrong: a user must explicitly install and authorize optional integrations later.
+
+Task 4: complete (tests: `bash tests/test_plugin_audit.sh && bash tests/test_multi_client_manifest.sh && bash tests/test_client_setup.sh && bash tests/test_dialogue.sh` → all four PASS)

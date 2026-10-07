@@ -70,6 +70,60 @@ Tracked != model input.
 The private Dawa repository owns Dawa_Avalhla.sublime-project.
 The public Avalhla repository owns only the canonical global Sublime settings.
 
+## Devil3Way coordination preset
+
+Devil3Way names the three-lane collaboration shape; it does not create a new
+agent, authority, verifier, or permission boundary.
+
+    AVALHLA / DAWA-FACING
+      current-source research and evidence synthesis
+
+    CLAUDE CODE
+      independent forensic/security review in an isolated worktree
+
+    GITHUB COPILOT
+      candidate implementation in an isolated worktree
+
+Codex is the current orchestration and verification surface. Dawa chooses any
+provider activation, external write, merge, push, or publication.
+
+## Multi-client Avalhla setup
+
+The cross-client manifest, dry-run-first setup path, paired-persona renderer,
+and non-mutating plugin audit are documented in
+`docs/AVALHLA_MULTI_CLIENT.md`. Use `scripts/avalhla-client-setup plan` before
+any client-specific apply. The manifest can auto-start already authenticated
+GDP and local Desktop Commander entries, but it never copies credentials or
+turns a persona label into permission.
+
+## Local repository MCP
+
+Launch the bounded local server with:
+
+    python3 scripts/avalhla-repo-mcp.py
+
+It is stdio-only, dependency-free, and implements MCP revision `2026-07-28`,
+pinned to the official specification at
+https://modelcontextprotocol.io/specification/2026-07-28.
+The exact read-only tool surface is:
+
+    repo_summary
+    git_status
+    git_diff(base_ref?, paths?)
+    read_files(paths)
+    search_repo(query, additional_queries?, max_results?)
+
+The server rejects absolute/traversal/symlink/private/runtime-memory/untracked/
+binary paths, uses shell-free Git subprocesses, revalidates HEAD and file
+hashes, and fails closed rather than silently truncating results. It has no
+HTTP listener, network dependency, model call, filesystem write, GitHub action,
+or GDP execution path.
+
+MCP repository read access is context only. It does not select a GDP node,
+authenticate an account, queue a patch, run a check, apply a change, or grant
+access to Desktop Commander, GitHub, Supabase, Notion, Slack, Todoist,
+Smartsheet, GitBook, or another connector.
+
 ## Sublime updater door
 
 scripts/ava-sublime-update
