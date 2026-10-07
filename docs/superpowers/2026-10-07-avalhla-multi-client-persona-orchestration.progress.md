@@ -13,3 +13,7 @@ Task 1: complete (tests: `bash tests/test_multi_client_manifest.sh` → MULTI_CL
 Task 2: Ruling: the setup tool refuses to synthesize a Desktop Commander command when no executable is supplied — cost if wrong: auto-start remains deferred until the actual local executable is explicitly identified, avoiding a fake or broken command.
 
 Task 2: complete (tests: `bash tests/test_client_setup.sh && scripts/avalhla-cobuilder verify-pack` → CLIENT_SETUP_TEST_OK; PACK VERIFY: PASS)
+
+Task 3: Ruling: paired chat is rendered as a deterministic labeled transcript rather than claiming native multi-agent support in every client — cost if wrong: clients without native speaker orchestration still need a wrapper or prompt adapter to display the contract.
+
+Task 3: complete (tests: `bash tests/test_multi_client_manifest.sh && bash tests/test_client_setup.sh && bash tests/test_dialogue.sh && bash tests/test_cobuilder_projection.sh` → all four PASS)

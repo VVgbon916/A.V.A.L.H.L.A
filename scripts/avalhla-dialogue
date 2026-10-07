@@ -1,0 +1,97 @@
+#!/usr/bin/env python3
+"""Render a portable, labeled Avalhla multi-speaker transcript."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+
+class DialogueError(RuntimeError):
+    pass
+
+
+def load_json(path: Path) -> dict:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise DialogueError(f"invalid JSON input: {path}: {exc}") from exc
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    sub = parser.add_subparsers(dest="command", required=True)
+    render = sub.add_parser("render")
+    render.add_argument("--manifest", default="config/avalhla-multi-client.v1.json")
+    render.add_argument("--client", required=True)
+    render.add_argument("--view", choices=("compact", "structural", "diff"), default="compact")
+    render.add_argument("--input", required=True)
+    return parser.parse_args()
+
+
+def render(args: argparse.Namespace) -> str:
+    try:
+        manifest = load_json(Path(args.manifest).expanduser())
+        source = load_json(Path(args.input).expanduser())
+    except DialogueError:
+        raise
+    client = manifest.get("clients", {}).get(args.client)
+    if not client:
+        raise DialogueError(f"unknown client: {args.client}")
+    turns = source.get("turns", [])
+    if not isinstance(turns, list):
+        raise DialogueError("input turns must be an array")
+    by_speaker: dict[str, list[str]] = {}
+    for turn in turns:
+        if not isinstance(turn, dict) or not isinstance(turn.get("speaker"), str):
+            raise DialogueError("each turn requires a speaker")
+        by_speaker.setdefault(turn["speaker"], []).append(str(turn.get("text", "")))
+
+    lines = [f"CLIENT: {client['display_name']}", f"VIEW: {args.view}"]
+    expected = client.get("speakers", [])
+    for speaker_name in expected:
+        profile = manifest.get("speakers", {}).get(speaker_name)
+        if not profile:
+            raise DialogueError(f"client references unknown speaker: {speaker_name}")
+        if args.view == "structural":
+            lines.append("## Evidence")
+        elif args.view == "diff":
+            lines.append("## Diff")
+        lines.append(
+            f"[{speaker_name} | {profile['accent']} | {profile['style']}]"
+        )
+        messages = by_speaker.get(speaker_name, [])
+        if messages:
+            lines.extend(messages)
+        else:
+            lines.append("(awaiting paired response; no authority inferred)")
+        if args.view == "structural":
+            lines.append(f"behavior: {profile['chat_behavior']}")
+        lines.append("")
+
+    if args.view in ("structural", "diff"):
+        lines.append("## Challenge")
+        lines.append("Challenge claims separately from evidence; unresolved risk returns to Dawa.")
+        lines.append("## Verification")
+        lines.append("Verification status is proposed until tests or sources establish it.")
+        lines.append("## Dawa decision")
+        lines.append("Dawa remains the final authority for consequential action.")
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def main() -> int:
+    args = parse_args()
+    try:
+        if args.command != "render":
+            raise DialogueError(f"unsupported command: {args.command}")
+        sys.stdout.write(render(args))
+        return 0
+    except DialogueError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
