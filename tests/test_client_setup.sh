@@ -123,6 +123,9 @@ $SETUP apply --manifest "$ROOT/config/avalhla-multi-client.v1.json" --client cod
 grep -F 'url = "https://mcp.methe.tech/gdp/mcp"' "$TOML_CONFIG" >/dev/null || { echo "stale TOML GDP URL was not updated" >&2; exit 1; }
 grep -F "command = \"$NODE\"" "$TOML_CONFIG" >/dev/null || { echo "stale TOML Desktop Commander command was not updated" >&2; exit 1; }
 grep -F 'url = "https://keep.example"' "$TOML_CONFIG" >/dev/null || { echo "unrelated TOML section was changed" >&2; exit 1; }
+if grep -F 'type = "http"' "$TOML_CONFIG" >/dev/null; then echo "JSON-only HTTP type leaked into Codex TOML" >&2; exit 1; fi
+TOML_AFTER="$($SETUP plan --manifest "$ROOT/config/avalhla-multi-client.v1.json" --client codex_cli --config "$TOML_CONFIG" --desktop-node "$NODE" --desktop-entrypoint "$ENTRYPOINT")"
+[[ "$TOML_AFTER" == *"action=unchanged server=avalhla"* && "$TOML_AFTER" == *"action=unchanged server=desktop-commander"* ]] || { echo "Codex TOML apply was not idempotent" >&2; exit 1; }
 
 printf '{not-json\n' > "$TMP/bad.json"
 if $SETUP apply --manifest "$ROOT/config/avalhla-multi-client.v1.json" --client claude_code --config "$TMP/bad.json" --desktop-command "$DESKTOP" --backup-dir "$BACKUPS" >/dev/null 2>&1; then

@@ -35,3 +35,5 @@ Task 5: complete (tests: `bash scripts/ava-ci-contract` with fixture write acces
 Final review: self-review (no subagent tool available).
 
 Final: fixed stale TOML dry-run reporting — `plan` now uses the same section-value comparison as `apply`; regression test `test_client_setup.sh` RED→GREEN, full contract 168/168.
+
+Final: fixed Codex format projection — TOML receives only `url` for GDP while JSON clients receive `type` plus `url`; regression test `test_client_setup.sh` RED→GREEN, all four live client plans now report unchanged.

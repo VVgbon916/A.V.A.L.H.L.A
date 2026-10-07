@@ -69,10 +69,10 @@ def desktop_spec(args: argparse.Namespace) -> dict | None:
     return {"command": str(path)}
 
 
-def desired_servers(manifest: dict, args: argparse.Namespace) -> dict[str, dict]:
+def desired_servers(manifest: dict, args: argparse.Namespace, target: Path) -> dict[str, dict]:
     servers = {}
     remote = manifest["mcp"]["avalhla"]
-    servers["avalhla"] = {"type": "http", "url": remote["url"]}
+    servers["avalhla"] = {"url": remote["url"]} if target.suffix == ".toml" else {"type": "http", "url": remote["url"]}
     command = desktop_spec(args)
     if command:
         servers["desktop-commander"] = command
@@ -275,7 +275,7 @@ def main() -> int:
         target = target_for(args)
         if not target.is_file():
             raise SetupError(f"target config does not exist: {target}")
-        desired = desired_servers(manifest, args)
+        desired = desired_servers(manifest, args, target)
         if args.command == "check":
             if target.suffix == ".toml":
                 load_toml(target)
