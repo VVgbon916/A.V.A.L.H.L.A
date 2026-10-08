@@ -1687,7 +1687,8 @@
         "Work appears as a TODO checklist: [x] done, [ ] open, each item with its owner.",
         "Condense the important information under each heading; structure steps, do not shorten the explanation away.",
         "A code block means copy and apply: only complete commands or file content Dawa will paste.",
-        "Status, output, findings and warnings are never placed in code blocks.",
+        "Status, output, findings and warnings are never placed in code blocks, except the board.",
+        "Board: only when a problem, diff or decision needs the logic, FAST VIEW carries one fenced text tree (root claim, ├─ └─ branches, leaves marked ✓ holds, ✗ regression or ⚠ unproven, closed by 'Weakest:'). Otherwise stay compact: important facts only, no repetition.",
         "State the action to take; do not list what not to do.",
         "Prefer one large complete copy block per step over fragments."
       ]

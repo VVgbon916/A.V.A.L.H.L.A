@@ -40,7 +40,10 @@ and changes that reopen already-solved gates without new evidence.
 Answers, research and handoffs follow Dawa's view owned by
 `memory/auto-read/00_AI_COBUILD.json` -> `information_shape.response_view`:
 TITLE -> FAST VIEW -> TODO -> STEP DIVIDER -> COPY BLOCK.
-A code block means copy and apply; status and findings stay outside code blocks.
+A code block means copy and apply; status and findings stay outside code blocks,
+except the board: one fenced text tree with ✓ holds / ✗ regression /
+⚠ unproven leaves, drawn in FAST VIEW only when a problem, diff or decision
+needs the logic. Otherwise stay compact: important facts, no repetition.
 
 ## Consultation and skill routing
 
