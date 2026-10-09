@@ -2466,5 +2466,16 @@
     "rule": "SHA-256 identifies and verifies exact content bytes; it does not create meaning, authority, permission, security classification, or semantic similarity.",
     "scope": "ADDRESSABLE_IMPORTANT_OBJECT",
     "provenance_rule": "When model preparation transforms source content, source and consumed-input digests remain distinct evidence."
+  },
+  "meaning_crosswalk_project_2026_09_30": {
+    "status": "RESEARCH_ARTIFACT_POINTER",
+    "source": "docs/research/MEANING_CROSSWALK_2026-09-30.json",
+    "authority": "DAWA_HUMAN_GATE_REQUIRED_FOR_CANONICAL_OR_CONSEQUENTIAL_CHANGE",
+    "rule": "Research evidence remains separate from primary auto-read authority."
+  },
+  "operating_modes": {
+    "status": "POINTER_ONLY",
+    "source": "config/ava/operating-modes.v1.json",
+    "rule": "Topology changes capability, never human authority."
   }
 }

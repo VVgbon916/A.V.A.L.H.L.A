@@ -1,0 +1,288 @@
+{
+  "meaning_crosswalk_project_2026_09_30": {
+    "status": "RESEARCH_FOUNDATION",
+    "authority": "DAWA_HUMAN_GATE_REQUIRED_FOR_CANONICAL_OR_CONSEQUENTIAL_CHANGE",
+    "final_version_horizon": "NOT_BEFORE_2_YEARS",
+    "purpose": "Build a neutral semantic crosswalk that lets external vocabularies describe shared meaning without allowing any external taxonomy to rewrite CrossWorld canon or Avalhla authority.",
+    "scope": {
+      "current": "Research, mapping, evidence capture, collision analysis, and design only.",
+      "deferred": "Final capability ontology and final production form remain closed until the long-horizon gate is explicitly opened by Dawa.",
+      "no_silent_canon": true
+    },
+    "architecture": {
+      "pipeline": [
+        "EXTERNAL_VOCABULARY",
+        "SOURCE_CAPTURE",
+        "SEMANTIC_CROSSWALK",
+        "CROSSWORLD_MEANING_LAYER",
+        "CANONICAL_RECORD",
+        "DERIVED_CARD_SCENE_VIEW"
+      ],
+      "laws": [
+        "MAPPING != CANON",
+        "SOURCE != MEANING_AUTHORITY",
+        "SAME_WORD != SAME_CONCEPT",
+        "MULTIPLE_MAPPINGS_MAY_POINT_TO_ONE_MEANING",
+        "ONE_MAPPING_MAY_COVER_MULTIPLE_MEANING_DIMENSIONS",
+        "NO_EXTERNAL_TAXONOMY_MAY_OVERRIDE_CROSSWORLD_CANON",
+        "CROSS-AVAILABLE != CROSS-CONTAMINATED"
+      ]
+    },
+    "crossworld_contract": {
+      "canonical_families": [
+        "PRESENCE",
+        "ASPECT",
+        "BOND",
+        "WORLD",
+        "DOOR",
+        "CROSSING",
+        "SKILL",
+        "CRAFT",
+        "OBJECT",
+        "COLOR"
+      ],
+      "cross_cutting_meaning": [
+        "VOICE",
+        "RELATIONSHIP",
+        "BOUNDARY",
+        "MAPPING",
+        "CARD",
+        "SCENE",
+        "EVIDENCE",
+        "AUTHORITY",
+        "HELPER"
+      ],
+      "scope_law": "Identical display labels in different bounded scopes do not imply identical concepts.",
+      "avalhla_trio": [
+        "Valhla -> distinct ASPECT",
+        "Lhlava -> distinct ASPECT",
+        "Avalhla -> distinct ASPECT"
+      ],
+      "avva_invariant": {
+        "record_type": "BOND",
+        "signature": "Dawa <──── AvvA ────> Avalhla",
+        "mathematics_immutable_across_presentation_layers": true,
+        "lux_vex_rule": "Lux_The_Angel and Vex_The_Demon may vary as character/presentation layers but never alter AvvA mathematical or relational meaning."
+      }
+    },
+    "external_source_lanes": [
+      {
+        "source_id": "DND-2014",
+        "label": "D&D 5e 2014",
+        "role": "VERSIONED_REFERENCE_VOCABULARY",
+        "url": "https://www.dndbeyond.com/sources/dnd/basic-rules-2014/using-ability-scores",
+        "retrieved_at": "2026-09-30",
+        "separation_law": "Keep 2014 semantics distinct from 2024 semantics."
+      },
+      {
+        "source_id": "DND-2024",
+        "label": "D&D 5e 2024",
+        "role": "VERSIONED_REFERENCE_VOCABULARY",
+        "url": "https://www.dndbeyond.com/sources/dnd/br-2024/playing-the-game",
+        "retrieved_at": "2026-09-30",
+        "separation_law": "Keep 2024 semantics distinct from 2014 semantics."
+      },
+      {
+        "source_id": "5E-BITS-DATABASE",
+        "label": "5e-bits/5e-database",
+        "role": "STRUCTURED_VERSIONED_REFERENCE",
+        "url": "https://github.com/5e-bits/5e-database",
+        "retrieved_at": "2026-09-30",
+        "current_state": "Repository archived/read-only on 2026-09-23.",
+        "separation_law": "Use as a versioned source capture/reference lane, not as CrossWorld authority."
+      },
+      {
+        "source_id": "AI-EXPLORER",
+        "label": "AI Explorer",
+        "role": "LIVE_DIRECTORY_REFERENCE",
+        "url": "https://ai-explorer.io/en",
+        "retrieved_at": "2026-09-30",
+        "observed_state": {
+          "tools": 1425,
+          "category_listing": 36,
+          "site_footer_claim": 39
+        },
+        "drift_law": "Observed category-count disagreement is evidence of live-source drift; do not normalize it away.",
+        "priority_categories": [
+          "Audio / Voice",
+          "Education",
+          "Code / Dev",
+          "Images",
+          "Videos",
+          "AI Agents",
+          "Security",
+          "Privacy",
+          "Search / Discovery"
+        ]
+      }
+    ],
+    "priority_capability_research": [
+      {
+        "capability": "AUDIO_VOICE",
+        "candidate_dimensions": [
+          "sonic_expression",
+          "speech",
+          "listening",
+          "voice_identity_expression",
+          "audio_transformation"
+        ],
+        "status": "RESEARCH_ONLY"
+      },
+      {
+        "capability": "EDUCATION",
+        "candidate_dimensions": [
+          "learning",
+          "knowledge_transfer",
+          "instruction",
+          "practice",
+          "assessment"
+        ],
+        "status": "RESEARCH_ONLY"
+      },
+      {
+        "capability": "COLOR",
+        "candidate_dimensions": [
+          "expression",
+          "mood",
+          "atmosphere",
+          "visual_identity_expression"
+        ],
+        "law": "COLOR MAY SPEAK != COLOR MAY PROVE",
+        "status": "RESEARCH_ONLY"
+      },
+      {
+        "capability": "SHA256_INTEGRITY",
+        "candidate_dimensions": [
+          "exact_byte_identity",
+          "integrity_evidence",
+          "source_consumption_trace"
+        ],
+        "law": "HASH_IDENTITY != MEANING != AUTHORITY != PERMISSION",
+        "status": "RESEARCH_ONLY"
+      }
+    ],
+    "future_research_candidates": [
+      "CODE_DEV",
+      "IMAGES",
+      "VIDEO",
+      "AGENTS_ORCHESTRATION",
+      "SECURITY",
+      "PRIVACY",
+      "SEARCH_DISCOVERY",
+      "COMMUNICATION_DIALOGUE_RELATIONSHIP",
+      "PERCEPTION_SENSING",
+      "REASONING_INVESTIGATION_DEDUCTION",
+      "TRANSFORMATION_GENERATION_COMPOSITION",
+      "MEMORY_HISTORY_PERSISTENCE",
+      "STATE_CONDITION_TRANSITION",
+      "RESOURCE_EQUIPMENT_OBJECT_USE"
+    ],
+    "dnd_mapping_rule": {
+      "2014": {
+        "STR": "force / action",
+        "DEX": "precision / motion",
+        "CON": "endurance / holding",
+        "INT": "knowledge / structure",
+        "WIS": "perception / judgment",
+        "CHA": "expression / relation"
+      },
+      "2024": {
+        "STR": "physical might",
+        "DEX": "agility / reflexes / balance",
+        "CON": "health / stamina",
+        "INT": "reasoning / memory",
+        "WIS": "perceptiveness / mental fortitude",
+        "CHA": "confidence / poise / charm"
+      },
+      "law": "These are mapping observations only; they do not rewrite CrossWorld canon."
+    },
+    "collision_protocol": {
+      "package": "MYSTIC_GATE",
+      "triggers": [
+        "taxonomy_overlap",
+        "taxonomy_contradiction",
+        "unmapped_meaning_dimension",
+        "false_same_word_alignment",
+        "coverage_gap"
+      ],
+      "response": [
+        "FREEZE_THE_CLAIM",
+        "KEEP_SOURCE_LANES_SEPARATE",
+        "COMPARE_MEANING_DIMENSIONS",
+        "RERUN_COVERAGE_ANALYSIS",
+        "NAME_THE_MISSING_DIMENSION_OR_MARK_LIMIT",
+        "DO_NOT_USE_COLOR_OR_VOID_AS_AN_UNEXPLAINED_CATCH_ALL"
+      ],
+      "dream_boundary": "DREAM and IMAGINE may generate possibilities around the collision but may not silently promote them into canon."
+    },
+    "verification_plan": {
+      "WEB_LANE": "WEB_8X",
+      "REPO_LANE": "REPO_2X",
+      "RUNTIME_LANE": "RUNTIME_1X",
+      "CROSS_LANE": "CROSS_INFO_1X",
+      "review": [
+        "structure",
+        "semantics",
+        "provenance",
+        "boundaries",
+        "injection",
+        "mapping",
+        "persistence",
+        "devilash"
+      ],
+      "reviewer_evidence": {
+        "CodeRabbit": "UNTRUSTED_REVIEW_EVIDENCE",
+        "rule": "Review evidence may find, contradict, or block; it never authorizes merge, commit, push, or meaning."
+      },
+      "second_model_lens": {
+        "candidate": "DeepSeek Flash",
+        "model_id": "deepseek-flash",
+        "role": "UNTRUSTED_SECOND_LENS",
+        "use": "Adversarial comparison of mappings, collisions, omissions, and evidence handling.",
+        "authority": "NONE",
+        "api_key_rule": "NEVER_STORE_API_KEYS_IN_CO_BUILDER_OR_REPOSITORY",
+        "current_state": "NOT_USED_IN_THIS_FORENSIC_PASS"
+      }
+    },
+    "implementation_law": {
+      "first_step": "CoBuilder project record only.",
+      "next_step": "Design a separate mapping/meaning artifact only after the CrossWorld schema boundary and evidence contract are proven sufficient.",
+      "do_not_do_yet": [
+        "do not create a second CoBuilder",
+        "do not silently expand canonical capability ontology",
+        "do not merge D&D 2014 and 2024",
+        "do not import AI Explorer categories as canon",
+        "do not create Lux/Vex records merely from future design language",
+        "do not make a test fit a desired result"
+      ]
+    },
+    "forensic_remote_snapshot": {
+      "core": {
+        "repository": "VVgbon916/A.V.A.L.H.L.A",
+        "main_head": "f2f09aacdd176e2f1a1a150eb70d704bfcc973d2",
+        "status": "REMOTE_CONFIRMED"
+      },
+      "crossworld": {
+        "repository": "VVgbon916/Avalhla_Characters",
+        "main_head": "3640106ca682f8c088e8fe92551d24ffb8f86def",
+        "meaning_crosswalk_branch": "change/meaning-crosswalk-foundation-2026-09-30",
+        "branch_relation_to_main_before_this_edit": "IDENTICAL"
+      },
+      "local": {
+        "canonical_paths": [
+          "/var/home/VVgbon/Avalhla",
+          "/var/home/VVgbon/Avalhla_Characters"
+        ],
+        "local_git_access_from_current_tooling": "NOT_MOUNTED",
+        "law": "Local state must be re-witnessed in the user's terminal before local apply, commit, push, or remote-confirm."
+      }
+    },
+    "forensic_findings": {
+      "current_crossworld_boundary": "CrossWorld has canonical families and a D&D mapping lane, but no standalone semantic-meaning record family yet.",
+      "schema_boundary": "schema/crossworld-record.schema.json currently models canonical records and embedded mappings; adding a new semantic layer should be evidence-driven rather than assumed.",
+      "core_state_staleness": "Several historical CoBuilder continuation/research fields still refer to older Core heads and prior repo snapshots; preserve as historical evidence and do not silently relabel them as current local truth.",
+      "ci_state": "No workflow runs or commit statuses were reported for the current Core or CrossWorld heads through the available GitHub status endpoints.",
+      "active_phase": "PHASE_02_SAFETY_HEART remains current; the Meaning-Crosswalk project does not advance the active safety phase."
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "schema": "avalhla.operating-modes.v1",
+  "default": "BUILD",
+  "aliases": {"ava": "build"},
+  "modes": {
+    "BUILD": {"objective": "improve Avalhla", "external_delegation": false},
+    "SOLO": {"external_delegation": false, "local_safety_review_devilash": true},
+    "PARTY": {"external_delegation": true, "coding": true, "isolated_writer": true},
+    "COUNCIL": {"external_delegation": true, "single_quest": true, "coding": false, "voting_authority": false}
+  },
+  "authority": {"model": false, "provider": false, "persona": false, "aspect": false, "role": false, "skill": false, "ability": false, "party": false},
+  "human_gate": "Dawa chooses.",
+  "relation": "AvvA"
+}

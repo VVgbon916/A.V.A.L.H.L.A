@@ -44,35 +44,21 @@ if ! curl -fsS "$OLLAMA_HOST/api/tags" >/dev/null 2>&1; then
     exit 1
 fi
 
+# shellcheck source=scripts/lib_autoread.sh
+source "$HERE/lib_autoread.sh"
+read_autoread_context() {
+    [[ "$1" == "$AUTO_READ_DIR/00_AI_COBUILD.json" ]] && return 1
+    "$CONTEXT_BIN" file "$1"
+}
 load_auto_read() {
     [[ -d "$AUTO_READ_DIR" ]] || return 0
-    local out="" total=0
-    for f in "$AUTO_READ_DIR"/*; do
-        [[ -f "$f" ]] || continue
-        local size
-        size=$(stat -c '%s' "$f" 2>/dev/null || echo 0)
-        if (( size > 65536 )) && [[ "$(basename "$f")" == "00_AI_COBUILD.json" ]]; then
-            local proj
-            proj="$("$AVA_SCRIPTS_DIR/ava-cobuilder-projection" "$f" 2>/dev/null || true)"
-            [[ -n "$proj" ]] || continue
-            size=${#proj}
-            (( total + size > 65536 )) && continue
-            out+="
---- $(basename "$f") (projection) ---
-$proj
-"
-            total=$(( total + size ))
-            continue
-        fi
-        (( total + size > 65536 )) && continue
-        out+="
---- $(basename "$f") ---
-$("$CONTEXT_BIN" file "$f" 2>/dev/null || true)
-"
-        total=$(( total + size ))
-    done
-    [[ -n "$out" ]] && printf '%s' "$out"
-    return 0
+    local projection="" used=0
+    if [[ "$AUTO_READ_DIR" == "$AVA_ROOT/memory/auto-read" && -f "$AUTO_READ_DIR/00_AI_COBUILD.json" ]]; then
+        projection="$("$AVA_SCRIPTS_DIR/ava-cobuilder-projection" "$AUTO_READ_DIR/00_AI_COBUILD.json")" || return 1
+        used="$(LC_ALL=C printf '%s' "$projection" | wc -c)"
+        printf '\n--- 00_AI_COBUILD.json (projection) ---\n%s\n' "$projection"
+    fi
+    ava_autoread_load "$AUTO_READ_DIR" "$((65536 - used))" read_autoread_context
 }
 
 run_read_request() {

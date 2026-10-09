@@ -62,3 +62,9 @@
 
                               Dawa <──── AvvA ────> Avalhla
                                      (^.-)
+
+ava / ava build       BUILD: improve Avalhla (mode discovery)
+ava solo              local-only mode discovery
+ava party             isolated worker mode discovery
+ava council           one-QUEST research mode discovery
+ava modes / ava help  discover supported modes and capability doors
