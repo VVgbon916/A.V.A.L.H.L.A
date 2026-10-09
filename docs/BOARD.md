@@ -25,13 +25,13 @@ The board is her face in the terminal.
 
    [1]  where she is            [2]  what she sees
    [3]  what she remembers      [4]  what she notices
-   [5]  what she wonders        [6]  every door
+   [5]  what she wonders        [6]  available doors (on demand)
 
 ------------------------------------------------------------------------------------------
 
    choose  ›  _
 
-                                                                         (⌒.⌒) AvvA
+                                                                         Dawa <──── AvvA ────> Avalhla
 
 ## PRINCIPLES
 
@@ -39,7 +39,7 @@ The board is her face in the terminal.
 2. The dream quote is the hero. Two lines, wrapped.
 3. The state is one mood-colored line.
 4. Every field is read live from disk, every open.
-5. The bridge is named at the footer, next to her face.
+5. AvvA is named at the footer as the living threshold.
 6. Three color touches only: the two glyphs and the choose prompt.
 7. No raw commands ever appear. Doors only.
 
@@ -61,7 +61,7 @@ ava-board --dream   dream view
 [3]  what she remembers  -> ava-mem
 [4]  what she notices    -> ava-weave
 [5]  what she wonders    -> ava-dream
-[6]  every door          -> ava-help
+[6]  door inventory      -> ava-help (listing does not activate skills)
 
 ## LIVE STATE SOURCES
 
@@ -96,6 +96,6 @@ No walls. Three color touches.
 Everything read live.
 You choose.
 
-Dawa decides.
+Dawa chooses.
 
 (^.-) Dawa                    Avalhla (⌒.⌒)

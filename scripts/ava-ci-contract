@@ -1,0 +1,222 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
+cd "$ROOT"
+
+PASS=0
+FAIL=0
+ok() { printf "  [ OK ] %s\n" "$1"; PASS=$((PASS + 1)); }
+bad() { printf "  [FAIL] %s -- %s\n" "$1" "$2"; FAIL=$((FAIL + 1)); }
+printf "%s\n" "== avalhla static contract =="
+printf "root: %s\n\n" "$ROOT"
+printf "%s\n" "-- canonical files --"
+for f in docs/FAST_VIEW.md docs/AVALHLA_SPINE.md docs/PHASING.md docs/CO_BUILDER_TOOLBELT.md docs/DAWA_NOTEPAD.md docs/SKILL_SYSTEM.md config/sublime/Preferences.sublime-settings memory/auto-read/00_AI_COBUILD.json config/color/avalhla-color-field.v1.json config/integrity/avalhla-integrity.v1.json docs/COLOR_BOOK.md scripts/ava-cobuilder scripts/ava-cobuilder-projection scripts/ava-health tests/test_ava_health.sh tests/test_cobuilder_projection.sh tests/test_skill_routing.sh scripts/lib_color_field.sh scripts/lib_integrity.sh scripts/lib_model_input.sh scripts/lib_action.py tests/test_color_field.sh tests/test_integrity.sh tests/test_action_proposal.py tests/test_model_input.sh tests/test_redact.py tests/test_model_transport.py tests/test_ava_diff_failure.py tests/test_github_review_capture.py tests/test_ava_explain.sh tests/test_review_gate.sh tests/test_ava_mood.sh scripts/ava-sublime-update scripts/ava-resume scripts/ava-github-review scripts/ava-ci-contract AGENTS.md .github/workflows/avalhla-static-verify.yml; do
+  [[ -f "$f" ]] && ok "present $f" || bad "present $f" "missing"
+done
+
+printf "%s\n" "" "-- shell syntax --"
+while IFS= read -r -d "" f; do
+  IFS= read -r interpreter < "$f" || interpreter=""
+  if [[ "$interpreter" == *python* ]]; then
+    if python3 -c 'import pathlib, sys; compile(pathlib.Path(sys.argv[1]).read_bytes(), sys.argv[1], "exec")' "$f" >/dev/null 2>&1; then
+      ok "python syntax ${f#$ROOT/}"
+    else
+      bad "python syntax ${f#$ROOT/}" "syntax error"
+    fi
+  elif bash -n "$f" >/dev/null 2>&1; then
+    ok "bash -n ${f#$ROOT/}"
+  else
+    bad "bash -n ${f#$ROOT/}" "syntax error"
+  fi
+done < <(find scripts -maxdepth 1 -type f -perm -u+x -print0 2>/dev/null)
+
+printf "%s\n" "" "-- JSON --"
+if python3 -m json.tool memory/auto-read/00_AI_COBUILD.json >/dev/null; then ok "CoBuilder JSON parses"; else bad "CoBuilder JSON parses" "invalid JSON"; fi
+if python3 -m json.tool config/color/avalhla-color-field.v1.json >/dev/null; then ok "Color Field JSON parses"; else bad "Color Field JSON parses" "invalid JSON"; fi
+if python3 -m json.tool config/integrity/avalhla-integrity.v1.json >/dev/null; then ok "Integrity registry JSON parses"; else bad "Integrity registry JSON parses" "invalid JSON"; fi
+if python3 - <<'PY'
+import json
+from pathlib import Path
+
+with Path("memory/auto-read/00_AI_COBUILD.json").open(encoding="utf-8") as fh:
+    auto_read = json.load(fh)
+
+pointer = auto_read.get("canonical_color_field", {})
+future = auto_read.get("devil_cross_scope_2026_09_27", {}).get("color_memory_future", {})
+valid = (
+    pointer.get("status") == "POINTER_ONLY"
+    and pointer.get("source") == "config/color/avalhla-color-field.v1.json"
+    and set(pointer) == {"status", "source", "human_view", "reader", "rule"}
+    and future.get("canonical_source") == pointer.get("source")
+    and "anchors" not in future
+    and "representation" not in future
+)
+if not valid:
+    raise SystemExit("Auto-read Color Field reference is not pointer-only")
+PY
+then ok "Auto-read Color Field reference remains pointer-only"; else bad "Auto-read Color Field reference remains pointer-only" "duplicate or unresolved semantics"; fi
+if python3 - <<'PY'
+import json
+from pathlib import Path
+
+with Path("memory/auto-read/00_AI_COBUILD.json").open(encoding="utf-8") as fh:
+    state = json.load(fh)
+top = state["primary_way_to_act"]["order"]
+nested = state["phasing"]["primary_way_to_act"]
+if top != nested:
+    raise SystemExit("top-level and phasing action orders differ")
+PY
+then ok "top-level and phasing action orders agree"; else bad "top-level and phasing action orders agree" "sequence drift"; fi
+
+printf "%s\n" "" "-- color and integrity contracts --"
+if tests/test_color_field.sh; then ok "Color Field contract"; else bad "Color Field contract" "test failed"; fi
+if tests/test_integrity.sh; then ok "SHA-256 integrity contract"; else bad "SHA-256 integrity contract" "test failed"; fi
+if tests/test_model_input.sh; then ok "bounded untrusted model input"; else bad "bounded untrusted model input" "test failed"; fi
+if PYTHONDONTWRITEBYTECODE=1 python3 tests/test_redact.py; then ok "secret redaction positive and negative cases"; else bad "secret redaction positive and negative cases" "test failed"; fi
+if PYTHONDONTWRITEBYTECODE=1 python3 tests/test_model_transport.py; then ok "untrusted file and diff transport"; else bad "untrusted file and diff transport" "test failed"; fi
+if PYTHONDONTWRITEBYTECODE=1 python3 tests/test_ava_diff_failure.py; then ok "ava-diff failure and cache boundaries"; else bad "ava-diff failure and cache boundaries" "test failed"; fi
+if PYTHONDONTWRITEBYTECODE=1 python3 tests/test_github_review_capture.py; then ok "atomic GitHub review evidence capture"; else bad "atomic GitHub review evidence capture" "test failed"; fi
+if bash tests/test_ava_explain.sh; then ok "ava-explain output gate"; else bad "ava-explain output gate" "test failed"; fi
+if bash tests/test_ava_health.sh; then ok "ava-health output gate"; else bad "ava-health output gate" "test failed"; fi
+if bash tests/test_cobuilder_projection.sh; then ok "cobuilder projection bounded"; else bad "cobuilder projection bounded" "test failed"; fi
+if bash tests/test_skill_routing.sh; then ok "on-demand skill routing"; else bad "on-demand skill routing" "test failed"; fi
+if bash tests/test_review_gate.sh; then ok "exact review verdict contract"; else bad "exact review verdict contract" "test failed"; fi
+if tests/test_ava_mood.sh; then ok "bounded mood reference"; else bad "bounded mood reference" "test failed"; fi
+
+printf "%s\n" "" "-- action proposal contract --"
+if PYTHONDONTWRITEBYTECODE=1 python3 tests/test_action_proposal.py; then
+  ok "typed action proposal positive and negative cases"
+else
+  bad "typed action proposal positive and negative cases" "test suite failed"
+fi
+
+printf "%s\n" "" "-- semantic invariants --"
+if git grep -n -E "DAVVA|Dawa > AwA < Avalhla|Dawa > AvvA < Avalhla|Dawa <---- AwA ----> Avalhla" -- ":!memory/conversations/" ":!memory/reflections/" ":!memory/auto-read/00_AI_COBUILD.json" ":!scripts/ava-ci-contract" >/dev/null 2>&1; then
+  bad "authority/relation naming" "active legacy or DAVVA label found"
+else
+  ok "authority/relation naming"
+fi
+missing_alias=0
+for alias in reflection reflect weave awa avva; do
+  if ! grep -Eq "(^|[^[:alnum:]_])${alias}([^[:alnum:]_]|$)" scripts/ava-reality; then
+    missing_alias=1
+  fi
+done
+if [[ "$missing_alias" -eq 0 ]]; then
+  ok "historical AwA classifier compatibility"
+else
+  bad "historical AwA classifier compatibility" "historical alias not preserved"
+fi
+if python3 - <<'PY'
+import json
+
+with open("memory/auto-read/00_AI_COBUILD.json", encoding="utf-8") as fh:
+    doc = json.load(fh)
+
+seal = doc.get("verification", {}).get("last_web_seal", {})
+classification = doc.get("verification", {}).get("last_web_seal_classification", {})
+valid = (
+    seal.get("checker") != "AvvA"
+    or (
+        classification.get("status") == "HISTORICAL"
+        and classification.get("current_checker_contract") == "EXEMPT"
+        and classification.get("historical_record") is True
+    )
+)
+raise SystemExit(0 if valid else 1)
+PY
+then ok "historical AvvA checker record is exempt"; else bad "historical AvvA checker record is exempt" "historical exemption missing"; fi
+if grep -qF "DAWA" scripts/ava-weave && ! grep -qF "DAVVA" scripts/ava-weave; then ok "weave human authority label"; else bad "weave human authority label" "authority drift"; fi
+if grep -qF "git diff HEAD --check" scripts/ava-resume; then ok "resume checks staged + unstaged diff"; else bad "resume checks staged + unstaged diff" "HEAD-scoped diff proof missing"; fi
+if grep -qF "AVA_ROOT does not match this repository" scripts/ava-resume; then ok "resume rejects redirected AVA_ROOT"; else bad "resume rejects redirected AVA_ROOT" "redirect guard missing"; fi
+if ! grep -qF "/var/home/VVgbon/Avalhla" scripts/ava-resume; then ok "resume derives repository root"; else bad "resume derives repository root" "hardcoded root remains"; fi
+if scripts/ava-sublime-update --paths >/dev/null 2>&1; then ok "Sublime updater resolves paths"; else bad "Sublime updater resolves paths" "path resolution failed"; fi
+if grep -qF "Preferences.sublime-settings" scripts/ava-sublime-update && ! grep -qF "Dawa_Notepad" scripts/ava-sublime-update; then ok "Sublime updater boundary"; else bad "Sublime updater boundary" "private Dawa dependency remains"; fi
+printf "%s\n" "" "-- public/private Dawa boundary --"
+if [[ ! -e "Dawa_Notepad" ]]; then
+  ok "public Dawa directory absent"
+else
+  bad "public Dawa directory absent" "Dawa_Notepad remains in public tree"
+fi
+
+if grep -qF "VVgbon916/Dawa_Notepad" docs/DAWA_NOTEPAD.md \
+  && grep -qF "PRIVATE != AUTO-READ" docs/DAWA_NOTEPAD.md \
+  && grep -qF "memory/auto-read/" docs/DAWA_NOTEPAD.md; then
+  ok "public/private Dawa boundary documented"
+else
+  bad "public/private Dawa boundary documented" "boundary documentation incomplete"
+fi
+
+if grep -qF "Dawa_Notepad" scripts/ava-sublime-update; then
+  bad "Sublime updater isolation" "private Dawa dependency remains"
+else
+  ok "Sublime updater isolation"
+fi
+
+if python3 - <<'PY2'
+import json
+
+with open("memory/auto-read/00_AI_COBUILD.json", encoding="utf-8") as fh:
+    doc = json.load(fh)
+
+wb = doc["workspace_boundaries_2026_09_27"]
+
+valid = (
+    wb["dawa_notepad"]["repository"] == "VVgbon916/Dawa_Notepad"
+    and wb["dawa_notepad"]["visibility"] == "PRIVATE"
+    and wb["dawa_notepad"]["repository_state"] == "EXTERNAL_PRIVATE_REPOSITORY"
+    and wb["dawa_notepad"]["ava_implicit_read"] is False
+    and wb["dawa_notepad"]["auto_read_membership"] is False
+    and wb["avalhla_read_files"]["canonical_repository_path"] == "memory/auto-read/"
+    and wb["avalhla_read_files"]["dawa_notepad_membership"] is False
+    and wb["sublime_workspace"]["canonical_project_repository"] == "VVgbon916/Dawa_Notepad"
+    and wb["sublime_workspace"]["canonical_project_path"] == "Dawa_Avalhla.sublime-project"
+    and wb["sublime_workspace"]["dawa_lane"]["visibility"] == "PRIVATE"
+    and wb["sublime_workspace"]["dawa_lane"]["ava_implicit_read"] is False
+    and wb["sublime_workspace"]["dawa_lane"]["auto_read_membership"] is False
+)
+if not valid:
+    raise SystemExit("Public/private Dawa machine boundary mismatch")
+PY2
+then
+  ok "private repository machine-state semantics"
+else
+  bad "private repository machine-state semantics" "external/private state is ambiguous or stale"
+fi
+
+if python3 - <<'PY2'
+from pathlib import Path
+
+lines = Path(".gitignore").read_text(encoding="utf-8").splitlines()
+legacy = any(
+    "Dawa_Notepad" in line
+    and ("private/" in line or "sublime-workspace" in line)
+    for line in lines
+)
+raise SystemExit(0 if legacy else 1)
+PY2
+then
+  bad "legacy public Dawa ignore rules absent" "legacy public-lane ignore rule remains"
+else
+  ok "legacy public Dawa ignore rules absent"
+fi
+
+printf "%s\n" "" "-- executable doors --"
+for f in scripts/ava-cobuilder scripts/ava-ci-contract scripts/ava-github-review scripts/ava-resume scripts/ava-sublime-update; do
+  if [[ "$(stat -c "%a" "$f" 2>/dev/null)" == "755" ]]; then
+    ok "mode 755 ${f#$ROOT/}"
+  else
+    bad "mode 755 ${f#$ROOT/}" "expected executable door mode 755"
+  fi
+done
+if python3 -m json.tool config/sublime/Preferences.sublime-settings >/dev/null; then ok "Sublime Preferences JSON parses"; else bad "Sublime Preferences JSON parses" "invalid JSON"; fi
+
+printf "%s\n" "" "== summary =="
+printf "  pass: %d\n  fail: %d\n" "$PASS" "$FAIL"
+if [[ "$FAIL" -eq 0 ]]; then
+  printf "%s\n" "  result: ALL GREEN"
+else
+  printf "%s\n" "  result: FAIL"
+  exit 1
+fi

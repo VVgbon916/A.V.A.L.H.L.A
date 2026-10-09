@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# ava-cobuilder-projection -- bounded, read-only MODEL-INPUT view of the CoBuilder master.
+# Shrinks what the model reads, not what is known. Writes nothing; the master stays the source.
+set -Eeuo pipefail
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SRC="${1:-$HERE/../memory/auto-read/00_AI_COBUILD.json}"
+MAX="${AVA_PROJECTION_MAX_BYTES:-32768}"
+[[ -f "$SRC" && ! -L "$SRC" ]] || { echo "projection: source missing or symlink" >&2; exit 1; }
+python3 - "$SRC" "$MAX" <<'PY'
+import json, sys
+src, mx = sys.argv[1], int(sys.argv[2])
+KEEP = ["schema","status","runtime_authority","human_authority","choice_language",
+        "consultation_lanes","skill_activation","canonical_root","canonical_memory",
+        "shell","primary_way_to_act","review_resume",
+        "heart","safety","memory","final_rules","change_contract","information_shape",
+        "relational_notation","visual_grammar","authority_gates","canonical_color_field",
+        "integrity_spine","phase","next_target","co_builder_information_request_policy"]
+try:
+    d = json.load(open(src))
+except Exception as e:
+    sys.exit("projection: invalid JSON: %s" % e)
+out = {"_projection": "MODEL-INPUT ONLY; full source = 00_AI_COBUILD.json (read on demand)"}
+for k in KEEP:
+    if k in d:
+        out[k] = d[k]
+s = json.dumps(out, ensure_ascii=False, indent=1)
+if len(s.encode()) > mx:
+    sys.exit("projection: %d bytes exceeds cap %d" % (len(s.encode()), mx))
+print(s)
+PY

@@ -17,6 +17,21 @@ IMAGINE_HUMAN="${AVA_IMAGINE_ROOT:-$HOME/Avalhla/imagination}/HUMAN"
 
 mkdir -p "$STATE_DIR"
 
+# ----- Avalhla color anchors -----
+# These meanings are visual references, not authority or evidence.
+# orange = Dawa fire / survival / work / persistence / heart of gold
+# blue   = Avalhla base / presence
+# green  = code / building / implementation
+# yellow = comedy / play / brightness
+# red    = alert / boundary / attention
+# purple = dream / strange / deep imagination
+# sRGB display anchors:
+# orange #FF8000 | blue #0000FF | green #00FF00
+# yellow #FFFF00 | red #FF0000 | purple #800080
+#
+# Future Color Memory may derive a fast visual fingerprint from SHA-256.
+# The full SHA-256 remains provenance; the color never becomes identity.
+
 # ----- palette -----
 palette_colors=(red orange yellow green blue purple)
 palette_labels=(
@@ -36,6 +51,22 @@ color_index() {
         [[ "${palette_colors[$i]}" == "$c" ]] && { echo "$i"; return; }
     done
     echo -1
+}
+
+valid_imagination_slug() {
+    [[ "${1:-}" =~ ^[A-Za-z0-9][A-Za-z0-9_-]{0,127}$ ]]
+}
+
+human_imagination_file() {
+    local slug="${1:-}"
+    local root resolved
+    valid_imagination_slug "$slug" || return 1
+    [[ -d "$IMAGINE_HUMAN" ]] || return 1
+    [[ -f "$IMAGINE_HUMAN/$slug.md" && ! -L "$IMAGINE_HUMAN/$slug.md" ]] || return 1
+    root="$(realpath -e -- "$IMAGINE_HUMAN")" || return 1
+    resolved="$(realpath -e -- "$IMAGINE_HUMAN/$slug.md")" || return 1
+    [[ "$resolved" == "$root"/* ]] || return 1
+    printf '%s\n' "$resolved"
 }
 
 # ----- auto from time-of-day -----
@@ -90,11 +121,11 @@ resolve() {
         ref)
             local slug c l
             slug="$(state_get ref)"
-            local f="$IMAGINE_HUMAN/${slug}.md"
-            if [[ -f "$f" ]]; then
-                c="$(grep -m1 '^> color:' "$f" | sed 's/^> color: *//' | awk '{print $1}')"
+            local f
+            if f="$(human_imagination_file "$slug")"; then
+                c="$(grep -m1 '^> color:' "$f" 2>/dev/null | sed 's/^> color: *//' | awk '{print $1}' || true)"
                 l="$(label_for "$c")"
-                [[ -z "$c" ]] && { c="$(auto_pick)"; l="$(label_for "$c")"; mode="auto"; }
+                [[ "$(color_index "$c")" == "-1" ]] && { c="$(auto_pick)"; l="$(label_for "$c")"; mode="auto"; }
             else
                 c="$(auto_pick)"; l="$(label_for "$c")"; mode="auto"
             fi
@@ -150,17 +181,21 @@ case "$cmd" in
     ref)
         slug="${2:-}"
         [[ -z "$slug" ]] && { echo "usage: ava-mood ref <imagination-slug>" >&2; exit 2; }
-        if [[ ! -f "$IMAGINE_HUMAN/${slug}.md" ]]; then
+        file="$(human_imagination_file "$slug")" || {
             echo "X no imagination entry: $slug" >&2
             exit 1
+        }
+        c="$(grep -m1 '^> color:' "$file" 2>/dev/null | sed 's/^> color: *//' | awk '{print $1}' || true)"
+        if [[ "$(color_index "$c")" == "-1" ]]; then
+            printf 'X imagination entry has no canonical mood color: %s\n' "$slug" >&2
+            exit 1
         fi
-        c="$(grep -m1 '^> color:' "$IMAGINE_HUMAN/${slug}.md" | sed 's/^> color: *//' | awk '{print $1}')"
         state_write ref "$c" "$(label_for "$c")" "$slug"
         echo "ava-mood :: ref -> $slug  ($c)"
         ;;
     title)
         IFS=$'\t' read -r _ color label _ <<<"$(resolve)"
-        printf '\033]0;Dawa > AwA < Avalhla  //  %s -- %s\007' "$color" "$label"
+        printf '\033]0;Dawa <──── AvvA ────> Avalhla  //  %s -- %s\007' "$color" "$label"
         ;;
     prompt)
         IFS=$'\t' read -r _ color _ _ <<<"$(resolve)"

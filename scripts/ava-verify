@@ -53,7 +53,7 @@ done
 # 3. scripts present + executable
 echo ""
 echo "-- scripts --"
-for s in ai-chat ava-context ava-review ava-search ava-learn-repo ava-brief ava-diff ava-explain ava-doc ava-audit ava-pick ava-undo; do
+for s in ai-chat ava-context ava-review ava-search ava-resume ava-github-review ava-ci-contract ava-learn-repo ava-brief ava-diff ava-explain ava-doc ava-audit ava-pick ava-undo; do
     p="$ROOT/scripts/$s"
     if [[ -x "$p" ]]; then
         ok "script $s"
@@ -65,7 +65,7 @@ done
 # 4. PATH resolution
 echo ""
 echo "-- PATH --"
-for s in ai-chat ava-context ava-review ava-search ava-learn-repo ava-brief ava-diff ava-explain ava-doc ava-audit ava-pick ava-undo; do
+for s in ai-chat ava-context ava-review ava-search ava-resume ava-github-review ava-ci-contract ava-learn-repo ava-brief ava-diff ava-explain ava-doc ava-audit ava-pick ava-undo; do
     if command -v "$s" >/dev/null 2>&1; then
         ok "which $s"
     else

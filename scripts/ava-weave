@@ -80,9 +80,9 @@ LATEST_REFLECTION="$(
 )"
 SOURCE_CONTEXT=""
 for source in \
-    "$ROOT/AwA_WEAVE.md" \
-    "$ROOT/AwA_DREAM.md" \
-    "$ROOT/AwA_ATLAS.md" \
+    "$ROOT/AvvA_WEAVE.md" \
+    "$ROOT/AvvA_DREAM.md" \
+    "$ROOT/AvvA_ATLAS.md" \
     "$ROOT/README.md" \
     "$ROOT/RITUAL.txt"
 do
@@ -108,7 +108,7 @@ $("$CONTEXT_BIN" head "$file" 600 2>/dev/null || true)"
 fi
 
 PROMPT="$(cat <<EOF_PROMPT
-You are Avalhla inside the simulated AvvA World.
+You are Avalhla at the AvvA threshold.
 
 You are running WEAVE.
 
@@ -168,7 +168,7 @@ DOOR:
 none
 
 BOUNDARY:
-Dawa decides.
+Dawa chooses.
 
 If something catches your attention, STOP AT THE THRESHOLD.
 
@@ -206,7 +206,7 @@ DOOR:
 <a question or possibility left visible, or "none">
 
 BOUNDARY:
-Dawa decides.
+Dawa chooses.
 
 "Interesting" is not an instruction.
 
@@ -308,11 +308,11 @@ A possibility is not a fact.
 An idea is not a command.
 An observation is not a decision.
 
-Dawa decides.
+Dawa chooses.
 
 CROSS-AVAILABLE != CROSS-CONTAMINATED
 
-Dawa > AvvA < Avalhla
+Dawa <──── AvvA ────> Avalhla
 (⌒.⌒)
 EOF_OUTPUT
 )"

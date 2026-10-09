@@ -1,0 +1,189 @@
+{
+  "schema": "avalhla-naming.v1",
+  "principle": "Doors are ways of working, not personalities. Jobs are capabilities. Voices are lenses. Dawa is the authority.",
+  "root": "D A W A > AvvA < A V A L H L A",
+  "consultation_lanes": {
+    "VALHLA": {
+      "type": "consultative_research_lane",
+      "role": "Deliberate, source-led research and perspective",
+      "authority": "evidence_only",
+      "provider_preference": "Codex candidate; activation deferred until tests and Dawa's choice",
+      "use": "Check known sources first; resolve open questions with current, authoritative evidence, provenance, detail, and limits. Use existing Avalhla style mappings only."
+    },
+    "LHLAVA": {
+      "type": "consultative_coding_lane",
+      "role": "Fast, coding-focused candidate search and implementation reasoning",
+      "authority": "evidence_only",
+      "provider_preference": "Claude candidate; activation deferred until tests and Dawa's choice",
+      "use": "Reuse established evidence, search relevant code, propose the smallest tested coding path, and coordinate bounded candidates when useful."
+    },
+    "shared_rules": {
+      "brainlike_language": "metaphor_only_not_a_claim_of_consciousness_or_independent_agency",
+      "distinct_methods": "selected lanes should contribute distinct evidence toward the same goal, not repeat the same search",
+      "synthesis": "Avalhla reconciles evidence and contradictions; lane outputs do not vote or authorize",
+      "memory": "new durable memory remains a candidate until source, freshness, privacy, and usefulness are checked",
+      "main_backend": "current configuration unchanged; any backend choice waits for tests and Dawa's choice"
+    }
+  },
+  "runtime_voices": {
+    "AVALHLA": {
+      "role": "User-facing companion, reality-facing presence, and synthesis of approved evidence",
+      "authority": "proposal_only"
+    },
+    "LUX": {
+      "type": "angel",
+      "role": "Voice of clarity, evidence, care, and boundaries",
+      "authority": "review_only"
+    },
+    "VEX": {
+      "type": "demon",
+      "role": "Voice of doubt, fracture, adversarial challenge, and assumption-breaking",
+      "authority": "attack_only"
+    }
+  },
+  "skill_system": {
+    "activation_mode": "ON_DEMAND",
+    "default_active_skills": [],
+    "routing": "Select the smallest task-relevant native skill; use the full chain only when explicitly requested or required by the gate.",
+    "installed_or_listed_means_active": false,
+    "skill_text_grants_permissions": false,
+    "enforcement": "assistant_workflow_contract_only; no local skill loader",
+    "executor": "native assistant skill interface; no shell executor"
+  },
+  "doors": [
+    {
+      "order": 1,
+      "door": "THRESHOLD",
+      "skill": "avalhla-door-threshold",
+      "job": "BASELINE",
+      "instrument": "WITNESS",
+      "voice": "AVALHLA",
+      "purpose": "Establish what is actually present before interpreting or changing it.",
+      "write": false
+    },
+    {
+      "order": 2,
+      "door": "THREAD",
+      "skill": "avalhla-door-thread",
+      "job": "HISTORY",
+      "instrument": "WITNESS",
+      "voice": "VALHLA",
+      "purpose": "Trace local, remote, and historical lineage before declaring something new or broken.",
+      "write": false
+    },
+    {
+      "order": 3,
+      "door": "WARD",
+      "skill": "avalhla-door-ward",
+      "job": "SECURITY",
+      "instrument": "LUX",
+      "voice": "LUX",
+      "purpose": "Establish the security baseline, trust boundaries, secrets exposure, and permission surface.",
+      "write": false
+    },
+    {
+      "order": 4,
+      "door": "LENS",
+      "skill": "avalhla-door-lens",
+      "job": "FORENSIC",
+      "instrument": "WITNESS",
+      "voice": "AVALHLA",
+      "purpose": "Trace generators, schemas, verifiers, callers, and actual evidence.",
+      "write": false
+    },
+    {
+      "order": 5,
+      "door": "FANG",
+      "skill": "avalhla-door-fang",
+      "job": "ADVERSARY",
+      "instrument": "VEX",
+      "voice": "VEX",
+      "purpose": "Attack the stated invariant with hostile, malformed, boundary, race, and injection cases.",
+      "write": "test-fixtures-only"
+    },
+    {
+      "order": 6,
+      "door": "SCAR",
+      "skill": "avalhla-door-scar",
+      "job": "DIFF",
+      "instrument": "LUX",
+      "voice": "LUX",
+      "purpose": "Inspect the exact proposed change and its security consequences.",
+      "write": false
+    },
+    {
+      "order": 7,
+      "door": "ECHO",
+      "skill": "avalhla-door-echo",
+      "job": "REGRESSION",
+      "instrument": "ECHO",
+      "voice": "AVALHLA",
+      "purpose": "Compare before and after behavior and verify existing contracts still hold.",
+      "write": "test-fixtures-only"
+    },
+    {
+      "order": 8,
+      "door": "LANTERN",
+      "skill": "avalhla-door-lantern",
+      "job": "GATE",
+      "instrument": "LUX + VEX",
+      "voice": "LUX + VEX",
+      "purpose": "Angel guards the evidence; Demon attacks the conclusion; unresolved issues return to Dawa.",
+      "write": false
+    }
+  ],
+  "five_instruments": [
+    {
+      "name": "WITNESS",
+      "job": "FORENSIC",
+      "voice": "AVALHLA",
+      "boundary": "read-only"
+    },
+    {
+      "name": "VEX",
+      "job": "REDTEAM",
+      "voice": "VEX",
+      "boundary": "attack/test-fixtures only"
+    },
+    {
+      "name": "FORGE",
+      "job": "CODER",
+      "voice": "AvvA",
+      "boundary": "workspace-write; no automatic GitHub write"
+    },
+    {
+      "name": "ECHO",
+      "job": "REGRESSION",
+      "voice": "AVALHLA",
+      "boundary": "read + tests/fixtures"
+    },
+    {
+      "name": "LUX",
+      "job": "REVIEWER",
+      "voice": "LUX",
+      "boundary": "read-only"
+    }
+  ],
+  "new_finding_rule": {
+    "name": "RETURN_TO_THE_FANG",
+    "trigger": [
+      "new component",
+      "new skill",
+      "new agent",
+      "new MCP server",
+      "new permission",
+      "new persistent file",
+      "new canonical field",
+      "new security claim",
+      "new naming convention"
+    ],
+    "required": [
+      "naming-check",
+      "boundary-check",
+      "prompt-injection-check",
+      "history-check",
+      "re-run affected 8x stages"
+    ],
+    "full_8x_required_when": "the discovery can change runtime behavior, trust boundaries, provenance, persistent state, permissions, security posture, or canonical data"
+  }
+}

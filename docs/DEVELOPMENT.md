@@ -18,31 +18,51 @@
       Prefer existing Bazzite tooling and Distrobox.
       Do not use random sudo dnf/apt/pacman installs on the immutable host.
 
-03 TOOLCHAIN WITNESSES
-  3.1 git / gh
+03 EDITOR / HUMAN LANE
+  3.1 Private Dawa repository
+      VVgbon916/Dawa_Notepad
+      /var/home/VVgbon/Dawa_Notepad
+      private human lane; not implicit model input
+  3.2 Avalhla auto-read
+      /var/home/VVgbon/Avalhla/memory/auto-read
+      canonical bounded read lane
+  3.3 Sublime project
+      /var/home/VVgbon/Dawa_Notepad/Dawa_Avalhla.sublime-project
+      private editor project; workspace/session state stays ignored
+
+04 TOOLCHAIN WITNESSES
+  4.1 git / gh
       source control and GitHub sync
-  3.2 rg
+  4.2 rg
       reference search before rename
-  3.3 shellcheck
+  4.3 shellcheck
       shell quality check
-  3.4 realpath
+  4.4 realpath
       path-resolution witness
+  4.5 ava-sublime-update
+      explicit host-side Sublime user-settings updater only
 
-04 CHANGE LOOP
+05 CHANGE LOOP
   READ -> REAL STATE -> UNDERSTAND -> COMPARE -> CROSS-CHECK
-  -> MINIMAL EDIT -> TEST -> VERIFY -> DIFF -> REVIEW
+  -> MINIMAL EDIT -> POSITIVE TEST -> NEGATIVE TEST
+  -> VERIFY -> DEVILASH ATTACK -> DIFF -> REVIEW -> DAWA HUMAN GATE
 
-05 SAFETY
-  5.1 Runtime authority
+06 SAFETY
+  6.1 Runtime authority
       lib_runtime.sh
-  5.2 Safety authority
+  6.2 Safety authority
       lib_safety.sh
-  5.3 Context authority
+  6.3 Context authority
       lib_context.sh
-  5.4 Model authority
+  6.4 Model authority
       model sees approved inputs; model does not self-authorize
 
-06 GIT
-  VERIFY -> DIFF -> REVIEW -> COMMIT -> PUSH -> REMOTE CONFIRM
+07 GIT
+  7.1 Review gate
+      VERIFY -> DEVILASH ATTACK -> DIFF -> REVIEW
+  7.2 Human gate
+      Dawa explicitly approves consequential Git actions
+  7.3 Integration gate
+      COMMIT -> PUSH -> REMOTE CONFIRM
 
 No blind staging. No silent phase advancement.

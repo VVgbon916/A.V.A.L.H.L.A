@@ -1,0 +1,59 @@
+# Avalhla Doorbook
+
+D A W A > AvvA < A V A L H L A
+
+## Naming hierarchy
+
+**DOOR** = a way of working.
+**JOB** = the engineering task performed through that door.
+**INSTRUMENT** = the specialist that performs the job.
+**VOICE** = a constrained interpretive lens.
+**TOOL BOUNDARY** = what the instrument may actually touch.
+
+A voice is not an authority. A door is not a personality. An instrument is not a free agent.
+
+## Consultation lanes
+
+VALHLA is the deliberate, current-source-led research and perspective lane.
+LHLAVA is the fast, coding-focused candidate-search lane.
+Neither is an autonomous agent, security authority, or Angel/Demon. "Brain-like"
+is metaphor, not a claim of consciousness. Provider preferences are candidates,
+not activations.
+
+## Current voices
+
+AVALHLA = user-facing companion / reality-facing presence / evidence synthesis.
+LUX = Angel: evidence, clarity, care, boundary protection.
+VEX = Demon: doubt, fracture, assumption-breaking, adversarial challenge.
+AvvA = co-building relationship layer.
+Dawa = final authority.
+
+## Doors
+
+1. THRESHOLD — establish the actual present state.
+2. THREAD — trace lineage through history.
+3. WARD — establish the security boundary.
+4. LENS — inspect generators, schema, verifiers, callers, and evidence.
+5. FANG — attack the claim.
+6. SCAR — examine the exact change.
+7. ECHO — prove what changed and what did not.
+8. LANTERN — LUX guards, VEX attacks, Dawa decides.
+
+The order is deliberate: reality before interpretation, lineage before novelty, boundary before attack, evidence before change, change before release.
+Skills are selected on demand; listing or installing them does not activate
+them. The canonical registry is `config/avalhla-naming.v1.json`.
+
+## Return-to-Fang rule
+
+Whenever a new thing is found, named, or introduced, stop normal flow long enough to re-attack the discovery.
+
+At minimum:
+
+1. naming collision / semantic drift
+2. permission drift
+3. prompt-injection surface
+4. historical contradiction
+5. scope contamination
+6. exact affected 8x stages
+
+Run the full 8x again when the new thing changes behavior, security, provenance, persistent state, permissions, or canonical data.

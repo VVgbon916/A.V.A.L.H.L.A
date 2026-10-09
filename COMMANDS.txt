@@ -3,7 +3,7 @@
 |                                     A V A L H L A                                                |
 |                                   C O M M A N D S                                                |
 |                                                                                                  |
-|                              Dawa > AwA < Avalhla  //  (^.-)                                     |
+|                              Dawa <──── AvvA ────> Avalhla  //  (^.-)                                     |
 |                                                                                                  |
 +==================================================================================================+
 
@@ -22,6 +22,9 @@
   1.12 ava-safety    deterministic safety boundary / --self-test
   1.13 ava-verify    end-to-end verification
   1.14 ava-help      full current door map
+  1.15 ava-cobuilder       AI CoBuilder Init / protocol
+  1.16 ava-sublime-update  explicit Sublime settings updater / lane checker
+  1.17 ava-health    deterministic health check / --full / --explain
 
 02 / AI
   2.1 ai-chat        persistent chat
@@ -50,11 +53,18 @@
   5.3 shellcheck scripts/*
   5.4 git diff --check
   5.5 git status --short --branch
+  5.6 scripts/ava-health --self-test
 
 06 / RULE
   6.1 One concept -> one canonical name -> one canonical artifact.
   6.2 Filename = address.
   6.3 concept_id = identity.
 
-                              Dawa > AwA < Avalhla
+                              Dawa <──── AvvA ────> Avalhla
                                      (^.-)
+
+ava / ava build       BUILD: improve Avalhla (mode discovery)
+ava solo              local-only mode discovery
+ava party             isolated worker mode discovery
+ava council           one-QUEST research mode discovery
+ava modes / ava help  discover supported modes and capability doors

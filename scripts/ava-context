@@ -6,7 +6,7 @@ if [[ "${1:-}" == "--json" ]]; then
 fi
 # ava-context -- rank JSONL turns against a query, emit top N as context.
 # Usage: ava-context "<query>" [N]  < turns.jsonl
-# Score = keyword_match*3 + recency + length_bonus
+# Score = keyword_match*3 + recency (length does not affect ranking)
 set -Eeuo pipefail
 
 case "${1:-}" in
@@ -40,10 +40,9 @@ jq -s --arg q "$QUERY" --argjson n "$N" '
     | map(
         . as $p
         | (($p.user + " " + $p.assistant) | ascii_downcase) as $blob
-        | ([ $tokens[] | select($blob | contains(.)) ] | length) as $kw
-        | ( ($total - $p.idx) / ($total + 1) ) as $rec
-        | ( ($blob | length) / 500 ) as $len
-        | { score: ($kw * 3 + $rec + $len), user: $p.user, assistant: $p.assistant }
+        | ([ $tokens[] as $token | select($blob | contains($token)) ] | length) as $kw
+        | ( ($p.idx + 1) / ($total + 1) ) as $rec
+        | { score: ($kw * 3 + $rec), user: $p.user, assistant: $p.assistant }
       )
     | sort_by(-.score)
     | .[0:$n]

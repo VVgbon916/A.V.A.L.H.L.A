@@ -1,0 +1,85 @@
+{
+  "schema_version": "plugin-role-catalog.v1",
+  "activation_policy": "catalogue_and_on_demand",
+  "roles": {
+    "code_and_repository": [
+      "Git Diff Patcher Bridge",
+      "GitHub",
+      "GitLab",
+      "Context7",
+      "GH Review Loop",
+      "Software & AI Copilot",
+      "Unix Copilot",
+      "Superpowers",
+      "Mergify",
+      "Trylle",
+      "Remote Desktop Commander"
+    ],
+    "research_and_search": [
+      "Exa",
+      "Firecrawl",
+      "Notion",
+      "NVIDIA Skills",
+      "Agentic Search by Liner",
+      "Research & Writing Copilot",
+      "RAG & GenAI Copilot",
+      "DevRecap"
+    ],
+    "data_and_sql": [
+      "Supabase",
+      "SQL Copilot",
+      "Data Engineering Copilot",
+      "Power BI Report Copilot",
+      "Smartsheet US",
+      "Coda"
+    ],
+    "cloud_and_connectors": [
+      "OpenAI Developers",
+      "Cloud Environment",
+      "A.V.A.L.H.L.A MCP",
+      "Hugging Face",
+      "TinyFish",
+      "Slack",
+      "GitHub",
+      "GitLab"
+    ],
+    "writing_and_memory": [
+      "Writing Style",
+      "Basic Memory Cloud",
+      "GitBook",
+      "Prompt Engineer",
+      "Prompt Perfect",
+      "Prompt Optimizer",
+      "Resume Builder"
+    ],
+    "design_and_media": [
+      "Product Design",
+      "Sites",
+      "Miro",
+      "Pets",
+      "Granola"
+    ],
+    "productivity": [
+      "Todoist: To Do List & Calendar",
+      "Linear",
+      "LINEAR Magazine",
+      "monday.com",
+      "DataCamp"
+    ],
+    "technical_and_specialized": [
+      "Technical Interview Copilot",
+      "LLM & Agent Builder Copilot",
+      "SEO & Growth Copilot",
+      "Power BI Report Copilot",
+      "Recurse",
+      "Wolfram"
+    ],
+    "deferred_optional": [
+      {
+        "name": "canvas-authoring",
+        "requirements": ["dnx", "dotnet"],
+        "reason": ".NET Canvas Authoring server is optional and requires the .NET SDK"
+      }
+    ]
+  }
+}
