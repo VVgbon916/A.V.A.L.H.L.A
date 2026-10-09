@@ -8,6 +8,8 @@ This project currently uses an `Unreleased` section while release/version naming
 
 ### Fixed
 
+- Static contract now checks executable Python scripts with Python syntax
+  compilation instead of passing them to `bash -n`.
 - `Devil3Way` / `Avalhla_Devil3Way all` now restarts all three lanes, so
   one command always leaves exactly three fresh Claude, Codex and Copilot windows.
 - Persona lanes upgraded: six distinct anchored voices with color markers

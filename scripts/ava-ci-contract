@@ -17,7 +17,18 @@ done
 
 printf "%s\n" "" "-- shell syntax --"
 while IFS= read -r -d "" f; do
-  if bash -n "$f" >/dev/null 2>&1; then ok "bash -n ${f#$ROOT/}"; else bad "bash -n ${f#$ROOT/}" "syntax error"; fi
+  IFS= read -r interpreter < "$f" || interpreter=""
+  if [[ "$interpreter" == *python* ]]; then
+    if python3 -c 'import pathlib, sys; compile(pathlib.Path(sys.argv[1]).read_bytes(), sys.argv[1], "exec")' "$f" >/dev/null 2>&1; then
+      ok "python syntax ${f#$ROOT/}"
+    else
+      bad "python syntax ${f#$ROOT/}" "syntax error"
+    fi
+  elif bash -n "$f" >/dev/null 2>&1; then
+    ok "bash -n ${f#$ROOT/}"
+  else
+    bad "bash -n ${f#$ROOT/}" "syntax error"
+  fi
 done < <(find scripts -maxdepth 1 -type f -perm -u+x -print0 2>/dev/null)
 
 printf "%s\n" "" "-- JSON --"
