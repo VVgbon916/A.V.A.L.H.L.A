@@ -4,50 +4,75 @@
     "theme": "Adaptive.sublime-theme",
     "dark_theme": "Adaptive.sublime-theme",
     "light_theme": "Adaptive.sublime-theme",
-    "font_face": "Dekatron",
-    "font_size": 11,
-    "default_font_size": 11,
+    "font_face": "Hack",
+    "font_size": 13,
+    "default_font_size": 13,
     "line_padding_top": 1,
     "line_padding_bottom": 1,
     "draw_centered": false,
-    "word_wrap": false,
-    "wrap_width": 80,
-    "wrap_width_style": "constant",
+    "word_wrap": true,
+    "wrap_width": 96,
+    "wrap_width_style": "min",
     "rulers": [
         [
-            10,
-            "dotted",
+            8,
+            "solid",
             1
         ],
         [
-            20,
+            16,
             "dotted",
+            2
+        ],
+        [
+            24,
+            "stippled",
+            1
+        ],
+        [
+            32,
+            "solid",
             1
         ],
         [
             40,
+            "dotted",
+            2
+        ],
+        [
+            48,
             "stippled",
+            2
+        ],
+        [
+            56,
+            "solid",
             1
         ],
         [
-            60,
-            "dotted",
+            64,
+            "solid",
             1
+        ],
+        [
+            72,
+            "stippled",
+            2
         ],
         [
             80,
-            "stippled",
-            1
-        ],
-        [
-            90,
             "dotted",
+            2
+        ],
+        [
+            88,
+            "solid",
             1
         ],
         [
-            100,
-            "solid",
-            2
+            96,
+            "dotted",
+            3
         ]
     ],
     "ruler_style": "stippled",
