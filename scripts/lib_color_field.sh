@@ -75,9 +75,11 @@ require(doc.get("authority_rules"), expected_authority, "authority_rules")
 require(doc.get("avash", {}).get("source_ash_and_record_ash_distinct"), True, "AvAsh provenance distinction")
 require(doc.get("relationship"), {
     "Dawa": "chooses",
-    "AvvA": "carries_relation",
+    "AvvA": "Persona 22; prismatic color identity",
     "Avalhla": "may_notice",
     "DevilAsh": "checks_boundary",
+    "Av:vA": "working terminal interface for code and bounded recon",
+    "<---- AvvA ---->": "carries communication between Dawa and Avalhla Head",
 }, "relationship")
 print("COLOR_FIELD_OK")
 PY

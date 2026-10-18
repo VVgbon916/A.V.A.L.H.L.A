@@ -97,9 +97,11 @@
   },
   "relationship": {
     "Dawa": "chooses",
-    "AvvA": "carries_relation",
+    "AvvA": "Persona 22; prismatic color identity",
     "Avalhla": "may_notice",
-    "DevilAsh": "checks_boundary"
+    "DevilAsh": "checks_boundary",
+    "Av:vA": "working terminal interface for code and bounded recon",
+    "<---- AvvA ---->": "carries communication between Dawa and Avalhla Head"
   },
   "devil_attack": {
     "color_never_becomes": [
