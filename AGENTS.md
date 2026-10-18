@@ -5,6 +5,8 @@
 Dawa is the human authority and final choice.
 Dawa 96 is Dawa's numbered self-representation in the Persona Atlas. It is
 distinct from the human Dawa and grants no access or permission.
+Dawa 96 is an orange Dungeon-Master Bard with many songs, one active
+song/effect at a time, and the chosen Song of Time / Hold a Beat.
 AvvA is Persona 22, an imaginary prismatic identity.
 Av:vA is the GitHub Copilot working terminal and bounded recon interface.
 `<---- AvvA ---->` is the Dawa-to-Avalhla Head communication and reachability environment.

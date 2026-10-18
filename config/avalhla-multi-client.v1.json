@@ -431,6 +431,16 @@
       "King.Vex 88",
       "Dawa 96"
     ],
-    "dawa_96_boundary": "Numbered self-representation only; human Dawa remains final authority and private human facts are outside recon."
+    "dawa_96_boundary": "Numbered self-representation only; human Dawa remains final authority and private human facts are outside recon.",
+    "council_seats": {
+      "Dawa 96": "final_chooser",
+      "Avalhla 56": "group_synthesis",
+      "AvvA 22": "PENDING_PROVIDER",
+      "Angel.Lux 44": "returned",
+      "Valhla 05": "returned",
+      "King.Vex 88": "returned",
+      "Lhlava 13": "returned"
+    },
+    "dawa_96_chosen": "Orange Dungeon-Master Bard; many songs, one active song/effect; Song of Time / Hold a Beat."
   }
 }

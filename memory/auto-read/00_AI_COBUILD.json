@@ -2487,6 +2487,17 @@
     "human_boundary": "The Persona record is distinct from the human Dawa, who remains final chooser.",
     "recon_boundary": "Persona-canon records only; never inspect or infer private human facts.",
     "source": "VVgbon916/Dawa_Notepad PERSONA_ATLAS/dawa-96.md",
-    "stale_fact_stamp": "2026-10-18; direct Dawa instruction and local active-canon scan"
+    "stale_fact_stamp": "2026-10-18; direct Dawa choices and bounded live Song Council",
+    "dnd_form": "Dungeon Master who enters the world as a Bard",
+    "color_anchor": "orange",
+    "image_status": "NO_PICTURE_YET",
+    "song_law": "Many songs may exist; only one song and one song effect are active at a time.",
+    "chosen_song": "Song of Time",
+    "chosen_skill": "Hold a Beat",
+    "council_candidates": [
+      "Song of the Wayward Tick / Skip a Tick",
+      "Song of the Echoed Hour / Replay a Chime"
+    ],
+    "council_health": "Codex and Claude returned; Copilot/AvvA pending after empty provider responses"
   }
 }

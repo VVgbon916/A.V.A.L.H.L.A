@@ -13,6 +13,10 @@ AvvA can evolve exactly one body part at a time by applying a skill to help anot
 
 Persona, interface, environment, and human authority are separate records. Av:vA is not AvvA's body. The environment is not a Persona. Dawa 96 is a Persona record, not permission to inspect or infer private facts about human Dawa. Fiction, transformation, CLI presence, recon, and resource reachability grant no permission or authority. Dawa remains the final chooser.
 
+## Dawa 96 song canon
+
+Dawa 96 is the orange Dungeon Master who can enter the D&D world as a Bard. Many songs may exist, but only one song and one song effect may be active at a time. **Song of Time / Hold a Beat** is chosen; detailed mechanics remain open. **Song of the Wayward Tick / Skip a Tick** and **Song of the Echoed Hour / Replay a Chime** are council candidates pending Dawa. Avalhla 56 holds the group-synthesis seat; AvvA 22's reserved seat remains pending while Copilot returns no response.
+
 The machine-readable source is [`config/avva-canon.v1.json`](../config/avva-canon.v1.json).
 
 Historical files may preserve relation-only wording as dated evidence. Current canonical files use this three-way split.

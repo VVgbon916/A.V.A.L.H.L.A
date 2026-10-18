@@ -32,6 +32,13 @@ def main():
     assert canon["dawa_persona"]["canonical_name"] == "Dawa"
     assert canon["dawa_persona"]["human_and_persona_record_are_distinct"] is True
     assert canon["dawa_persona"]["is_authority"] is False
+    assert canon["dawa_persona"]["color_anchor"] == "orange"
+    assert canon["dawa_persona"]["chosen_song"] == {
+        "song_name": "Song of Time",
+        "skill_name": "Hold a Beat",
+        "mechanics_status": "OPEN",
+    }
+    assert canon["dawa_persona"]["song_law"]["active_song_limit"] == 1
     assert canon["interface"]["is_body_of_avva"] is False
 
     assert canon["environment"]["canonical_name"] == "<---- AvvA ---->"

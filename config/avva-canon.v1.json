@@ -107,8 +107,34 @@
     "canonical_name": "Dawa",
     "kind": "numbered_self_representation",
     "human_referent": "Dawa",
-    "creative_traits_status": "OPEN",
+    "creative_traits_status": "PARTLY_CHOSEN",
     "human_and_persona_record_are_distinct": true,
-    "is_authority": false
+    "is_authority": false,
+    "dnd_form": "Dungeon Master who enters the world as a Bard",
+    "color_anchor": "orange",
+    "image_status": "NO_PICTURE_YET",
+    "song_law": {
+      "many_songs_allowed": true,
+      "active_song_limit": 1,
+      "active_effect_limit": 1,
+      "starting_another_song_ends_current_effect": true
+    },
+    "chosen_song": {
+      "song_name": "Song of Time",
+      "skill_name": "Hold a Beat",
+      "mechanics_status": "OPEN"
+    },
+    "council_candidates": [
+      {
+        "song_name": "Song of the Wayward Tick",
+        "skill_name": "Skip a Tick",
+        "status": "PENDING_DAWA"
+      },
+      {
+        "song_name": "Song of the Echoed Hour",
+        "skill_name": "Replay a Chime",
+        "status": "PENDING_DAWA"
+      }
+    ]
   }
 }
