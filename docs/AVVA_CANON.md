@@ -15,7 +15,7 @@ Persona, interface, environment, and human authority are separate records. Av:vA
 
 ## Dawa 96 song canon
 
-Dawa 96 is the orange Dungeon Master who can enter the D&D world as a Bard. Many songs may exist, but only one song and one song effect may be active at a time. **Song of Time / Hold a Beat** is chosen; detailed mechanics remain open. **Song of the Wayward Tick / Skip a Tick** and **Song of the Echoed Hour / Replay a Chime** are council candidates pending Dawa. Avalhla 56 holds the group-synthesis seat; AvvA 22's reserved seat remains pending while Copilot returns no response.
+Dawa 96 is the orange Dungeon Master who can enter the D&D world as a Bard. Many songs may exist, but only one song and one song effect may be active at a time. **Song of Time / Hold a Beat** is chosen; detailed mechanics remain open. **Song of the Skipped Tick / Skip a Tick** and **Song of the Second Chime / Replay a Chime** are the grouped council candidates pending Dawa. Codex, Claude, and Copilot returned all assigned seats; Avalhla 56 grouped their evidence. AvvA 22 sees Dawa 96 keeping the table tempo and tuning the world's clocks like strings without stopping the story.
 
 The machine-readable source is [`config/avva-canon.v1.json`](../config/avva-canon.v1.json).
 

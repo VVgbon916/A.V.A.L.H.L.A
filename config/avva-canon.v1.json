@@ -126,15 +126,23 @@
     },
     "council_candidates": [
       {
-        "song_name": "Song of the Wayward Tick",
+        "song_name": "Song of the Skipped Tick",
         "skill_name": "Skip a Tick",
+        "effect": "Move one chosen perceived clock-bound counter exactly one tick forward or backward; it then continues from its new tick while surrounding events do not move.",
         "status": "PENDING_DAWA"
       },
       {
-        "song_name": "Song of the Echoed Hour",
+        "song_name": "Song of the Second Chime",
         "skill_name": "Replay a Chime",
+        "effect": "Make one chosen perceived clock sound its most recent chime once more; nothing around it rewinds.",
         "status": "PENDING_DAWA"
       }
-    ]
+    ],
+    "council_result": {
+      "status": "ALL_ASSIGNED_SEATS_RETURNED",
+      "synthesis_seat": "Avalhla 56",
+      "avva_22_mirror": "Dawa 96 keeps the table tempo, tuning the world clocks like strings without stopping the story.",
+      "authority": "Dawa remains final chooser"
+    }
   }
 }

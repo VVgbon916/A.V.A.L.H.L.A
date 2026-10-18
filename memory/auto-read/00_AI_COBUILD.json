@@ -2495,9 +2495,9 @@
     "chosen_song": "Song of Time",
     "chosen_skill": "Hold a Beat",
     "council_candidates": [
-      "Song of the Wayward Tick / Skip a Tick",
-      "Song of the Echoed Hour / Replay a Chime"
+      "Song of the Skipped Tick / Skip a Tick",
+      "Song of the Second Chime / Replay a Chime"
     ],
-    "council_health": "Codex and Claude returned; Copilot/AvvA pending after empty provider responses"
+    "council_health": "Codex, Claude, and Copilot returned; Avalhla 56 grouped the evidence; candidates remain pending Dawa."
   }
 }
