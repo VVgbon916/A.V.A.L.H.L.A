@@ -76,6 +76,37 @@ check_prompt() {
   }
 }
 
+copilot_prompt() {
+  local prompt_file="$1" stdout_file="$2" stderr_file="$3"
+  local lock_fd prior_hooks="" had_prior_hooks=0 result=0
+
+  exec {lock_fd}>"$STATE_ROOT/.copilot-headless.lock"
+  flock "$lock_fd"
+
+  if prior_hooks="$("$COPILOT_BIN" config disableAllHooks 2>/dev/null)"; then
+    had_prior_hooks=1
+  fi
+  if ! "$COPILOT_BIN" config disableAllHooks true >/dev/null 2>>"$stderr_file"; then
+    flock -u "$lock_fd"
+    exec {lock_fd}>&-
+    return 1
+  fi
+
+  "$COPILOT_BIN" -s -p "$(cat -- "$prompt_file")" --allow-all-tools \
+    --available-tools= --disable-builtin-mcps --no-ask-user \
+    --no-custom-instructions --no-color \
+    >"$stdout_file" 2>>"$stderr_file" || result=$?
+
+  if (( had_prior_hooks == 1 )); then
+    "$COPILOT_BIN" config disableAllHooks "$prior_hooks" >/dev/null 2>>"$stderr_file" || result=1
+  else
+    "$COPILOT_BIN" config --rm disableAllHooks >/dev/null 2>>"$stderr_file" || result=1
+  fi
+  flock -u "$lock_fd"
+  exec {lock_fd}>&-
+  return "$result"
+}
+
 council() {
   [[ $# -ge 1 && $# -le 2 ]] || { usage >&2; return 2; }
   local prompt_file="$1"
@@ -125,9 +156,8 @@ council() {
     > "$output_dir/claude.md" 2> "$output_dir/claude.err" &
   local claude_pid=$!
 
-  "$COPILOT_BIN" -s --available-tools= --disable-builtin-mcps --no-ask-user \
-    < "$prompt_file" \
-    > "$output_dir/copilot.attempt1.md" 2> "$output_dir/copilot.attempt1.err" &
+  copilot_prompt "$prompt_file" \
+    "$output_dir/copilot.attempt1.md" "$output_dir/copilot.attempt1.err" &
   local copilot_pid=$!
 
   local codex_result=0 claude_result=0 copilot_result=0
@@ -141,16 +171,28 @@ council() {
   if (( copilot_result != 0 )) || [[ ! -s "$output_dir/copilot.attempt1.md" ]]; then
     copilot_selected=2
     copilot_result=0
-    "$COPILOT_BIN" -s --available-tools= --disable-builtin-mcps --no-ask-user \
-      < "$prompt_file" \
-      > "$output_dir/copilot.attempt2.md" 2> "$output_dir/copilot.attempt2.err" || copilot_result=$?
+    copilot_prompt "$prompt_file" \
+      "$output_dir/copilot.attempt2.md" "$output_dir/copilot.attempt2.err" || copilot_result=$?
     [[ -s "$output_dir/copilot.attempt2.md" ]] || copilot_result=1
+  fi
+
+  # A headless Copilot turn can occasionally end without visible output even
+  # after hooks are isolated. One final sequential retry avoids dropping its
+  # council seat after the other providers have already completed.
+  if (( copilot_result != 0 )) || [[ ! -s "$output_dir/copilot.attempt${copilot_selected}.md" ]]; then
+    copilot_selected=3
+    copilot_result=0
+    copilot_prompt "$prompt_file" \
+      "$output_dir/copilot.attempt3.md" "$output_dir/copilot.attempt3.err" || copilot_result=$?
+    [[ -s "$output_dir/copilot.attempt3.md" ]] || copilot_result=1
   fi
 
   if (( copilot_selected == 1 )) && [[ -s "$output_dir/copilot.attempt1.md" ]]; then
     cp -- "$output_dir/copilot.attempt1.md" "$output_dir/copilot.md"
   elif (( copilot_selected == 2 )) && [[ -s "$output_dir/copilot.attempt2.md" ]]; then
     cp -- "$output_dir/copilot.attempt2.md" "$output_dir/copilot.md"
+  elif (( copilot_selected == 3 )) && [[ -s "$output_dir/copilot.attempt3.md" ]]; then
+    cp -- "$output_dir/copilot.attempt3.md" "$output_dir/copilot.md"
   fi
 
   printf '%s\n' "$codex_result" > "$output_dir/codex.status"

@@ -57,6 +57,28 @@ SH
 cat > "$tmp/bin/copilot" <<'SH'
 #!/usr/bin/env bash
 set -Eeuo pipefail
+if [[ "${1:-}" == "config" ]]; then
+  if [[ "${2:-}" == "disableAllHooks" && $# -eq 2 ]]; then
+    exit 1
+  fi
+  exit 0
+fi
+found_prompt=0
+found_isolation=0
+while (($#)); do
+  if [[ "$1" == "-p" || "$1" == "--prompt" ]]; then
+    [[ $# -ge 2 && "$2" == "bounded review prompt" ]] || exit 64
+    found_prompt=1
+    shift 2
+  elif [[ "$1" == "--no-custom-instructions" ]]; then
+    found_isolation=1
+    shift
+  else
+    shift
+  fi
+done
+[[ "$found_prompt" == 1 ]] || exit 64
+[[ "$found_isolation" == 1 ]] || exit 64
 count=0
 [[ -f "$COPILOT_STUB_STATE" ]] && count="$(cat "$COPILOT_STUB_STATE")"
 count=$((count + 1))
