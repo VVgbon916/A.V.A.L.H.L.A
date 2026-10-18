@@ -11,7 +11,7 @@ bad() { printf "  [FAIL] %s -- %s\n" "$1" "$2"; FAIL=$((FAIL + 1)); }
 printf "%s\n" "== avalhla static contract =="
 printf "root: %s\n\n" "$ROOT"
 printf "%s\n" "-- canonical files --"
-for f in docs/FAST_VIEW.md docs/AVALHLA_SPINE.md docs/PHASING.md docs/CO_BUILDER_TOOLBELT.md docs/DAWA_NOTEPAD.md docs/SKILL_SYSTEM.md config/sublime/Preferences.sublime-settings memory/auto-read/00_AI_COBUILD.json config/color/avalhla-color-field.v1.json config/integrity/avalhla-integrity.v1.json docs/COLOR_BOOK.md scripts/ava-cobuilder scripts/ava-cobuilder-projection scripts/ava-health tests/test_ava_health.sh tests/test_cobuilder_projection.sh tests/test_skill_routing.sh scripts/lib_color_field.sh scripts/lib_integrity.sh scripts/lib_model_input.sh scripts/lib_action.py tests/test_color_field.sh tests/test_integrity.sh tests/test_action_proposal.py tests/test_model_input.sh tests/test_redact.py tests/test_model_transport.py tests/test_ava_diff_failure.py tests/test_github_review_capture.py tests/test_ava_explain.sh tests/test_review_gate.sh tests/test_ava_mood.sh scripts/ava-sublime-update scripts/ava-resume scripts/ava-github-review scripts/ava-ci-contract AGENTS.md .github/workflows/avalhla-static-verify.yml; do
+for f in docs/FAST_VIEW.md docs/AVALHLA_SPINE.md docs/PHASING.md docs/CO_BUILDER_TOOLBELT.md docs/DAWA_NOTEPAD.md docs/SKILL_SYSTEM.md docs/AVVA_CANON.md config/avva-canon.v1.json config/sublime/Preferences.sublime-settings memory/auto-read/00_AI_COBUILD.json config/color/avalhla-color-field.v1.json config/integrity/avalhla-integrity.v1.json docs/COLOR_BOOK.md scripts/avalhla-head tests/test_avalhla_head.sh tests/test_avva_canon.py scripts/ava-cobuilder scripts/ava-cobuilder-projection scripts/ava-health tests/test_ava_health.sh tests/test_cobuilder_projection.sh tests/test_skill_routing.sh scripts/lib_color_field.sh scripts/lib_integrity.sh scripts/lib_model_input.sh scripts/lib_action.py tests/test_color_field.sh tests/test_integrity.sh tests/test_action_proposal.py tests/test_model_input.sh tests/test_redact.py tests/test_model_transport.py tests/test_ava_diff_failure.py tests/test_github_review_capture.py tests/test_ava_explain.sh tests/test_review_gate.sh tests/test_ava_mood.sh scripts/ava-sublime-update scripts/ava-resume scripts/ava-github-review scripts/ava-ci-contract AGENTS.md .github/workflows/avalhla-static-verify.yml; do
   [[ -f "$f" ]] && ok "present $f" || bad "present $f" "missing"
 done
 
@@ -22,6 +22,7 @@ done < <(find scripts -maxdepth 1 -type f -perm -u+x -print0 2>/dev/null)
 
 printf "%s\n" "" "-- JSON --"
 if python3 -m json.tool memory/auto-read/00_AI_COBUILD.json >/dev/null; then ok "CoBuilder JSON parses"; else bad "CoBuilder JSON parses" "invalid JSON"; fi
+if python3 -m json.tool config/avva-canon.v1.json >/dev/null; then ok "AvvA canon JSON parses"; else bad "AvvA canon JSON parses" "invalid JSON"; fi
 if python3 -m json.tool config/color/avalhla-color-field.v1.json >/dev/null; then ok "Color Field JSON parses"; else bad "Color Field JSON parses" "invalid JSON"; fi
 if python3 -m json.tool config/integrity/avalhla-integrity.v1.json >/dev/null; then ok "Integrity registry JSON parses"; else bad "Integrity registry JSON parses" "invalid JSON"; fi
 if python3 - <<'PY'
@@ -59,6 +60,10 @@ PY
 then ok "top-level and phasing action orders agree"; else bad "top-level and phasing action orders agree" "sequence drift"; fi
 
 printf "%s\n" "" "-- color and integrity contracts --"
+if PYTHONDONTWRITEBYTECODE=1 python3 tests/test_avva_canon.py; then ok "AvvA three-context canon"; else bad "AvvA three-context canon" "test failed"; fi
+if bash tests/test_avalhla_head.sh; then ok "Avalhla Head CLI coordination"; else bad "Avalhla Head CLI coordination" "test failed"; fi
+if bash tests/test_multi_client_manifest.sh; then ok "multi-client manifest"; else bad "multi-client manifest" "test failed"; fi
+if bash tests/test_dialogue.sh; then ok "multi-client dialogue"; else bad "multi-client dialogue" "test failed"; fi
 if tests/test_color_field.sh; then ok "Color Field contract"; else bad "Color Field contract" "test failed"; fi
 if tests/test_integrity.sh; then ok "SHA-256 integrity contract"; else bad "SHA-256 integrity contract" "test failed"; fi
 if tests/test_model_input.sh; then ok "bounded untrusted model input"; else bad "bounded untrusted model input" "test failed"; fi

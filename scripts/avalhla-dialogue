@@ -49,6 +49,11 @@ def render(args: argparse.Namespace) -> str:
             raise DialogueError("each turn requires a speaker")
         by_speaker.setdefault(turn["speaker"], []).append(str(turn.get("text", "")))
 
+    known_speakers = set(manifest.get("speakers", {}))
+    unknown_speakers = sorted(set(by_speaker) - known_speakers)
+    if unknown_speakers:
+        raise DialogueError("unknown speaker(s): " + ", ".join(unknown_speakers))
+
     lines = [f"CLIENT: {client['display_name']}", f"VIEW: {args.view}"]
     expected = client.get("speakers", [])
     for speaker_name in expected:

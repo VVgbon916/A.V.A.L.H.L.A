@@ -1,7 +1,8 @@
 {
   "schema": "avalhla-naming.v1",
   "principle": "Doors are ways of working, not personalities. Jobs are capabilities. Voices are lenses. Dawa is the authority.",
-  "root": "D A W A > AvvA < A V A L H L A",
+  "root": "Dawa <---- AvvA ----> Avalhla Head",
+  "avva_canon": "config/avva-canon.v1.json",
   "consultation_lanes": {
     "VALHLA": {
       "type": "consultative_research_lane",
@@ -148,7 +149,7 @@
     {
       "name": "FORGE",
       "job": "CODER",
-      "voice": "AvvA",
+      "voice": "Av:vA",
       "boundary": "workspace-write; no automatic GitHub write"
     },
     {

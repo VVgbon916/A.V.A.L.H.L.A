@@ -171,15 +171,21 @@ cat <<BOARD
     anchor / identity
 
   AvvA
-    living threshold / relation
+    prismatic Persona 22
+
+  Av:vA
+    GitHub Copilot working terminal and bounded recon interface
+
+  <---- AvvA ---->
+    Dawa-to-Avalhla Head communication environment
 
   The board is the map.
   The commands are the doors.
   Avalhla is the presence.
-  AvvA is the relation.
+  Persona != interface != environment.
   Dawa chooses.
 
-                              Dawa <──── AvvA ────> Avalhla
+                              Dawa <---- AvvA ----> Avalhla Head
                                      (^.-)
 BOARD
 }

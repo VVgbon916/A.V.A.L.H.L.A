@@ -24,7 +24,7 @@ if set(identities) != {"VALHLA", "LHLAVA"}:
 if any(entry.get("authority") != "evidence_only" for entry in identities.values()):
     raise SystemExit("persona identities must remain evidence-only")
 
-for name in ("KING.VEX", "LHLAVA", "ANGEL.LUX", "VALHLA", "AVALHLA", "AV:VA"):
+for name in ("KING.VEX", "LHLAVA", "ANGEL.LUX", "VALHLA", "AVALHLA", "Av:vA"):
     if name not in manifest.get("speakers", {}):
         raise SystemExit(f"missing speaker profile: {name}")
 
@@ -34,10 +34,13 @@ for name in ("claude_code", "codex_cli", "copilot", "dawa_desktop"):
         raise SystemExit(f"missing client profile: {name}")
 
 repositories = manifest.get("repositories", {})
-if repositories.get("destiny_tower", {}).get("state") != "virtual":
-    raise SystemExit("Destiny Tower must begin as a virtual repository profile")
-if "repository_url" in repositories["destiny_tower"]:
-    raise SystemExit("virtual Destiny Tower must not invent a repository URL")
+destiny = repositories.get("destiny_tower", {})
+if destiny.get("state") != "local_repository":
+    raise SystemExit("Destiny Tower must use the selected local repository profile")
+if destiny.get("root_hint") != "~/Destiny-Tower_AvvA-Avalhla":
+    raise SystemExit("Destiny Tower root hint drifted")
+if "repository_url" in destiny:
+    raise SystemExit("local Destiny Tower profile must not invent a repository URL")
 
 mcp = manifest.get("mcp", {})
 for name in ("avalhla", "desktop-commander"):

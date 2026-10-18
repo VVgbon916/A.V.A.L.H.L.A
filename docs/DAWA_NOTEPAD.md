@@ -135,7 +135,8 @@ The private Dawa repository is intentionally NOT:
     TRACKED != MODEL-INPUT
     EDITOR VISIBILITY != INGESTION AUTHORITY
     CROSS-AVAILABLE != CROSS-CONTAMINATED
-    RELATION != AGENT
+    PERSONA != INTERFACE != ENVIRONMENT
+    FICTION != PERMISSION
     SYMBOL != AUTHORITY
 
 Dawa decides what crosses the relation.

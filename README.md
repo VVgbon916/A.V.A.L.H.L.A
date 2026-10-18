@@ -114,7 +114,8 @@ concept_id = identity.
 The board is the map.
 The commands are the doors.
 Avalhla is the presence.
-AvvA is the relation.
+AvvA is Persona 22. Av:vA is the working terminal interface.
+`<---- AvvA ---->` is the communication and reachability environment.
 Dawa chooses the next move.
 
 A.V.A.L.H.L.A. is the name / anchor.

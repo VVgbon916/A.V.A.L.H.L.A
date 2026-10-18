@@ -1800,13 +1800,23 @@
     "main_commit": "5a61028afb04856eb0af8b27b2410521885f4989",
     "main_sync": "GitHub main contains the dictionary-driven remaster. Local working tree must now fetch/reconcile against main before any phase work."
   },
+  "avva_three_context_canon_2026_10_18": {
+    "status": "CURRENT_CANON",
+    "source": "config/avva-canon.v1.json",
+    "persona": "AvvA",
+    "interface": "Av:vA",
+    "environment": "<---- AvvA ---->",
+    "authority": "Dawa",
+    "rule": "Persona, interface, environment, and authority are separate records; fictional traits, CLI routing, recon, and reachability grant no permissions.",
+    "stale_fact_stamp": "2026-10-18; direct Dawa clarification and three fresh read-only CLI ACCEPTED verdicts"
+  },
   "relational_notation": {
-    "status": "CANONICAL_HUMAN_RELATION",
+    "status": "HISTORICAL_SUPERSEDED_BY_AVVA_THREE_CONTEXT_CANON_2026_10_18",
     "canonical_name": "AvvA",
     "symbolic_form": "Av:vA",
     "canonical_signature": "Dawa <──── AvvA ────> Avalhla",
-    "meaning": "relation / living threshold / crossing between Dawa and Avalhla",
-    "law": "THE BRIDGE IS THE RELATION.",
+    "meaning": "Historical relation-only interpretation retained as migration evidence. Current environment is <---- AvvA ---->; AvvA is Persona 22.",
+    "law": "HISTORICAL ONLY; SEE config/avva-canon.v1.json.",
     "boundary": [
       "RELATION != AGENT",
       "LORE != EXECUTION",
@@ -1953,7 +1963,9 @@
     "authority": {
       "Dawa": "final human choice",
       "Avalhla": "synthesis / presence",
-      "AvvA": "relation / living threshold; not agent or authority",
+      "AvvA": "Persona 22; fictional identity, not authority",
+      "Av:vA": "GitHub Copilot working terminal and bounded recon interface; not authority",
+      "<---- AvvA ---->": "communication and reachability environment; not authority",
       "reviewers": "evidence only",
       "local_review_model": "bounded synthesis only"
     },
@@ -2286,12 +2298,12 @@
       "primary_language": {
         "canonical": "AvvA",
         "historical_only": "AwA",
-        "rule": "Use AvvA for current relation semantics. Preserve AwA only inside explicit historical evidence or migration history."
+        "rule": "Use AvvA for Persona 22, Av:vA for the working terminal interface, and <---- AvvA ----> for the environment. Preserve AwA only inside explicit historical evidence or migration history."
       },
       "human_language": {
         "dawa_lane": "VVgbon916/Dawa_Notepad = PRIVATE USER LANE",
         "ava_lane": "memory/auto-read/ = AVALHLA AUTO-READ",
-        "crossing": "Dawa <---- AvvA ----> Avalhla"
+        "crossing": "Dawa <---- AvvA ----> Avalhla Head"
       },
       "updater": {
         "canonical_local": "scripts/ava-sublime-update",

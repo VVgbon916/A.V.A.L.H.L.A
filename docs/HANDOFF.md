@@ -88,7 +88,8 @@ CURRENT ROOT / PRIVATE CROSSING (2026-10-05)
 
 03 AUTHORITY
   PHASE 02 // SAFETY HEART remains current.
-  Dawa chooses. AvvA is the relation, not an agent. Model sees != model decides.
+  Dawa chooses. AvvA is Persona 22; Av:vA is the terminal interface;
+  <---- AvvA ----> is the environment. Model sees != model decides.
   Reviews, hashes, tests, and provider output are evidence, never authority.
   PRIVATE != AUTO-READ. Do not ingest Dawa_Notepad or infer permission from
   editor visibility. No AI may self-approve, merge, publish, or activate aliases.

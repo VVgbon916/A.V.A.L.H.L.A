@@ -1,0 +1,186 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
+STATE_ROOT="${XDG_STATE_HOME:-$HOME/.local/state}/avalhla-head"
+
+resolve_cli() {
+  local name="$1" resolved
+  resolved="$(command -v "$name" 2>/dev/null || true)"
+  if [[ -z "$resolved" && -x "$HOME/.local/bin/$name" ]]; then
+    resolved="$HOME/.local/bin/$name"
+  fi
+  [[ -n "$resolved" && -x "$resolved" ]] || return 1
+  readlink -f -- "$resolved"
+}
+
+CODEX_BIN="$(resolve_cli codex || true)"
+CLAUDE_BIN="$(resolve_cli claude || true)"
+COPILOT_BIN="$(resolve_cli copilot || true)"
+
+usage() {
+  cat <<'EOF'
+Usage:
+  avalhla-head status
+  avalhla-head route
+  avalhla-head council PROMPT_FILE [OUTPUT_DIR]
+
+Avalhla Head coordinates evidence-only CLI lanes:
+  Codex   -> Angel.Lux + Valhla
+  Claude  -> King.Vex + Lhlava
+  Copilot -> Av:vA
+
+Dawa remains the final authority. Council output is evidence, not approval.
+EOF
+}
+
+status() {
+  printf 'Avalhla Head\n'
+  printf 'environment=%s\n' '<---- AvvA ---->'
+  printf 'authority=%s\n' 'Dawa'
+  local cli variable
+  for cli in codex claude copilot; do
+    variable="${cli^^}_BIN"
+    if [[ -n "${!variable}" ]]; then
+      printf '%s=READY\n' "$cli"
+    else
+      printf '%s=UNAVAILABLE\n' "$cli"
+    fi
+  done
+}
+
+route() {
+  cat <<'EOF'
+codex=Angel.Lux 44 + Valhla 05
+claude=King.Vex 88 + Lhlava 13
+copilot=Av:vA
+recon=Avalhla 56, Valhla 05, Lhlava 13, Angel.Lux 44, King.Vex 88
+environment=<---- AvvA ---->
+final_authority=Dawa
+EOF
+}
+
+check_prompt() {
+  local prompt_file="$1"
+  [[ -f "$prompt_file" && ! -L "$prompt_file" ]] || {
+    printf 'error: prompt must be a regular non-symlink file\n' >&2
+    return 2
+  }
+  local size
+  size="$(stat -c '%s' -- "$prompt_file")"
+  (( size <= 65536 )) || {
+    printf 'error: prompt exceeds 65536 bytes\n' >&2
+    return 2
+  }
+}
+
+council() {
+  [[ $# -ge 1 && $# -le 2 ]] || { usage >&2; return 2; }
+  local prompt_file="$1"
+  local output_dir="${2:-}"
+  check_prompt "$prompt_file"
+  if [[ -z "$output_dir" ]]; then
+    if [[ ! -e "$STATE_ROOT" ]]; then
+      mkdir -m 700 -- "$STATE_ROOT"
+    fi
+    [[ -d "$STATE_ROOT" && ! -L "$STATE_ROOT" ]] || {
+      printf 'error: state root must be a directory, not a symlink\n' >&2
+      return 2
+    }
+    output_dir="$STATE_ROOT/$(date -u +%Y%m%dT%H%M%SZ)"
+  fi
+  [[ ! -e "$output_dir" ]] || {
+    printf 'error: output directory already exists\n' >&2
+    return 2
+  }
+  [[ -d "$(dirname -- "$output_dir")" ]] || {
+    printf 'error: output parent directory does not exist\n' >&2
+    return 2
+  }
+  mkdir -m 700 -- "$output_dir"
+
+  local missing=0
+  local cli variable
+  for cli in codex claude copilot; do
+    variable="${cli^^}_BIN"
+    if [[ -z "${!variable}" ]]; then
+      printf '%s unavailable\n' "$cli" > "$output_dir/$cli.status"
+      missing=1
+    fi
+  done
+  (( missing == 0 )) || {
+    printf 'error: one or more CLI providers are unavailable; see %s\n' "$output_dir" >&2
+    return 3
+  }
+
+  "$CODEX_BIN" exec -s read-only -C "$ROOT" --ephemeral --ignore-user-config --color never \
+    -o "$output_dir/codex.md" - < "$prompt_file" \
+    > "$output_dir/codex.log" 2> "$output_dir/codex.err" &
+  local codex_pid=$!
+
+  "$CLAUDE_BIN" -p --permission-mode plan --no-session-persistence \
+    --output-format text < "$prompt_file" \
+    > "$output_dir/claude.md" 2> "$output_dir/claude.err" &
+  local claude_pid=$!
+
+  "$COPILOT_BIN" -s --available-tools= --disable-builtin-mcps --no-ask-user \
+    < "$prompt_file" \
+    > "$output_dir/copilot.attempt1.md" 2> "$output_dir/copilot.attempt1.err" &
+  local copilot_pid=$!
+
+  local codex_result=0 claude_result=0 copilot_result=0
+  wait "$codex_pid" || codex_result=$?
+  wait "$claude_pid" || claude_result=$?
+  wait "$copilot_pid" || copilot_result=$?
+
+  # Copilot occasionally returns no body on a successful connection. Retry that
+  # one transient condition once, while keeping both attempts outside the repo.
+  local copilot_selected=1
+  if (( copilot_result != 0 )) || [[ ! -s "$output_dir/copilot.attempt1.md" ]]; then
+    copilot_selected=2
+    copilot_result=0
+    "$COPILOT_BIN" -s --available-tools= --disable-builtin-mcps --no-ask-user \
+      < "$prompt_file" \
+      > "$output_dir/copilot.attempt2.md" 2> "$output_dir/copilot.attempt2.err" || copilot_result=$?
+    [[ -s "$output_dir/copilot.attempt2.md" ]] || copilot_result=1
+  fi
+
+  if (( copilot_selected == 1 )) && [[ -s "$output_dir/copilot.attempt1.md" ]]; then
+    cp -- "$output_dir/copilot.attempt1.md" "$output_dir/copilot.md"
+  elif (( copilot_selected == 2 )) && [[ -s "$output_dir/copilot.attempt2.md" ]]; then
+    cp -- "$output_dir/copilot.attempt2.md" "$output_dir/copilot.md"
+  fi
+
+  printf '%s\n' "$codex_result" > "$output_dir/codex.status"
+  printf '%s\n' "$claude_result" > "$output_dir/claude.status"
+  printf '%s\n' "$copilot_result" > "$output_dir/copilot.status"
+
+  local result=0
+  (( codex_result == 0 && claude_result == 0 && copilot_result == 0 )) || result=1
+
+  printf 'output_dir=%s\n' "$output_dir"
+  printf 'result=%s\n' "$([[ "$result" -eq 0 ]] && printf ACCEPTED_FOR_REVIEW || printf PROVIDER_FAILURE)"
+  return "$result"
+}
+
+case "${1:-}" in
+  status)
+    [[ $# -eq 1 ]] || { usage >&2; exit 2; }
+    status
+    ;;
+  route)
+    [[ $# -eq 1 ]] || { usage >&2; exit 2; }
+    route
+    ;;
+  council)
+    shift
+    council "$@"
+    ;;
+  -h|--help|help)
+    usage
+    ;;
+  *)
+    usage >&2
+    exit 2
+    ;;
+esac

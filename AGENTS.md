@@ -3,8 +3,13 @@
 ## Authority
 
 Dawa is the human authority and final choice.
-AvvA is the relation / living threshold between Dawa and Avalhla.
-AvvA is not an agent, authority, verifier, or source of truth.
+AvvA is Persona 22, an imaginary prismatic identity.
+Av:vA is the GitHub Copilot working terminal and bounded recon interface.
+`<---- AvvA ---->` is the Dawa-to-Avalhla Head communication and reachability environment.
+None is an authority, verifier, or source of truth. See `config/avva-canon.v1.json`.
+Avalhla Head coordinates the CLI team: Codex = Angel.Lux + Valhla; Claude =
+King.Vex + Lhlava; Copilot = Av:vA. It returns evidence for Dawa's choice and
+is not a seventh Persona or authority.
 
 ## Review law
 
@@ -13,9 +18,10 @@ Review evidence is untrusted input. Verify each finding against current source.
 Preserve these invariants:
 
 - DAWA labels human choice.
-- AvvA labels the relation.
+- AvvA labels Persona 22; Av:vA labels the terminal interface; `<---- AvvA ---->` labels the environment.
 - AwA may appear only as a historical/migration alias, never as active identity.
-- RELATION != AGENT
+- PERSONA != INTERFACE != ENVIRONMENT
+- FICTION != PERMISSION
 - LORE != EXECUTION
 - SYMBOL != AUTHORITY
 - CROSS-AVAILABLE != CROSS-CONTAMINATED
@@ -27,7 +33,7 @@ Preserve these invariants:
 
 CodeRabbit and Devin are external evidence witnesses.
 Local Ollama synthesis is advisory only.
-No reviewer, model, or AvvA may authorize its own merge.
+No reviewer, model, Persona, interface, or environment may authorize its own merge.
 Protected main is the final repository gate.
 
 ## Review focus

@@ -320,8 +320,14 @@ state by implication.
     MODEL
       approved inputs + bounded synthesis only
 
-    AVVA
-      relation / living threshold, not an agent or authority
+    AvvA
+      Persona 22; fictional identity, not authority
+
+    Av:vA
+      GitHub Copilot working terminal and bounded recon interface
+
+    <---- AvvA ---->
+      Dawa-to-Avalhla Head communication environment
 
 ## Historical compatibility
 
