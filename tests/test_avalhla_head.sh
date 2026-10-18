@@ -15,6 +15,8 @@ route="$($HEAD route)"
 [[ "$route" == *"codex=Angel.Lux 44 + Valhla 05"* ]]
 [[ "$route" == *"claude=King.Vex 88 + Lhlava 13"* ]]
 [[ "$route" == *"copilot=Av:vA"* ]]
+[[ "$route" == *"Dawa 96"* ]]
+[[ "$route" == *"private human facts excluded"* ]]
 [[ "$route" == *"final_authority=Dawa"* ]]
 
 tmp="$(mktemp -d)"

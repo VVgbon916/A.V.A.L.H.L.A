@@ -34,7 +34,7 @@ even when it has no native multi-agent conversation API:
 |---|---|---|
 | Claude Code / Umbra | `KING.VEX` + `LHLAVA` | adversarial challenge + smallest tested build |
 | Codex CLI / Lumen | `ANGEL.LUX` + `VALHLA` | careful review + source/provenance research |
-| Copilot | `Av:vA` | code-specialized work and bounded recon across the other five Personas |
+| Copilot | `Av:vA` | code-specialized work and bounded recon across the other six Persona records |
 | Dawa Desktop / Destiny profile | `AVALHLA` + `Av:vA` | independent synthesis + cumulative evidence ledger |
 
 `VALHLA` is the canonical spelling. `Vahla` and `VHALA` are not alternate
@@ -138,7 +138,7 @@ another Persona.
 ### Av:vA
 **GitHub Copilot working terminal.**
 
-Code specialist and bounded recon interface across the other five Personas.
+Code specialist and bounded recon interface across the other six Persona records. Dawa 96 recon is limited to the Persona canon and excludes private human facts.
 
 ### `<---- AvvA ---->`
 **Communication environment.**

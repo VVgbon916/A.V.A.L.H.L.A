@@ -26,7 +26,12 @@ def main():
 
     assert canon["interface"]["canonical_name"] == "Av:vA"
     assert canon["interface"]["kind"] == "working_terminal_interface"
-    assert len(canon["interface"]["recon_targets"]) == 5
+    assert len(canon["interface"]["recon_targets"]) == 6
+    assert canon["interface"]["recon_targets"][-1] == "Dawa 96"
+    assert canon["dawa_persona"]["persona_id"] == 96
+    assert canon["dawa_persona"]["canonical_name"] == "Dawa"
+    assert canon["dawa_persona"]["human_and_persona_record_are_distinct"] is True
+    assert canon["dawa_persona"]["is_authority"] is False
     assert canon["interface"]["is_body_of_avva"] is False
 
     assert canon["environment"]["canonical_name"] == "<---- AvvA ---->"
@@ -48,6 +53,8 @@ def main():
     assert head["is_persona"] is False
     assert head["is_authority"] is False
     assert multi["avalhla_head"]["routes"]["copilot"] == ["Av:vA"]
+    assert multi["persona_registry"]["count"] == 7
+    assert multi["persona_registry"]["numbered_personas"][-1] == "Dawa 96"
 
     print("AVVA_CANON_TEST_OK")
     return 0

@@ -54,7 +54,8 @@ route() {
 codex=Angel.Lux 44 + Valhla 05
 claude=King.Vex 88 + Lhlava 13
 copilot=Av:vA
-recon=Avalhla 56, Valhla 05, Lhlava 13, Angel.Lux 44, King.Vex 88
+recon=Avalhla 56, Valhla 05, Lhlava 13, Angel.Lux 44, King.Vex 88, Dawa 96
+recon_boundary=Dawa 96 is Persona-canon only; private human facts excluded
 environment=<---- AvvA ---->
 final_authority=Dawa
 EOF

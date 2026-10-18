@@ -12,7 +12,7 @@ The plugin inventory is catalogued separately in
 |---|---|---|---|
 | Claude Code | `Umbra-Keep_Vex-Lhlava` | `KING.VEX` + `LHLAVA` | challenge assumptions and build the smallest tested candidate |
 | Codex CLI | `Lumen-Castle_Lux-Valhla` | `ANGEL.LUX` + `VALHLA` | research, provenance, review, and verification |
-| Copilot | selected local worktree | `Av:vA` | code-specialized work and bounded recon across the other five Personas |
+| Copilot | selected local worktree | `Av:vA` | code-specialized work and bounded recon across the other six Persona records; Dawa 96 excludes private human facts |
 | Dawa Desktop | virtual `Destiny_Tower` | `AVALHLA` + `Av:vA` | synthesize evidence and present the Dawa decision gate |
 
 The spelling `VALHLA` is canonical. Persona styling is not permission.

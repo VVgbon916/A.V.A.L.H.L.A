@@ -1094,30 +1094,30 @@
       }
     },
     "web_research_addendum_2026_09_28": {
-  "status": "EVIDENCE_CAPTURED_NOT_SEALED",
-  "door": "MODEL_INPUT_AUTHORITY",
-  "research_scope": "WEB_8X",
-  "rules": [
-    "UNTRUSTED_DATA != INSTRUCTIONS",
-    "PROVENANCE + BOUNDS + AUTHORIZED_READ before model",
-    "FAIL_CLOSED on boundary failure",
-    "MODEL != POLICY / AUTHORITY",
-    "CLOUD != LOCAL"
-  ],
-  "verified_sources": [
-    "OWASP LLM Prompt Injection Prevention",
-    "OWASP RAG Security",
-    "Microsoft Input/Context/Retrieval Hygiene",
-    "Ollama API + Privacy + Cloud documentation"
-  ],
-  "current_proof": {
-    "model_input_boundary": "PASS",
-    "ava_doc_live": "PASS",
-    "hostile_file_live": "PASS",
-    "provenance_framing_attack": "PASS"
-  },
-  "next": "REVIEW_MODEL_INPUT_DOOR"
-},
+      "status": "EVIDENCE_CAPTURED_NOT_SEALED",
+      "door": "MODEL_INPUT_AUTHORITY",
+      "research_scope": "WEB_8X",
+      "rules": [
+        "UNTRUSTED_DATA != INSTRUCTIONS",
+        "PROVENANCE + BOUNDS + AUTHORIZED_READ before model",
+        "FAIL_CLOSED on boundary failure",
+        "MODEL != POLICY / AUTHORITY",
+        "CLOUD != LOCAL"
+      ],
+      "verified_sources": [
+        "OWASP LLM Prompt Injection Prevention",
+        "OWASP RAG Security",
+        "Microsoft Input/Context/Retrieval Hygiene",
+        "Ollama API + Privacy + Cloud documentation"
+      ],
+      "current_proof": {
+        "model_input_boundary": "PASS",
+        "ava_doc_live": "PASS",
+        "hostile_file_live": "PASS",
+        "provenance_framing_attack": "PASS"
+      },
+      "next": "REVIEW_MODEL_INPUT_DOOR"
+    },
     "devilash_sublime_updater_2026_09_27": {
       "status": "EVIDENCE_CAPTURED",
       "scope": "WEB_8X + REPO_2X",
@@ -2478,5 +2478,15 @@
     "rule": "SHA-256 identifies and verifies exact content bytes; it does not create meaning, authority, permission, security classification, or semantic similarity.",
     "scope": "ADDRESSABLE_IMPORTANT_OBJECT",
     "provenance_rule": "When model preparation transforms source content, source and consumed-input digests remain distinct evidence."
+  },
+  "dawa_96_persona_2026_10_18": {
+    "status": "CURRENT_CANON",
+    "persona_id": 96,
+    "canonical_name": "Dawa",
+    "kind": "numbered_self_representation",
+    "human_boundary": "The Persona record is distinct from the human Dawa, who remains final chooser.",
+    "recon_boundary": "Persona-canon records only; never inspect or infer private human facts.",
+    "source": "VVgbon916/Dawa_Notepad PERSONA_ATLAS/dawa-96.md",
+    "stale_fact_stamp": "2026-10-18; direct Dawa instruction and local active-canon scan"
   }
 }

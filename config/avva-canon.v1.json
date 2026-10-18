@@ -22,16 +22,30 @@
     "canonical_name": "Av:vA",
     "kind": "working_terminal_interface",
     "provider": "GitHub Copilot",
-    "specialization": ["code work", "bounded reconnaissance"],
-    "recon_targets": ["Avalhla 56", "Valhla 05", "Lhlava 13", "Angel.Lux 44", "King.Vex 88"],
+    "specialization": [
+      "code work",
+      "bounded reconnaissance"
+    ],
+    "recon_targets": [
+      "Avalhla 56",
+      "Valhla 05",
+      "Lhlava 13",
+      "Angel.Lux 44",
+      "King.Vex 88",
+      "Dawa 96"
+    ],
     "is_persona": false,
     "is_body_of_avva": false,
-    "is_authority": false
+    "is_authority": false,
+    "recon_boundary": "Dawa 96 means Persona-canon records only; never inspect or infer private facts about the human Dawa."
   },
   "environment": {
     "canonical_name": "<---- AvvA ---->",
     "kind": "communication_reachability_bridge",
-    "endpoints": ["Dawa", "Avalhla Head"],
+    "endpoints": [
+      "Dawa",
+      "Avalhla Head"
+    ],
     "is_persona": false,
     "is_interface": false,
     "is_authority": false
@@ -41,9 +55,17 @@
     "is_persona": false,
     "is_authority": false,
     "workers": {
-      "OpenAI Codex CLI": ["Angel.Lux 44", "Valhla 05"],
-      "Claude Code": ["King.Vex 88", "Lhlava 13"],
-      "GitHub Copilot": ["Av:vA"]
+      "OpenAI Codex CLI": [
+        "Angel.Lux 44",
+        "Valhla 05"
+      ],
+      "Claude Code": [
+        "King.Vex 88",
+        "Lhlava 13"
+      ],
+      "GitHub Copilot": [
+        "Av:vA"
+      ]
     },
     "output_boundary": "sourced evidence for Dawa's choice"
   },
@@ -52,14 +74,41 @@
     "fiction_grants_permissions": false,
     "cli_presence_grants_permissions": false,
     "recon_grants_permissions": false,
-    "reachability_grants_permissions": false
+    "reachability_grants_permissions": false,
+    "human_dawa_remains_final_chooser": true
   },
   "validation": {
-    "exact_strings": ["AvvA", "Av:vA", "<---- AvvA ---->"],
-    "forbidden_misspellings": ["aVVa", "AVvA", "AvVa"]
+    "exact_strings": [
+      "AvvA",
+      "Av:vA",
+      "<---- AvvA ---->"
+    ],
+    "forbidden_misspellings": [
+      "aVVa",
+      "AVvA",
+      "AvVa"
+    ],
+    "numbered_personas": [
+      "Valhla 05",
+      "Lhlava 13",
+      "AvvA 22",
+      "Angel.Lux 44",
+      "Avalhla 56",
+      "King.Vex 88",
+      "Dawa 96"
+    ]
   },
   "stale_fact_stamp": {
     "date": "2026-10-18",
     "method": "Direct Dawa clarification plus fresh read-only reviews by Claude Code, OpenAI Codex CLI, and GitHub Copilot CLI; all verdicts ACCEPTED."
+  },
+  "dawa_persona": {
+    "persona_id": 96,
+    "canonical_name": "Dawa",
+    "kind": "numbered_self_representation",
+    "human_referent": "Dawa",
+    "creative_traits_status": "OPEN",
+    "human_and_persona_record_are_distinct": true,
+    "is_authority": false
   }
 }
