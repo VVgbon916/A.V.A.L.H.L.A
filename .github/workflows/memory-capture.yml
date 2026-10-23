@@ -1,0 +1,72 @@
+name: Memory capture
+
+# Merged PR -> project update note (docs/updates/*.md), proposed as a follow-up PR.
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: memory-capture-${{ github.event.pull_request.number }}
+
+jobs:
+  capture:
+    # Merged, same-repo PRs only (forks get no secrets), and never on our own capture PRs.
+    if: >
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      !startsWith(github.event.pull_request.head.ref, 'memory-capture/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PR: ${{ github.event.pull_request.number }}
+      SHA: ${{ github.event.pull_request.merge_commit_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 0
+
+      - name: Collect PR context
+        run: |
+          gh api "repos/${{ github.repository }}/pulls/$PR" \
+            --jq '{number, title, body, author: .user.login, labels: [.labels[].name], merged_at, merge_sha: .merge_commit_sha}' > pr.json
+          gh api "repos/${{ github.repository }}/pulls/$PR/commits" --paginate \
+            --jq '[.[] | .commit.message]' | jq -s 'add' > commits.json
+          gh api "repos/${{ github.repository }}/pulls/$PR/files" --paginate \
+            --jq '[.[] | {filename, status, additions, deletions}]' | jq -s 'add' > files.json
+          jq -n --slurpfile pr pr.json --slurpfile c commits.json --slurpfile f files.json \
+            '$pr[0] + {commits: $c[0], files: $f[0]}' > .github/memory-capture/context.json
+          rm pr.json commits.json files.json
+
+      - name: Write update note
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Follow .github/memory-capture/prompt.md for PR #${{ github.event.pull_request.number }}
+            (merge commit ${{ github.event.pull_request.merge_commit_sha }}).
+          claude_args: >-
+            --allowedTools "Read,Write,Glob,Grep,Bash(git show:*),Bash(git log:*),Bash(git diff:*)"
+            --max-turns 12
+
+      - name: Open follow-up PR with the note
+        run: |
+          set -e
+          note=$(ls docs/updates/*-pr-$PR.md 2>/dev/null | head -1)
+          [ -n "$note" ] || { echo "no note written"; exit 0; }
+          git config user.name "avalhla-memory-capture"
+          git config user.email "memory-capture@users.noreply.github.com"
+          branch="memory-capture/pr-$PR"
+          git checkout -b "$branch"
+          git add "$note"
+          git commit -m "docs: project update for PR #$PR"
+          git push origin "$branch"
+          gh pr create --base main --head "$branch" \
+            --title "docs: project update for PR #$PR" \
+            --body "Auto-captured project update for #$PR. Review the note; edit or close freely."
