@@ -1,0 +1,6 @@
+# GitBook Git Sync: publish only docs/ (keeps scripts, persona, memory out of GitBook)
+root: ./docs/
+
+structure:
+  readme: README.md
+  summary: SUMMARY.md
