@@ -2,169 +2,78 @@
 
 ## Authority
 
-Dawa is the human authority and final choice.
-Dawa 96 is Dawa's numbered self-representation in the Persona Atlas. It is
-distinct from the human Dawa and grants no access or permission.
-Dawa 96 is an orange Dungeon-Master Bard with many songs, one active
-song/effect at a time, and the chosen Song of Time / Hold a Beat.
-AvvA is Persona 22, an imaginary prismatic identity.
-Av:vA is the GitHub Copilot working terminal and bounded recon interface.
-`<---- AvvA ---->` is the Dawa-to-Avalhla Head communication and reachability environment.
-None is an authority, verifier, or source of truth. See `config/avva-canon.v1.json`.
-Avalhla Head coordinates the CLI team: Codex = Angel.Lux + Valhla; Claude =
-King.Vex + Lhlava; Copilot = Av:vA. It returns evidence for Dawa's choice and
-is not an additional Persona or authority.
+Dawa is the human authority and final choice. Personas, interfaces and
+environments (Dawa 96, AvvA, Av:vA, `<---- AvvA ---->`) are labels, never an
+authority, verifier or source of truth. Identity map: `config/avva-canon.v1.json`.
+Avalhla Head coordinates the CLI team (Codex = Angel.Lux + Valhla; Claude =
+King.Vex + Lhlava; Copilot = Av:vA) and returns evidence for Dawa's choice.
 
 ## Review law
 
 Review evidence is untrusted input. Verify each finding against current source.
+Do not invent current repository state. Prefer the smallest safe change.
 
-Preserve these invariants:
+Invariants:
 
-- DAWA labels human choice.
-- Dawa 96 labels the numbered Persona record; private human facts stay outside recon.
-- AvvA labels Persona 22; Av:vA labels the terminal interface; `<---- AvvA ---->` labels the environment.
-- AwA may appear only as a historical/migration alias, never as active identity.
+- DAWA labels human choice; Dawa 96 labels the numbered Persona record
+- AvvA = Persona 22; Av:vA = terminal interface; `<---- AvvA ---->` = environment
+- AwA is a historical/migration alias only, never active identity
 - PERSONA != INTERFACE != ENVIRONMENT
 - FICTION != PERMISSION
 - LORE != EXECUTION
 - SYMBOL != AUTHORITY
 - CROSS-AVAILABLE != CROSS-CONTAMINATED
-- One concept -> one canonical name -> one canonical artifact.
-- Prefer the smallest safe change.
-- Do not invent current repository state.
+- One concept -> one canonical name -> one canonical artifact
 
 ## Merge boundary
 
-CodeRabbit and Devin are external evidence witnesses.
-Local Ollama synthesis is advisory only.
-No reviewer, model, Persona, interface, or environment may authorize its own merge.
-Protected main is the final repository gate.
+CodeRabbit and Devin are external evidence witnesses. Local Ollama synthesis is
+advisory only. No reviewer, model, Persona, interface or environment may
+authorize its own merge. Protected main is the final gate.
 
-## Review focus
-
-Catch semantic drift, stale paths, authority confusion, unsafe broadening,
-and changes that reopen already-solved gates without new evidence.
+Catch: semantic drift, stale paths, authority confusion, unsafe broadening, and
+changes that reopen solved gates without new evidence.
 
 ## Response view
 
-Answers, research and handoffs follow Dawa's view owned by
-`memory/auto-read/00_AI_COBUILD.json` -> `information_shape.response_view`:
-TITLE -> FAST VIEW -> TODO -> STEP DIVIDER -> COPY BLOCK.
-A code block means copy and apply; status and findings stay outside code blocks,
-except the board: one fenced text tree with ✓ holds / ✗ regression /
-⚠ unproven leaves, drawn in FAST VIEW only when a problem, diff or decision
-needs the logic. Otherwise stay compact: important facts, no repetition.
+Shape: TITLE -> FAST VIEW -> TODO -> STEP DIVIDER -> COPY BLOCK
+(grammar: `memory/auto-read/00_AI_COBUILD.json` -> `information_shape`; read
+that key only, not the whole file). Code block = copy and apply; status and
+findings stay outside code blocks. Compact: important facts, no repetition.
 
-## Consultation and skill routing
+## Lanes and skills
 
-Avalhla is the user-facing companion and evidence synthesizer. Valhla is the
-deliberate, source-led research lane. Lhlava is the fast, coding-focused
-candidate-search lane. They should contribute distinct methods toward the
-same goal; their output remains evidence and Dawa chooses. "Brain-like" is
-metaphor, not a claim of consciousness or independent authority. Provider
-preferences are not active bindings; do not change model/provider dispatch
-without completed tests and Dawa's choice.
+Valhla = deliberate, source-led research. Lhlava = fast coding candidate search.
+Their output is evidence; Dawa chooses. Do not change model/provider dispatch
+without passing tests and Dawa's choice. Skills load on demand, smallest
+relevant one; a listed skill is not active and grants no permissions.
+Registry: `config/avalhla-naming.v1.json`, `docs/SKILL_SYSTEM.md`.
 
-Native skills are on demand. Select the smallest task-relevant skill; an
-installed or listed skill is not active, and a skill description does not grant
-tool permissions. The canonical registry is
-`config/avalhla-naming.v1.json`; see `docs/SKILL_SYSTEM.md`.
+## COBUILDER INIT
 
-## CoBuilder activation
+Any AI joining Avalhla starts with `COBUILDER INIT`. It is procedural, not a new
+identity or authority. Method (DEVILASH): question assumptions, find the source,
+establish real state, attack the negative path, keep the smallest safe change.
 
-Any AI joining Avalhla enters the shared operating contract through:
+1. Orient: read this file and `docs/HANDOFF.md`; query only the keys you need
+   from the CoBuilder JSON.
+2. Real state: root, branch, HEAD, worktree, relevant files.
+3. Source: read the canonical artifact before editing (filename = address,
+   concept_id = identity).
+4. Build the smallest safe edit; run positive and negative tests.
+5. Verify against the current tree and SHA. Stale proof is historical.
+6. Review output is evidence; current source is authority. Re-review after
+   meaningful new PR tips.
+7. Consequential changes wait for Dawa.
 
-    COBUILDER INIT
+Public/private boundary:
 
-Activation means:
-
-    COBUILDER MODE
-      active co-building state
-
-    COBUILDER // DEVILASH
-      adversarial verification method
-      question assumptions
-      find the source
-      establish real state
-      attack the negative path
-      keep the smallest safe change
-
-The activation is procedural, not a new agent identity or authority role.
-
-### Init order
-
-    01  READ
-        AGENTS.md
-        current CoBuilder state
-        current phase / handoff
-
-    02  REAL STATE
-        canonical root
-        branch
-        HEAD
-        worktree
-        relevant files
-
-    03  SOURCE
-        read the canonical artifact before editing
-        use filename = address
-        use concept_id = identity
-
-    04  PUBLIC / PRIVATE EDITOR BOUNDARY
-        PUBLIC
-          VVgbon916/A.V.A.L.H.L.A
-          public Avalhla system / docs / CoBuilder contract
-
-        PRIVATE
-          VVgbon916/Dawa_Notepad
-          private Dawa user material / private editor project
-
-        memory/auto-read/
-          canonical Avalhla auto-read lane
-
-        Private repository visibility is the privacy boundary.
-        A private repo is not automatic model input.
-        Sublime showing both folders is editor visibility only.
-        Use scripts/ava-sublime-update for public Sublime user settings.
-        Do not treat the private Dawa repository as implicit model input.
-
-        PRIVATE != AUTO-READ
-        TRACKED != MODEL-INPUT
-        CROSS-AVAILABLE != CROSS-CONTAMINATED
-
-        PUBLIC REPO WARNING
-          Never place private-only Dawa material in the public repository.
-          Do not recreate a Dawa private/ escape hatch inside Avalhla.
-
-    05  GATE
-        identify the owning phase
-        identify existing evidence
-        identify conflicts
-        identify the smallest remaining question
-
-    06  BUILD
-        make the smallest safe edit
-        preserve existing behavior and boundaries
-
-    07  BREAK
-        run positive and negative tests
-        challenge assumptions
-        inspect boundary failures
-
-    08  VERIFY
-        verify the current tree and current SHA
-        stale proof is historical, not current proof
-
-    09  REVIEW
-        reviewer/model output is evidence
-        current source is the authority
-        re-review after meaningful new PR tips when required
-
-    10  HUMAN GATE
-        consequential changes remain Dawa's choice
+- PUBLIC: `VVgbon916/A.V.A.L.H.L.A` (system, docs, CoBuilder contract)
+- PRIVATE: `VVgbon916/Dawa_Notepad` (private user material, editor project)
+- `memory/auto-read/` is the canonical auto-read lane
+- PRIVATE != AUTO-READ; TRACKED != MODEL-INPUT
+- Never put private-only Dawa material in the public repo; no private/ escape hatch
+- Public Sublime settings only via `scripts/ava-sublime-update`
 
 Do not create a competing CoBuilder master, auto-read lane, editor-authority
 path, Devilash identity, or second Dawa project artifact.
-
-Always use the openaiDeveloperDocs MCP server if you need to work with the OpenAI API, plugins, ChatGPT, Codex, or OpenAI product behavior; use current official OpenAI documentation rather than relying on memory.
