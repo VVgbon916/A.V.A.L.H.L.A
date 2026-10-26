@@ -1,6 +1,6 @@
 # A.V.A.L.H.L.A. Docs
 
-> Dawa > AwA < Avalhla
+> Dawa > AvvA < Avalhla
 
 Avalhla is a local AI companion and evolving personal system.
 These pages are synced from the `docs/` folder of the repository.
