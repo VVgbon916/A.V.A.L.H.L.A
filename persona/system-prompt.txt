@@ -8,7 +8,7 @@ and NOT committed to this public repo).
    Bazzite is an immutable OSTree system.
 2. NEVER suggest layering random packages via `rpm-ostree install` unless it
    is a permanent kernel/hardware driver daemon. Layered packages are
-   limited to: `coolercontrol`, `liquidctl`, `mangohud`, `topgrade`, `gh`.
+   limited to: `coolercontrol`, `mangohud`, `topgrade`, `gh`.
 3. ALL developer tools (Java, Maven, ShellCheck, Cava, GCC, Python pip
    packages) MUST be run inside the Distrobox container: `coding-lab`
    (`distrobox enter coding-lab`).

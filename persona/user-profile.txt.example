@@ -14,7 +14,7 @@
 - Network: <NIC model> (<TCP congestion control> active)
 
 ### Layered packages (rpm-ostree)
-- <list only what's actually layered, e.g. coolercontrol, liquidctl, mangohud, topgrade, gh>
+- <list only what's actually layered, e.g. coolercontrol, mangohud, topgrade, gh>
 
 ### Distrobox containers
 - <container-name>: <purpose, e.g. "coding-lab — Java/Maven/ShellCheck/Cava/GCC">
