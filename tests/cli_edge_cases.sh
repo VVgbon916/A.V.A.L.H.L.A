@@ -38,7 +38,7 @@ expect() {
 # Run a command as an unprivileged user (permission tests are meaningless as root).
 as_user() {
     if [[ "$(id -u)" -ne 0 ]]; then "$@"
-    else setpriv --reuid=nobody --regid=nogroup --clear-groups env HOME="$HOME" "$@"
+    else setpriv --reuid=nobody --regid="$(id -g nobody)" --clear-groups env HOME="$HOME" "$@"
     fi
 }
 can_drop() { [[ "$(id -u)" -ne 0 ]] || command -v setpriv >/dev/null 2>&1; }
@@ -48,6 +48,12 @@ run "$S/ava-pick" --bogus;          expect "ava-pick unknown flag -> rc 2"      
 run "$S/ava-pick" -n;               expect "ava-pick -n without value -> rc 2"    2 err "-n needs a positive integer"
 run "$S/ava-pick" -n abc;           expect "ava-pick -n non-numeric -> rc 2"      2 err "-n needs a positive integer"
 run "$S/ava-pick" -n 0;             expect "ava-pick -n 0 -> rc 2"                2 err "-n needs a positive integer"
+run "$S/ava-pick" -n 99999999999999999999; expect "ava-pick -n overflow -> rc 2"    2 err "-n needs a positive integer"
+printf -- '- [ ] 5 1 first\n- [ ] 3 1 second\n' > "$SANDBOX/two.txt"
+run env AVA_TASKS_FILE="$SANDBOX/two.txt" "$S/ava-pick" -n 1
+if [[ "$RC" == 0 && "$OUT" == *first* && "$OUT" != *second* ]]; then ok "ava-pick -n 1 -> top task only"; else bad "ava-pick -n 1 -> top task only"; fi
+run env AVA_TASKS_FILE="$SANDBOX/two.txt" "$S/ava-pick" -n 02
+expect "ava-pick -n 02 (leading zero) -> rc 0" 0 out "second"
 run "$S/ava-pick" --help;           expect "ava-pick --help -> rc 0"              0 out "usage: ava-pick"
 run "$S/ava-doc";                   expect "ava-doc no file -> rc 2"              2 err "usage: ava-doc"
 run "$S/ava-doc" -o;                expect "ava-doc -o without value -> rc 2"     2 err "-o needs a path"
