@@ -93,12 +93,17 @@ preflight() {
     else
         bad "node not found (install Node >= $NODE_MIN, e.g. brew install node)"
     fi
-    if command -v npm >/dev/null 2>&1; then ok "npm $(npm -v)"; else bad "npm not found"; fi
+    local npm_v
+    if ! command -v npm >/dev/null 2>&1; then bad "npm not found"
+    elif npm_v="$(npm -v 2>/dev/null)"; then ok "npm $npm_v"
+    else bad "npm found but 'npm -v' failed"; fi
     if [[ -f "$DIR/package.json" ]]; then
         ok "package.json"
         if (( FAIL == 0 )); then
-            local s
-            for s in collect dev; do
+            local s; local -a need=(collect dev)
+            [[ "$MODE" == collect ]] && need=(collect)
+            [[ "$MODE" == serve ]] && need=(dev)
+            for s in "${need[@]}"; do
                 if has_script "$s"; then ok "npm script: $s"
                 else bad "npm script missing: $s"; fi
             done
