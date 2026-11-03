@@ -43,6 +43,8 @@
   4.2 systemctl --user stop ollama.service
   4.3 systemctl --user restart ollama.service
   4.4 systemctl --user status ollama.service --no-pager
+  4.5 dndevs-dashboard           DnDevs-Dashboard: collect + dev on 127.0.0.1:3000
+  4.6 dndevs-dashboard --check   preflight only (node, npm, folder, port, assets)
 
 05 / PROOF
   5.1 scripts/ava-safety --self-test

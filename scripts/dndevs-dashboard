@@ -1,0 +1,154 @@
+#!/usr/bin/env bash
+# dndevs-dashboard — DnDevs Bash Launcher: collect, then serve the DnDevs-Dashboard
+#   on http://127.0.0.1:3000 (Next.js, `npm run collect` then `npm run dev`).
+#
+#   dndevs-dashboard               preflight, collect, print login link, start dev server
+#   dndevs-dashboard --check       preflight only (node, npm, folder, scripts, port, assets)
+#   dndevs-dashboard --collect     preflight + collect only, print login link, no server
+#   dndevs-dashboard --no-collect  skip collect, start dev server only
+#   dndevs-dashboard --dry-run     show what would run, run nothing
+#
+# Env:
+#   DNDEVS_DASHBOARD_DIR   portal folder (default: ~/Devil3Way-Portal)
+#   DNDEVS_HOST            default 127.0.0.1
+#   DNDEVS_PORT            default 3000
+#   DNDEVS_NODE_MIN        minimum Node major version (default 20)
+# Exit: 0 ok, 1 preflight failed, 2 bad usage, 3 collect failed.
+set -Eeuo pipefail
+
+DIR="${DNDEVS_DASHBOARD_DIR:-$HOME/Devil3Way-Portal}"
+HOST="${DNDEVS_HOST:-127.0.0.1}"
+PORT="${DNDEVS_PORT:-3000}"
+NODE_MIN="${DNDEVS_NODE_MIN:-20}"
+URL="http://$HOST:$PORT/"
+
+if [[ -t 1 ]]; then
+    R=$'\e[0m' B=$'\e[1m' RED=$'\e[31m' GRN=$'\e[32m' YEL=$'\e[33m' CYN=$'\e[36m'
+else
+    R="" B="" RED="" GRN="" YEL="" CYN=""
+fi
+ok()   { printf '  %s✓%s %s\n' "$GRN" "$R" "$*"; }
+warn() { printf '  %s⚠%s %s\n' "$YEL" "$R" "$*"; }
+bad()  { printf '  %s✗%s %s\n' "$RED" "$R" "$*" >&2; FAIL=1; }
+
+usage() { sed -n '2,16p' "$0" | sed 's/^# \{0,1\}//'; }
+
+MODE=run DRY=0
+for a in "$@"; do
+    case "$a" in
+        --check) MODE=check ;;
+        --collect) MODE=collect ;;
+        --no-collect) MODE=serve ;;
+        --dry-run) DRY=1 ;;
+        -h|--help) usage; exit 0 ;;
+        *) printf 'unknown option: %s\n' "$a" >&2; usage >&2; exit 2 ;;
+    esac
+done
+
+has_script() {  # has_script <name>: package.json defines scripts.<name>
+    node -e 'const p=require(process.argv[1]);
+        process.exit(p.scripts&&p.scripts[process.argv[2]]?0:1)' \
+        "$DIR/package.json" "$1" 2>/dev/null
+}
+
+port_busy() {
+    if command -v ss >/dev/null 2>&1; then
+        ss -ltnH "sport = :$PORT" 2>/dev/null | grep -q .
+    else
+        (exec 3<>"/dev/tcp/$HOST/$PORT") 2>/dev/null
+    fi
+}
+
+preflight() {
+    FAIL=0
+    printf '%sDnDevs preflight%s  %s\n' "$B" "$R" "$DIR"
+    if command -v node >/dev/null 2>&1; then
+        local v; v="$(node -v)"; local major="${v#v}"; major="${major%%.*}"
+        if (( major >= NODE_MIN )); then ok "node $v"; else bad "node $v < v$NODE_MIN"; fi
+    else
+        bad "node not found (install Node >= $NODE_MIN, e.g. brew install node)"
+    fi
+    if command -v npm >/dev/null 2>&1; then ok "npm $(npm -v)"; else bad "npm not found"; fi
+    if [[ -f "$DIR/package.json" ]]; then
+        ok "package.json"
+        if (( FAIL == 0 )); then
+            local s
+            for s in collect dev; do
+                if has_script "$s"; then ok "npm script: $s"
+                else bad "npm script missing: $s"; fi
+            done
+        fi
+        if [[ -d "$DIR/node_modules" ]]; then ok "node_modules"
+        else warn "node_modules missing: will run npm ci/install"; fi
+        local img="$DIR/public/lex-owl-fantasy-anchor.png"
+        if [[ -d "$DIR/public" && ! -f "$img" ]] \
+            && grep -rqs --include='*.tsx' --include='*.ts' 'lex-owl-fantasy-anchor' \
+                "$DIR/app" "$DIR/src" "$DIR/components" 2>/dev/null; then
+            warn "public/lex-owl-fantasy-anchor.png missing (next/image will 403)"
+        fi
+    else
+        bad "no package.json in $DIR (set DNDEVS_DASHBOARD_DIR)"
+    fi
+    if port_busy; then bad "port $PORT already in use (ss -ltnp 'sport = :$PORT')"
+    else ok "port $PORT free"; fi
+    return "$FAIL"
+}
+
+run() {  # run <cmd...>: echo, or execute unless dry-run
+    printf '%s$ %s%s\n' "$CYN" "$*" "$R"
+    (( DRY )) || "$@"
+}
+
+install_deps() {
+    [[ -d "$DIR/node_modules" ]] && return 0
+    if [[ -f "$DIR/package-lock.json" ]]; then run npm ci; else run npm install; fi
+}
+
+collect() {
+    printf '\n%sDnDevs collect%s\n' "$B" "$R"
+    if (( DRY )); then run npm run --silent collect; return 0; fi
+    local out
+    if ! out="$(npm run --silent collect 2>&1)"; then
+        printf '%s\n' "$out" >&2
+        bad "collect failed"; exit 3
+    fi
+    printf '%s\n' "$out" | grep -v -i 'login link' || true
+    LINK="$(printf '%s\n' "$out" | grep -oE 'https?://[^ ]*\?session=[A-Za-z0-9]+' | tail -n1)"
+    if [[ -n "${LINK:-}" ]]; then
+        printf '\n  %s%sLOGIN%s  %s\n' "$B" "$GRN" "$R" "$LINK"
+        printf '  %s(open after "Ready"; the link holds a session token, keep it local)%s\n' \
+            "$YEL" "$R"
+    else
+        warn "no login link in collect output; open $URL"
+    fi
+}
+
+serve() {
+    printf '\n%sDnDevs dashboard%s  %s\n' "$B" "$R" "$URL"
+    [[ -n "${LINK:-}" ]] && printf '  login: %s\n' "$LINK"
+    if (( DRY )); then
+        run env NEXT_TELEMETRY_DISABLED=1 npm run dev  # + host/port unless pinned
+        return 0
+    fi
+    export NEXT_TELEMETRY_DISABLED=1
+    # Pass host/port only when the dev script does not already pin them.
+    if node -e 'const d=require(process.argv[1]).scripts.dev;
+        process.exit(/--port|-p /.test(d)?0:1)' \
+        "$DIR/package.json"; then
+        exec npm run dev
+    fi
+    exec npm run dev -- --hostname "$HOST" --port "$PORT"
+}
+
+LINK=""
+if ! preflight; then
+    (( DRY )) || { printf '\n%spreflight failed%s\n' "$RED" "$R" >&2; exit 1; }
+    warn "dry-run: continuing despite failures"
+fi
+[[ "$MODE" == check ]] && exit 0
+
+cd "$DIR" 2>/dev/null || { (( DRY )) || exit 1; }
+install_deps
+[[ "$MODE" == serve ]] || collect
+[[ "$MODE" == collect ]] && exit 0
+serve
