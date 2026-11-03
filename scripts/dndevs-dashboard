@@ -27,6 +27,23 @@ HOST="${DNDEVS_HOST:-127.0.0.1}"
 PORT="${DNDEVS_PORT:-3000}"
 NODE_MIN="${DNDEVS_NODE_MIN:-20}"
 [[ "$DIR" == /* ]] || DIR="$PWD/$DIR"   # absolute, so $DIR/... still holds after cd
+
+pinned_value() {  # pinned_value <flags-regex>: value scripts.dev passes for that flag
+    command -v node >/dev/null 2>&1 && [[ -f "$DIR/package.json" ]] || return 1
+    node -e 'const d=(require(process.argv[1]).scripts||{}).dev||"";
+        const m=d.match(new RegExp("(?:^|\\s)(?:"+process.argv[2]+")[ =](\\S+)"));
+        if(!m)process.exit(1);console.log(m[1])' "$DIR/package.json" "$1" 2>/dev/null
+}
+# A host or port pinned in scripts.dev wins: preflight, /health and the link follow it.
+PIN_HOST="$(pinned_value '--hostname|-H' || true)"
+PIN_PORT="$(pinned_value '--port|-p' || true)"
+PIN_NOTE=""
+if [[ -n "$PIN_HOST" && "$PIN_HOST" != "$HOST" ]]; then
+    PIN_NOTE+="host $PIN_HOST "; HOST="$PIN_HOST"
+fi
+if [[ -n "$PIN_PORT" && "$PIN_PORT" != "$PORT" ]]; then
+    PIN_NOTE+="port $PIN_PORT "; PORT="$PIN_PORT"
+fi
 URL="http://$HOST:$PORT/"
 
 if [[ -t 1 ]]; then
@@ -69,6 +86,7 @@ port_busy() {
 preflight() {
     FAIL=0
     printf '%sDnDevs preflight%s  %s\n' "$B" "$R" "$DIR"
+    [[ -z "$PIN_NOTE" ]] || warn "scripts.dev pins ${PIN_NOTE}(overrides DNDEVS_HOST/PORT)"
     if command -v node >/dev/null 2>&1; then
         local v; v="$(node -v)"; local major="${v#v}"; major="${major%%.*}"
         if (( major >= NODE_MIN )); then ok "node $v"; else bad "node $v < v$NODE_MIN"; fi
@@ -114,7 +132,7 @@ install_deps() {
 portal_up() {  # the portal answers /health on $PORT
     command -v curl >/dev/null 2>&1 || return 1
     local page
-    page="$(curl --fail --silent --max-time 2 "http://127.0.0.1:$PORT/health" 2>/dev/null)" \
+    page="$(curl --fail --silent --max-time 2 "${URL}health" 2>/dev/null)" \
         || return 1
     [[ "$page" == *"PORTAL AVAILABLE"* && "$page" == *"DevilBruh"* ]]
 }
@@ -139,7 +157,7 @@ new_session() {  # same contract as the portal's own devil3way-dashboard
 }
 
 login() {
-    LINK="http://127.0.0.1:$PORT/?session=$KEY"
+    LINK="${URL}?session=$KEY"
     printf '\n  %s%sLOGIN%s  %s\n' "$B" "$GRN" "$R" "$LINK"
     printf '  %s(the link holds a session token, keep it local)%s\n' "$YEL" "$R"
 }
@@ -149,37 +167,55 @@ collect() {
     run npm run --silent collect || { bad "collect failed"; exit 3; }
 }
 
-pinned() {  # pinned <regex>: scripts.dev already passes that flag
-    node -e 'const d=require(process.argv[1]).scripts.dev||"";
-        process.exit(new RegExp(process.argv[2]).test(d)?0:1)' "$DIR/package.json" "$1"
+WATCH_PID="" DEV_PID=""
+kill_tree() {  # kill_tree <pid>: TERM the process and all its descendants, leaves first
+    local c
+    for c in $(ps -o pid= --ppid "$1" 2>/dev/null || true); do kill_tree "$c"; done
+    kill -TERM "$1" 2>/dev/null || true
 }
-
-WATCH_PID=""
+stop_tree() {  # stop_tree <pid>: kill_tree, then reap it (npm -> sh -> node server)
+    [[ -n "$1" ]] || return 0
+    kill_tree "$1"
+    wait "$1" 2>/dev/null || true
+}
 cleanup() {
-    [[ -n "$WATCH_PID" ]] || return 0
-    kill "$WATCH_PID" 2>/dev/null || true
-    wait "$WATCH_PID" 2>/dev/null || true
+    trap - EXIT INT TERM
+    stop_tree "$DEV_PID"; stop_tree "$WATCH_PID"
 }
 
 serve() {
     printf '\n%sDnDevs dashboard%s  %s\n' "$B" "$R" "$URL"
     local -a extra=()
     if [[ -f "$DIR/package.json" ]]; then
-        pinned '(--hostname|-H)( |=)' || extra+=(--hostname "$HOST")
-        pinned '(--port|-p)( |=)' || extra+=(--port "$PORT")
+        [[ -n "$PIN_HOST" ]] || extra+=(--hostname "$HOST")
+        [[ -n "$PIN_PORT" ]] || extra+=(--port "$PORT")
     fi
     if [[ -f "$DIR/bin/devil3way-watch.ts" ]]; then
         printf '%s$ node --import tsx bin/devil3way-watch.ts &%s\n' "$CYN" "$R"
         if (( ! DRY )); then
             node --import tsx bin/devil3way-watch.ts &
             WATCH_PID=$!
-            trap cleanup EXIT INT TERM
         fi
     fi
-    if (( ${#extra[@]} )); then run npm run dev -- "${extra[@]}"; else run npm run dev; fi
+    local -a dev=(npm run dev)
+    (( ${#extra[@]} )) && dev+=(-- "${extra[@]}")
+    printf '%s$ %s%s\n' "$CYN" "${dev[*]}" "$R"
+    (( DRY )) && return 0
+    # Run dev in the background and wait, so INT/TERM reach the trap at once and
+    # cleanup stops both dev (and its server) and the watcher.
+    trap 'cleanup; exit 130' INT
+    trap 'cleanup; exit 143' TERM
+    trap cleanup EXIT
+    "${dev[@]}" &
+    DEV_PID=$!
+    local rc=0
+    wait "$DEV_PID" || rc=$?
+    DEV_PID=""
+    return "$rc"
 }
 
 STATE_DIR="${DEVIL3WAY_STATE_DIR:-$HOME/.local/state/devil3way-portal}"
+[[ "$STATE_DIR" == /* ]] || STATE_DIR="$PWD/$STATE_DIR"   # same file before and after cd
 SESSION_FILE="$STATE_DIR/session.key"
 KEY="" LINK=""
 export NEXT_TELEMETRY_DISABLED=1
