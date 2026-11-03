@@ -16,3 +16,7 @@ bin:
 		ln -s "../$$f" "bin/$$n" && echo "+ bin/$$n"; \
 	done
 .PHONY: bin
+
+test:
+	@bash tests/run.sh
+.PHONY: test
