@@ -16,3 +16,7 @@ bin:
 		ln -s "../$$f" "bin/$$n" && echo "+ bin/$$n"; \
 	done
 .PHONY: bin
+
+test:
+	@tests/cli_edge_cases.sh
+.PHONY: test

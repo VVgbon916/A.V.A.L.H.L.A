@@ -8,7 +8,7 @@ KB="$MEM/knowledge-base"
 AUTO="$MEM/auto-read"
 REFL="$MEM/reflections"
 
-count_files() { find "$1" -type f 2>/dev/null | wc -l; }
+count_files() { { find "$1" -type f 2>/dev/null || true; } | wc -l; }
 count_lines() { cat "$1" 2>/dev/null | wc -l; }
 
 conv_files=0; conv_lines=0
