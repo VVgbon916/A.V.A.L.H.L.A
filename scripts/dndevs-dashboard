@@ -114,8 +114,9 @@ collect() {
         printf '%s\n' "$out" >&2
         bad "collect failed"; exit 3
     fi
-    printf '%s\n' "$out" | grep -v -i 'login link' || true
-    LINK="$(printf '%s\n' "$out" | grep -oE 'https?://[^[:space:]]*[?&]session=[^[:space:]&]+' \
+    printf '%s\n' "$out"   # verbatim: never hide a line the collector printed
+    LINK="$(printf '%s\n' "$out" | sed $'s/\e\[[0-9;]*m//g' \
+        | grep -oE 'https?://[^[:space:]]*[?&]session=[^[:space:]&]+' \
         | tail -n1 || true)"
     if [[ -n "${LINK:-}" ]]; then
         printf '\n  %s%sLOGIN%s  %s\n' "$B" "$GRN" "$R" "$LINK"
