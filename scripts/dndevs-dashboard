@@ -21,6 +21,7 @@ DIR="${DNDEVS_DASHBOARD_DIR:-$HOME/A.V.A.L.H.L.A._ProJect-v0.5_Dawa916/Devil3Way
 HOST="${DNDEVS_HOST:-127.0.0.1}"
 PORT="${DNDEVS_PORT:-3000}"
 NODE_MIN="${DNDEVS_NODE_MIN:-20}"
+[[ "$DIR" == /* ]] || DIR="$PWD/$DIR"   # absolute, so $DIR/... still holds after cd
 URL="http://$HOST:$PORT/"
 
 if [[ -t 1 ]]; then
@@ -114,7 +115,8 @@ collect() {
         bad "collect failed"; exit 3
     fi
     printf '%s\n' "$out" | grep -v -i 'login link' || true
-    LINK="$(printf '%s\n' "$out" | grep -oE 'https?://[^ ]*\?session=[A-Za-z0-9]+' | tail -n1)"
+    LINK="$(printf '%s\n' "$out" | grep -oE 'https?://[^[:space:]]*[?&]session=[^[:space:]&]+' \
+        | tail -n1 || true)"
     if [[ -n "${LINK:-}" ]]; then
         printf '\n  %s%sLOGIN%s  %s\n' "$B" "$GRN" "$R" "$LINK"
         printf '  %s(open after "Ready"; the link holds a session token, keep it local)%s\n' \
@@ -122,6 +124,11 @@ collect() {
     else
         warn "no login link in collect output; open $URL"
     fi
+}
+
+pinned() {  # pinned <regex>: scripts.dev already passes that flag
+    node -e 'const d=require(process.argv[1]).scripts.dev||"";
+        process.exit(new RegExp(process.argv[2]).test(d)?0:1)' "$DIR/package.json" "$1"
 }
 
 serve() {
@@ -132,13 +139,12 @@ serve() {
         return 0
     fi
     export NEXT_TELEMETRY_DISABLED=1
-    # Pass host/port only when the dev script does not already pin them.
-    if node -e 'const d=require(process.argv[1]).scripts.dev;
-        process.exit(/--port|-p /.test(d)?0:1)' \
-        "$DIR/package.json"; then
-        exec npm run dev
-    fi
-    exec npm run dev -- --hostname "$HOST" --port "$PORT"
+    # Add host and port each only when the dev script does not already pin it.
+    local -a extra=()
+    pinned '(--hostname|-H)( |=)' || extra+=(--hostname "$HOST")
+    pinned '(--port|-p)( |=)' || extra+=(--port "$PORT")
+    if (( ${#extra[@]} )); then exec npm run dev -- "${extra[@]}"; fi
+    exec npm run dev
 }
 
 LINK=""
