@@ -520,6 +520,8 @@ ava_safety_self_test() {
     local outside_file=""
     local bytes=""
     local rel_outside=""
+    local saved_exit_trap=""
+    local cleanup_cmd=""
 
     pass() {
         printf '  [ OK ] %s\n' "$1"
@@ -586,7 +588,14 @@ ava_safety_self_test() {
         return 1
     }
 
-    trap 'rm -rf -- "${tmp_root:-}" "${tmp_memory:-}" "${tmp_outside:-}"' EXIT
+    # Cleanup must not depend on function-local variables: they are unset by
+    # the time an EXIT trap fires. Bake the paths into the trap now (abort
+    # safety), clean explicitly before returning, and restore the caller's
+    # EXIT trap instead of stealing it.
+    saved_exit_trap="$(trap -p EXIT)"
+    cleanup_cmd="rm -rf -- $(printf '%q ' "$tmp_root" "$tmp_memory" "$tmp_outside")"
+    # shellcheck disable=SC2064
+    trap "$cleanup_cmd" EXIT
 
     safe_file="$tmp_root/safe.txt"
     sensitive_file="$tmp_root/.env"
@@ -720,6 +729,19 @@ ava_safety_self_test() {
         fi
     else
         fail "memory append allowed"
+    fi
+
+    eval "$cleanup_cmd"
+    if [[ -n "$saved_exit_trap" ]]; then
+        eval "$saved_exit_trap"
+    else
+        trap - EXIT
+    fi
+
+    if [[ -e "$tmp_root" || -e "$tmp_memory" || -e "$tmp_outside" ]]; then
+        fail "self-test isolation directories removed"
+    else
+        pass "self-test isolation directories removed"
     fi
 
     printf '%s\n' '-- self-test result --'
