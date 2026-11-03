@@ -9,14 +9,15 @@
 #   dndevs-dashboard --dry-run     show what would run, run nothing
 #
 # Env:
-#   DNDEVS_DASHBOARD_DIR   portal folder (default: ~/Devil3Way-Portal)
+#   DNDEVS_DASHBOARD_DIR   portal folder
+#                          (default: ~/A.V.A.L.H.L.A._ProJect-v0.5_Dawa916/Devil3Way-Portal)
 #   DNDEVS_HOST            default 127.0.0.1
 #   DNDEVS_PORT            default 3000
 #   DNDEVS_NODE_MIN        minimum Node major version (default 20)
 # Exit: 0 ok, 1 preflight failed, 2 bad usage, 3 collect failed.
 set -Eeuo pipefail
 
-DIR="${DNDEVS_DASHBOARD_DIR:-$HOME/Devil3Way-Portal}"
+DIR="${DNDEVS_DASHBOARD_DIR:-$HOME/A.V.A.L.H.L.A._ProJect-v0.5_Dawa916/Devil3Way-Portal}"
 HOST="${DNDEVS_HOST:-127.0.0.1}"
 PORT="${DNDEVS_PORT:-3000}"
 NODE_MIN="${DNDEVS_NODE_MIN:-20}"
@@ -31,7 +32,7 @@ ok()   { printf '  %s✓%s %s\n' "$GRN" "$R" "$*"; }
 warn() { printf '  %s⚠%s %s\n' "$YEL" "$R" "$*"; }
 bad()  { printf '  %s✗%s %s\n' "$RED" "$R" "$*" >&2; FAIL=1; }
 
-usage() { sed -n '2,16p' "$0" | sed 's/^# \{0,1\}//'; }
+usage() { sed -n '2,17p' "$0" | sed 's/^# \{0,1\}//'; }
 
 MODE=run DRY=0
 for a in "$@"; do
