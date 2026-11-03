@@ -1,0 +1,250 @@
+#!/usr/bin/env bash
+# dndevs-dashboard — DnDevs Bash Launcher: collect, then serve the DnDevs-Dashboard
+#   on http://127.0.0.1:3000 (Next.js, `npm run collect` then `npm run dev`).
+#
+#   dndevs-dashboard               preflight, collect, print login link, start dev server
+#   dndevs-dashboard --check       preflight only (node, npm, folder, scripts, port, assets)
+#   dndevs-dashboard --collect     preflight + collect only, print login link, no server
+#   dndevs-dashboard --no-collect  skip collect, start dev server only
+#   dndevs-dashboard --dry-run     show what would run, run nothing
+#
+# Env:
+#   DNDEVS_DASHBOARD_DIR   portal folder
+#                          (default: ~/A.V.A.L.H.L.A._ProJect-v0.5_Dawa916/Devil3Way-Portal)
+#   DNDEVS_HOST            default 127.0.0.1
+#   DNDEVS_PORT            default 3000
+#   DNDEVS_NODE_MIN        minimum Node major version (default 20)
+#   DEVIL3WAY_STATE_DIR    session key folder (default ~/.local/state/devil3way-portal)
+# Session: a fresh 64-hex key is written to <state>/session.key and exported as
+#   DEVIL3WAY_SESSION_KEY to collect, the watcher and the dev server, as the portal's
+#   own bin/devil3way-dashboard does. If the portal already answers /health, the
+#   stored login link is printed and nothing starts.
+# Exit: 0 ok, 1 preflight failed, 2 bad usage, 3 collect failed.
+set -Eeuo pipefail
+
+DIR="${DNDEVS_DASHBOARD_DIR:-$HOME/A.V.A.L.H.L.A._ProJect-v0.5_Dawa916/Devil3Way-Portal}"
+HOST="${DNDEVS_HOST:-127.0.0.1}"
+PORT="${DNDEVS_PORT:-3000}"
+NODE_MIN="${DNDEVS_NODE_MIN:-20}"
+[[ "$DIR" == /* ]] || DIR="$PWD/$DIR"   # absolute, so $DIR/... still holds after cd
+
+pinned_value() {  # pinned_value <flags-regex>: value scripts.dev passes for that flag
+    command -v node >/dev/null 2>&1 && [[ -f "$DIR/package.json" ]] || return 1
+    node -e 'const d=(require(process.argv[1]).scripts||{}).dev||"";
+        const m=d.match(new RegExp("(?:^|\\s)(?:"+process.argv[2]+")[ =](\\S+)"));
+        if(!m)process.exit(1);console.log(m[1])' "$DIR/package.json" "$1" 2>/dev/null
+}
+# A host or port pinned in scripts.dev wins: preflight, /health and the link follow it.
+PIN_HOST="$(pinned_value '--hostname|-H' || true)"
+PIN_PORT="$(pinned_value '--port|-p' || true)"
+PIN_NOTE=""
+if [[ -n "$PIN_HOST" && "$PIN_HOST" != "$HOST" ]]; then
+    PIN_NOTE+="host $PIN_HOST "; HOST="$PIN_HOST"
+fi
+if [[ -n "$PIN_PORT" && "$PIN_PORT" != "$PORT" ]]; then
+    PIN_NOTE+="port $PIN_PORT "; PORT="$PIN_PORT"
+fi
+URL="http://$HOST:$PORT/"
+
+if [[ -t 1 ]]; then
+    R=$'\e[0m' B=$'\e[1m' RED=$'\e[31m' GRN=$'\e[32m' YEL=$'\e[33m' CYN=$'\e[36m'
+else
+    R="" B="" RED="" GRN="" YEL="" CYN=""
+fi
+ok()   { printf '  %s✓%s %s\n' "$GRN" "$R" "$*"; }
+warn() { printf '  %s⚠%s %s\n' "$YEL" "$R" "$*"; }
+bad()  { printf '  %s✗%s %s\n' "$RED" "$R" "$*" >&2; FAIL=1; }
+
+usage() { sed -n '2,22p' "$0" | sed 's/^# \{0,1\}//'; }
+
+MODE=run DRY=0
+for a in "$@"; do
+    case "$a" in
+        --check) MODE=check ;;
+        --collect) MODE=collect ;;
+        --no-collect) MODE=serve ;;
+        --dry-run) DRY=1 ;;
+        -h|--help) usage; exit 0 ;;
+        *) printf 'unknown option: %s\n' "$a" >&2; usage >&2; exit 2 ;;
+    esac
+done
+
+has_script() {  # has_script <name>: package.json defines scripts.<name>
+    node -e 'const p=require(process.argv[1]);
+        process.exit(p.scripts&&p.scripts[process.argv[2]]?0:1)' \
+        "$DIR/package.json" "$1" 2>/dev/null
+}
+
+port_busy() {
+    if command -v ss >/dev/null 2>&1; then
+        ss -ltnH "sport = :$PORT" 2>/dev/null | grep -q .
+    else
+        (exec 3<>"/dev/tcp/$HOST/$PORT") 2>/dev/null
+    fi
+}
+
+preflight() {
+    FAIL=0
+    printf '%sDnDevs preflight%s  %s\n' "$B" "$R" "$DIR"
+    [[ -z "$PIN_NOTE" ]] || warn "scripts.dev pins ${PIN_NOTE}(overrides DNDEVS_HOST/PORT)"
+    if command -v node >/dev/null 2>&1; then
+        local v; v="$(node -v)"; local major="${v#v}"; major="${major%%.*}"
+        if (( major >= NODE_MIN )); then ok "node $v"; else bad "node $v < v$NODE_MIN"; fi
+    else
+        bad "node not found (install Node >= $NODE_MIN, e.g. brew install node)"
+    fi
+    local npm_v
+    if ! command -v npm >/dev/null 2>&1; then bad "npm not found"
+    elif npm_v="$(npm -v 2>/dev/null)"; then ok "npm $npm_v"
+    else bad "npm found but 'npm -v' failed"; fi
+    if [[ -f "$DIR/package.json" ]]; then
+        ok "package.json"
+        if (( FAIL == 0 )); then
+            local s; local -a need=(collect dev)
+            [[ "$MODE" == collect ]] && need=(collect)
+            [[ "$MODE" == serve ]] && need=(dev)
+            for s in "${need[@]}"; do
+                if has_script "$s"; then ok "npm script: $s"
+                else bad "npm script missing: $s"; fi
+            done
+        fi
+        if [[ -d "$DIR/node_modules" ]]; then ok "node_modules"
+        else warn "node_modules missing: will run npm ci/install"; fi
+        local img="$DIR/public/lex-owl-fantasy-anchor.png"
+        if [[ -d "$DIR/public" && ! -f "$img" ]] \
+            && grep -rqs --include='*.tsx' --include='*.ts' 'lex-owl-fantasy-anchor' \
+                "$DIR/app" "$DIR/src" "$DIR/components" 2>/dev/null; then
+            warn "public/lex-owl-fantasy-anchor.png missing (next/image will 403)"
+        fi
+    else
+        bad "no package.json in $DIR (set DNDEVS_DASHBOARD_DIR)"
+    fi
+    if port_busy; then bad "port $PORT already in use (ss -ltnp 'sport = :$PORT')"
+    else ok "port $PORT free"; fi
+    return "$FAIL"
+}
+
+run() {  # run <cmd...>: echo, or execute unless dry-run
+    printf '%s$ %s%s\n' "$CYN" "$*" "$R"
+    (( DRY )) || "$@"
+}
+
+install_deps() {
+    [[ -d "$DIR/node_modules" ]] && return 0
+    if [[ -f "$DIR/package-lock.json" ]]; then run npm ci; else run npm install; fi
+}
+
+portal_up() {  # the portal answers /health on $PORT
+    command -v curl >/dev/null 2>&1 || return 1
+    local page
+    page="$(curl --fail --silent --max-time 2 "${URL}health" 2>/dev/null)" \
+        || return 1
+    [[ "$page" == *"PORTAL AVAILABLE"* && "$page" == *"DevilBruh"* ]]
+}
+
+read_key() {  # print the stored session key if it is valid
+    local k
+    [[ -f "$SESSION_FILE" ]] && IFS= read -r k < "$SESSION_FILE" \
+        && [[ "$k" =~ ^[a-f0-9]{64}$ ]] && printf '%s' "$k"
+}
+
+new_session() {  # same contract as the portal's own devil3way-dashboard
+    if (( DRY )); then
+        printf '%s$ new session key -> %s%s\n' "$CYN" "$SESSION_FILE" "$R"
+        KEY=DRYRUN; return 0
+    fi
+    umask 077
+    mkdir -p -- "$STATE_DIR"; chmod 700 -- "$STATE_DIR"
+    KEY="$(od -An -N32 -tx1 /dev/urandom | tr -d ' \n')"
+    [[ "$KEY" =~ ^[a-f0-9]{64}$ ]] || { bad "could not generate a session key"; exit 1; }
+    local tmp="$STATE_DIR/.session.key.$$"
+    printf '%s\n' "$KEY" > "$tmp"; chmod 600 -- "$tmp"; mv -f -- "$tmp" "$SESSION_FILE"
+}
+
+login() {
+    LINK="${URL}?session=$KEY"
+    printf '\n  %s%sLOGIN%s  %s\n' "$B" "$GRN" "$R" "$LINK"
+    printf '  %s(the link holds a session token, keep it local)%s\n' "$YEL" "$R"
+}
+
+collect() {
+    printf '\n%sDnDevs collect%s\n' "$B" "$R"
+    run npm run --silent collect || { bad "collect failed"; exit 3; }
+}
+
+WATCH_PID="" DEV_PID=""
+kill_tree() {  # kill_tree <pid>: TERM the process and all its descendants, leaves first
+    local c
+    for c in $(ps -o pid= --ppid "$1" 2>/dev/null || true); do kill_tree "$c"; done
+    kill -TERM "$1" 2>/dev/null || true
+}
+stop_tree() {  # stop_tree <pid>: kill_tree, then reap it (npm -> sh -> node server)
+    [[ -n "$1" ]] || return 0
+    kill_tree "$1"
+    wait "$1" 2>/dev/null || true
+}
+cleanup() {
+    trap - EXIT INT TERM
+    stop_tree "$DEV_PID"; stop_tree "$WATCH_PID"
+}
+
+serve() {
+    printf '\n%sDnDevs dashboard%s  %s\n' "$B" "$R" "$URL"
+    local -a extra=()
+    if [[ -f "$DIR/package.json" ]]; then
+        [[ -n "$PIN_HOST" ]] || extra+=(--hostname "$HOST")
+        [[ -n "$PIN_PORT" ]] || extra+=(--port "$PORT")
+    fi
+    if [[ -f "$DIR/bin/devil3way-watch.ts" ]]; then
+        printf '%s$ node --import tsx bin/devil3way-watch.ts &%s\n' "$CYN" "$R"
+        if (( ! DRY )); then
+            node --import tsx bin/devil3way-watch.ts &
+            WATCH_PID=$!
+        fi
+    fi
+    local -a dev=(npm run dev)
+    (( ${#extra[@]} )) && dev+=(-- "${extra[@]}")
+    printf '%s$ %s%s\n' "$CYN" "${dev[*]}" "$R"
+    (( DRY )) && return 0
+    # Run dev in the background and wait, so INT/TERM reach the trap at once and
+    # cleanup stops both dev (and its server) and the watcher.
+    trap 'cleanup; exit 130' INT
+    trap 'cleanup; exit 143' TERM
+    trap cleanup EXIT
+    "${dev[@]}" &
+    DEV_PID=$!
+    local rc=0
+    wait "$DEV_PID" || rc=$?
+    DEV_PID=""
+    return "$rc"
+}
+
+STATE_DIR="${DEVIL3WAY_STATE_DIR:-$HOME/.local/state/devil3way-portal}"
+[[ "$STATE_DIR" == /* ]] || STATE_DIR="$PWD/$STATE_DIR"   # same file before and after cd
+SESSION_FILE="$STATE_DIR/session.key"
+KEY="" LINK=""
+export NEXT_TELEMETRY_DISABLED=1
+
+# Already serving: print the stored login link, start nothing (like devil3way-dashboard).
+if [[ "$MODE" != check ]] && portal_up; then
+    printf '%sDnDevs dashboard already serving%s  %s\n' "$B" "$R" "$URL"
+    if KEY="$(read_key)"; then login
+    else warn "no valid session key in $SESSION_FILE; stop the server and rerun"; fi
+    exit 0
+fi
+
+if ! preflight; then
+    (( DRY )) || { printf '\n%spreflight failed%s\n' "$RED" "$R" >&2; exit 1; }
+    warn "dry-run: continuing despite failures"
+fi
+[[ "$MODE" == check ]] && exit 0
+
+cd "$DIR" 2>/dev/null || { (( DRY )) || exit 1; }
+install_deps
+# collect-only keeps a running server's session; run and serve start a fresh one.
+if [[ "$MODE" == collect ]] && KEY="$(read_key)"; then :; else new_session; fi
+export DEVIL3WAY_SESSION_KEY="$KEY" DEVIL3WAY_STATE_DIR="$STATE_DIR"
+[[ "$MODE" == serve ]] || collect
+login
+[[ "$MODE" == collect ]] && exit 0
+serve
