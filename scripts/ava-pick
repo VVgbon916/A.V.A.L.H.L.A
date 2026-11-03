@@ -14,7 +14,9 @@ MODE="list"
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        -n) N="$2"; shift 2 ;;
+        -n)
+            [[ "${2:-}" =~ ^[1-9][0-9]*$ ]] || { echo "X -n needs a positive integer" >&2; exit 2; }
+            N="$2"; shift 2 ;;
         --all) N=9999; shift ;;
         --done) MODE="done"; shift ;;
         -h|--help)
@@ -26,6 +28,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 [[ -f "$TASKS" ]] || { echo "X no tasks file at $TASKS" >&2; exit 1; }
+[[ -r "$TASKS" ]] || { echo "X cannot read tasks file: $TASKS" >&2; exit 1; }
 
 # parse active:  - [ ] <pri> <eff> <text>
 PARSED="$(awk '
@@ -52,6 +55,10 @@ if [[ "$MODE" == "done" ]]; then
     if grep -qF -- "- [x] " <(grep -F -- "$TEXT" "$TASKS"); then
         echo "  already done"
         exit 0
+    fi
+    if [[ ! -w "$TASKS" || ! -w "$(dirname -- "$TASKS")" ]]; then
+        echo "X cannot write tasks file: $TASKS" >&2
+        exit 1
     fi
     sed -i "s|- \[ \] \([0-9]*\) \([0-9]*\) $ESC|- [x] \1 \2 $ESC|" "$TASKS"
     echo "  marked done"
